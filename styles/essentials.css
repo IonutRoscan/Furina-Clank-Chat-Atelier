@@ -1,0 +1,1273 @@
+/* ========================================================================
+   FURINA ESSENTIALS MODE
+   ======================================================================== */
+
+.furina-mode-switch {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.furina-mode-switch-button {
+  min-height: 30px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.44);
+  font: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background 130ms ease,
+    border-color 130ms ease,
+    color 130ms ease;
+}
+
+.furina-mode-switch-button:hover {
+  color: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.furina-mode-switch-active {
+  color: #fff;
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 32%,
+    rgba(255, 255, 255, 0.07)
+  );
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 12%,
+    rgba(255, 255, 255, 0.025)
+  );
+  box-shadow: inset 0 0 18px
+    color-mix(in srgb, var(--furina-accent, #9b7cff) 6%, transparent);
+}
+
+.furina-panel[data-panel-mode='essentials'] {
+  width: min(410px, calc(100vw - 32px));
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-app {
+  grid-template-columns: 104px minmax(0, 1fr);
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav {
+  padding-inline: 8px;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-scroll {
+  padding: 15px 16px 22px;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-content {
+  width: min(100%, 680px);
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-header {
+  padding-bottom: 12px;
+}
+
+.furina-essentials-home,
+.furina-essentials-customize,
+.furina-essentials-roleplay,
+.furina-essentials-immersion,
+.furina-essentials-more {
+  display: grid;
+  gap: 12px;
+}
+
+.furina-essential-intro {
+  position: relative;
+  overflow: hidden;
+  padding: 14px 15px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--furina-accent, #9b7cff) 20%,
+      rgba(255, 255, 255, 0.07)
+    );
+  border-radius: 14px;
+  background:
+    radial-gradient(
+      circle at 88% 0%,
+      color-mix(in srgb, var(--furina-accent, #9b7cff) 17%, transparent),
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.018)
+    );
+}
+
+.furina-essential-intro::after {
+  content: '✦';
+  position: absolute;
+  right: 12px;
+  top: 4px;
+  color: color-mix(in srgb, var(--furina-accent, #9b7cff) 25%, transparent);
+  font-size: 42px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.furina-essential-heading {
+  max-width: 88%;
+  margin-top: 5px;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.furina-essential-intro-copy {
+  max-width: 92%;
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.furina-essential-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 14px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.038),
+    rgba(255, 255, 255, 0.015)
+  );
+}
+
+.furina-essential-card-head {
+  padding: 13px 14px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.furina-essential-card-title {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.furina-essential-card-description {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.furina-essential-card-content {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px 14px;
+}
+
+.furina-essential-home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.furina-essential-home-card {
+  min-height: 118px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto 1fr;
+  gap: 4px 8px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.025);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 130ms ease,
+    border-color 130ms ease,
+    background 130ms ease;
+}
+
+.furina-essential-home-card:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 32%,
+    rgba(255, 255, 255, 0.08)
+  );
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 6%,
+    rgba(255, 255, 255, 0.028)
+  );
+}
+
+.furina-essential-home-icon {
+  grid-row: 1 / 3;
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 12%,
+    rgba(255, 255, 255, 0.025)
+  );
+  color: var(--furina-accent, #9b7cff);
+  font-size: 13px;
+}
+
+.furina-essential-home-title {
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.furina-essential-home-description {
+  grid-column: 2 / 4;
+  color: rgba(255, 255, 255, 0.37);
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.furina-essential-home-arrow {
+  color: rgba(255, 255, 255, 0.24);
+  font-size: 11px;
+}
+
+.furina-essential-status-list {
+  display: grid;
+  gap: 2px;
+}
+
+.furina-essential-status-row {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr) auto;
+  gap: 7px;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 7px;
+  border-radius: 8px;
+}
+
+.furina-essential-status-row:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.furina-essential-status-label {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.furina-essential-status-value {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.furina-essential-status-meta {
+  color: var(--furina-accent, #9b7cff);
+  font-size: 7px;
+  white-space: nowrap;
+}
+
+.furina-essential-choice-grid,
+.furina-essential-background-grid,
+.furina-essential-theme-grid,
+.furina-essential-atmosphere-grid,
+.furina-essential-shortcut-grid,
+.furina-essential-interface-grid {
+  display: grid;
+  gap: 7px;
+}
+
+.furina-essential-choice-grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.furina-essential-choice {
+  min-height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(255, 255, 255, 0.55);
+  font: inherit;
+  font-size: 9px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.furina-essential-choice-active {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 35%,
+    rgba(255, 255, 255, 0.08)
+  );
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 11%,
+    rgba(255, 255, 255, 0.025)
+  );
+  color: #fff;
+}
+
+.furina-essential-theme-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.furina-essential-theme {
+  min-width: 0;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(255, 255, 255, 0.58);
+  font: inherit;
+  cursor: pointer;
+}
+
+.furina-essential-theme-active {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 40%,
+    rgba(255, 255, 255, 0.07)
+  );
+  color: #fff;
+}
+
+.furina-essential-theme-swatch {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+}
+
+.furina-essential-theme-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 8px;
+  font-weight: 750;
+}
+
+.furina-essential-background-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.furina-essential-background-choice {
+  min-width: 0;
+  min-height: 54px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 3px;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(255, 255, 255, 0.47);
+  font: inherit;
+  cursor: pointer;
+}
+
+.furina-essential-background-choice:hover,
+.furina-essential-background-choice-active {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 36%,
+    rgba(255, 255, 255, 0.08)
+  );
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 9%,
+    rgba(255, 255, 255, 0.02)
+  );
+  color: #fff;
+}
+
+.furina-essential-background-icon {
+  color: var(--furina-accent, #9b7cff);
+  font-size: 13px;
+}
+
+.furina-essential-background-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 7px;
+  font-weight: 800;
+}
+
+.furina-essential-background-controls {
+  display: grid;
+  gap: 9px;
+  padding-top: 2px;
+}
+
+.furina-essential-field {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.furina-essential-field > .furina-text-input,
+.furina-essential-field > .furina-select,
+.furina-essential-field > .furina-textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.furina-essential-help {
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 7px;
+  line-height: 1.4;
+}
+
+.furina-essential-inline-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.furina-essential-color {
+  width: 100%;
+  min-height: 34px;
+}
+
+.furina-essential-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.furina-essential-range {
+  margin: 0;
+}
+
+.furina-essential-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.furina-essential-actions > button {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+.furina-essential-status {
+  min-height: 12px;
+  color: color-mix(in srgb, var(--furina-accent, #9b7cff) 72%, white);
+  font-size: 7px;
+  line-height: 1.4;
+}
+
+.furina-essential-toggle {
+  margin: 0;
+}
+
+.furina-essential-atmosphere-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.furina-essential-chip {
+  min-height: 34px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(255, 255, 255, 0.64);
+  font: inherit;
+  font-size: 8px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.furina-essential-chip:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 30%,
+    rgba(255, 255, 255, 0.08)
+  );
+  color: #fff;
+}
+
+.furina-essential-chip-muted {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.furina-essential-interface-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.furina-essential-interface {
+  min-width: 0;
+  min-height: 142px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 12px;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in srgb, var(--furina-accent, #9b7cff) 12%, transparent),
+      transparent 52%
+    ),
+    rgba(255, 255, 255, 0.02);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.furina-essential-interface:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 35%,
+    rgba(255, 255, 255, 0.08)
+  );
+}
+
+.furina-essential-interface-mark {
+  color: var(--furina-accent, #9b7cff);
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.furina-essential-interface-title {
+  margin-top: 10px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.furina-essential-interface-copy {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 7px;
+  line-height: 1.45;
+}
+
+.furina-essential-interface-action {
+  margin-top: auto;
+  padding-top: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.furina-essential-shortcut-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.furina-essential-shortcut {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 2px 7px;
+  align-items: center;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.02);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.furina-essential-shortcut:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.furina-essential-shortcut-icon {
+  grid-row: 1 / 3;
+  color: var(--furina-accent, #9b7cff);
+  font-size: 12px;
+  text-align: center;
+}
+
+.furina-essential-shortcut-title {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.furina-essential-shortcut-copy {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.32);
+  font-size: 7px;
+}
+
+@media (max-width: 620px) {
+  .furina-panel[data-panel-mode='essentials'] {
+    width: calc(100vw - 16px);
+  }
+
+  .furina-mode-switch {
+    padding: 5px 7px;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-workspace-app {
+    display: flex;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button {
+    flex-basis: 58px;
+  }
+
+  .furina-essential-home-grid,
+  .furina-essential-interface-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-essential-background-grid {
+    grid-template-columns: repeat(5, minmax(52px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+}
+
+@media (max-width: 420px) {
+  .furina-essential-theme-grid,
+  .furina-essential-atmosphere-grid,
+  .furina-essential-shortcut-grid,
+  .furina-essential-inline-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-mode-switch-button,
+  .furina-essential-home-card {
+    transition: none !important;
+  }
+}
+
+/* ========================================================================
+   ESSENTIALS COMFORT PASS V2
+
+   Essentials should feel like a friendly launcher, not a miniature copy of
+   Full Atelier. The advanced panel keeps its dense left rail; Essentials uses
+   a wider canvas, larger type, and a simple goal-based tab strip instead.
+   ======================================================================== */
+
+.furina-panel[data-panel-mode='essentials'] {
+  width: min(490px, calc(100vw - 28px));
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Essentials primary navigation becomes a readable tab strip. */
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  padding: 8px 10px;
+  overflow: visible;
+  border-right: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.023),
+    rgba(255, 255, 255, 0.009)
+  );
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 6px;
+  border-radius: 9px;
+  text-align: center;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button:hover {
+  transform: translateY(-1px);
+}
+
+.furina-panel[data-panel-mode='essentials']
+  .furina-primary-nav-button-active::before {
+  left: 10px;
+  right: 10px;
+  top: auto;
+  bottom: -9px;
+  width: auto;
+  height: 2px;
+  border-radius: 999px 999px 0 0;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-label {
+  min-width: 0;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: nowrap;
+  font-size: 9.5px;
+  font-weight: 780;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-badge {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  min-width: 15px;
+  height: 15px;
+  padding-inline: 3px;
+  font-size: 7px;
+}
+
+/* Give the content area enough room to breathe. */
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-header {
+  padding: 16px 20px 12px;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-title {
+  font-size: 20px;
+  letter-spacing: -0.02em;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-description {
+  margin-top: 5px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-scroll {
+  padding: 18px 20px 26px;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-workspace-content {
+  width: min(100%, 720px);
+}
+
+.furina-mode-switch {
+  padding: 7px 10px;
+  gap: 6px;
+}
+
+.furina-mode-switch-button {
+  min-height: 34px;
+  padding: 7px 11px;
+  font-size: 10px;
+}
+
+.furina-essentials-home,
+.furina-essentials-customize,
+.furina-essentials-roleplay,
+.furina-essentials-immersion,
+.furina-essentials-more {
+  gap: 15px;
+}
+
+.furina-essential-intro {
+  padding: 17px 18px;
+  border-radius: 15px;
+}
+
+.furina-essential-intro::after {
+  right: 14px;
+  top: 6px;
+  font-size: 48px;
+}
+
+.furina-essential-heading {
+  margin-top: 6px;
+  font-size: 20px;
+  line-height: 1.15;
+}
+
+.furina-essential-intro-copy {
+  margin-top: 7px;
+  font-size: 10.5px;
+  line-height: 1.55;
+}
+
+.furina-essential-card {
+  border-radius: 15px;
+}
+
+.furina-essential-card-head {
+  padding: 15px 16px 12px;
+}
+
+.furina-essential-card-title {
+  font-size: 12.5px;
+}
+
+.furina-essential-card-description {
+  margin-top: 5px;
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.furina-essential-card-content {
+  gap: 12px;
+  padding: 14px 16px 17px;
+}
+
+.furina-essential-home-grid {
+  gap: 10px;
+}
+
+.furina-essential-home-card {
+  min-height: 136px;
+  gap: 6px 10px;
+  padding: 15px;
+  border-radius: 14px;
+}
+
+.furina-essential-home-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  font-size: 15px;
+}
+
+.furina-essential-home-title {
+  font-size: 11.5px;
+  line-height: 1.25;
+}
+
+.furina-essential-home-description {
+  font-size: 9.5px;
+  line-height: 1.5;
+}
+
+.furina-essential-home-arrow {
+  font-size: 12px;
+}
+
+.furina-essential-status-list {
+  gap: 3px;
+}
+
+.furina-essential-status-row {
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  gap: 9px;
+  min-height: 35px;
+  padding: 7px 9px;
+  border-radius: 9px;
+}
+
+.furina-essential-status-label {
+  font-size: 8px;
+}
+
+.furina-essential-status-value {
+  font-size: 10.5px;
+}
+
+.furina-essential-status-meta {
+  font-size: 8px;
+}
+
+.furina-essential-choice {
+  min-height: 40px;
+  padding: 8px 10px;
+  font-size: 10px;
+}
+
+.furina-essential-theme {
+  min-height: 44px;
+  gap: 9px;
+  padding: 8px 9px;
+}
+
+.furina-essential-theme-swatch {
+  width: 25px;
+  height: 25px;
+}
+
+.furina-essential-theme-name {
+  font-size: 9.5px;
+}
+
+.furina-essential-background-choice {
+  min-height: 64px;
+  gap: 6px;
+  padding: 8px 4px;
+}
+
+.furina-essential-background-icon {
+  font-size: 15px;
+}
+
+.furina-essential-background-label {
+  font-size: 8.5px;
+}
+
+.furina-essential-background-controls {
+  gap: 11px;
+}
+
+.furina-essential-field {
+  gap: 6px;
+}
+
+.furina-essential-help {
+  font-size: 8.5px;
+  line-height: 1.45;
+}
+
+.furina-essential-textarea {
+  min-height: 84px;
+}
+
+.furina-essential-actions {
+  gap: 8px;
+}
+
+.furina-essential-status {
+  min-height: 14px;
+  font-size: 8.5px;
+}
+
+.furina-essential-chip {
+  min-height: 39px;
+  padding: 8px 10px;
+  font-size: 9.5px;
+}
+
+.furina-essential-interface {
+  min-height: 154px;
+  padding: 14px;
+}
+
+.furina-essential-interface-mark {
+  font-size: 21px;
+}
+
+.furina-essential-interface-title {
+  margin-top: 11px;
+  font-size: 11.5px;
+}
+
+.furina-essential-interface-copy {
+  margin-top: 5px;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.furina-essential-interface-action {
+  padding-top: 11px;
+  font-size: 9.5px;
+}
+
+.furina-essential-shortcut {
+  grid-template-columns: 27px minmax(0, 1fr);
+  gap: 3px 8px;
+  padding: 11px;
+  border-radius: 10px;
+}
+
+.furina-essential-shortcut-icon {
+  font-size: 14px;
+}
+
+.furina-essential-shortcut-title {
+  font-size: 9.5px;
+}
+
+.furina-essential-shortcut-copy {
+  font-size: 8.5px;
+}
+
+/* Narrow windows keep the same intent-first layout, but tabs may wrap. */
+@media (max-width: 620px) {
+  .furina-panel[data-panel-mode='essentials'] {
+    width: calc(100vw - 16px);
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(62px, 1fr));
+    gap: 4px;
+    padding: 7px;
+    overflow-x: auto;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button {
+    min-width: 62px;
+    min-height: 40px;
+    flex-direction: row;
+    gap: 4px;
+    padding: 6px 5px;
+  }
+
+  .furina-panel[data-panel-mode='essentials']
+    .furina-primary-nav-button-active::before {
+    bottom: -8px;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav-label {
+    max-width: none;
+    font-size: 8.5px;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-workspace-header {
+    padding: 14px 15px 10px;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-workspace-title {
+    font-size: 18px;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-workspace-description {
+    font-size: 10px;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-workspace-scroll {
+    padding: 15px 14px 21px;
+  }
+}
+
+@media (max-width: 440px) {
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button {
+    min-width: 0;
+  }
+
+  .furina-essential-home-grid,
+  .furina-essential-interface-grid,
+  .furina-essential-theme-grid,
+  .furina-essential-atmosphere-grid,
+  .furina-essential-shortcut-grid,
+  .furina-essential-inline-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-essential-background-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+  }
+}
+
+/* ========================================================================
+   ESSENTIALS FINAL MICRO-POLISH
+
+   Keeps the Comfort Pass layout intact. This pass only improves hierarchy,
+   click affordance, readability, and keyboard focus without changing logic.
+   ======================================================================== */
+
+/* Primary Essentials tabs: a touch more presence without becoming bulky. */
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button {
+  min-height: 42px;
+  padding: 8px 7px;
+  transition:
+    transform 130ms ease,
+    background 130ms ease,
+    border-color 130ms ease,
+    color 130ms ease,
+    box-shadow 130ms ease;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-label {
+  font-size: 10.25px;
+  font-weight: 800;
+}
+
+.furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* Intro copy should be something a first-time user can comfortably read. */
+.furina-essential-intro-copy {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.54);
+}
+
+/* Slightly improve supporting copy throughout Essentials. */
+.furina-essential-card-description {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.46);
+}
+
+.furina-essential-home-description {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.43);
+}
+
+/* Make Home cards read more obviously as clickable launchers. */
+.furina-essential-home-card {
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.furina-essential-home-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 45%,
+    rgba(255, 255, 255, 0.1)
+  );
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 8%,
+    rgba(255, 255, 255, 0.032)
+  );
+  box-shadow:
+    0 11px 28px rgba(0, 0, 0, 0.14),
+    inset 0 0 20px
+      color-mix(in srgb, var(--furina-accent, #9b7cff) 4%, transparent);
+}
+
+.furina-essential-home-arrow {
+  transition:
+    transform 130ms ease,
+    color 130ms ease;
+}
+
+.furina-essential-home-card:hover .furina-essential-home-arrow {
+  transform: translateX(3px);
+  color: var(--furina-accent, #9b7cff);
+}
+
+/* Current Chat: keep the information, lose a little of the diagnostics feel. */
+.furina-essential-status-row {
+  min-height: 37px;
+  padding: 8px 10px;
+}
+
+.furina-essential-status-label {
+  font-size: 8.25px;
+  letter-spacing: 0.045em;
+  color: rgba(255, 255, 255, 0.39);
+}
+
+.furina-essential-status-value {
+  font-size: 11px;
+  font-weight: 750;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.furina-essential-status-meta {
+  font-size: 8px;
+  color: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 72%,
+    rgba(255, 255, 255, 0.55)
+  );
+  opacity: 0.84;
+}
+
+/* Small controls get the same soft interaction language as the Home cards. */
+.furina-essential-choice,
+.furina-essential-theme,
+.furina-essential-background-choice,
+.furina-essential-chip,
+.furina-essential-interface,
+.furina-essential-shortcut {
+  transition:
+    transform 130ms ease,
+    border-color 130ms ease,
+    background 130ms ease,
+    color 130ms ease,
+    box-shadow 130ms ease;
+}
+
+.furina-essential-choice:hover,
+.furina-essential-theme:hover,
+.furina-essential-background-choice:hover,
+.furina-essential-chip:hover,
+.furina-essential-interface:hover,
+.furina-essential-shortcut:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Keyboard users should always be able to see where they are. */
+.furina-mode-switch-button:focus-visible,
+.furina-panel[data-panel-mode='essentials']
+  .furina-primary-nav-button:focus-visible,
+.furina-essential-home-card:focus-visible,
+.furina-essential-choice:focus-visible,
+.furina-essential-theme:focus-visible,
+.furina-essential-background-choice:focus-visible,
+.furina-essential-chip:focus-visible,
+.furina-essential-interface:focus-visible,
+.furina-essential-shortcut:focus-visible {
+  outline: 2px solid
+    color-mix(in srgb, var(--furina-accent, #9b7cff) 78%, white);
+  outline-offset: 2px;
+}
+
+@media (max-width: 620px) {
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav-label {
+    font-size: 9px;
+  }
+
+  .furina-essential-intro-copy {
+    font-size: 10.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-panel[data-panel-mode='essentials'] .furina-primary-nav-button,
+  .furina-essential-home-card,
+  .furina-essential-home-arrow,
+  .furina-essential-choice,
+  .furina-essential-theme,
+  .furina-essential-background-choice,
+  .furina-essential-chip,
+  .furina-essential-interface,
+  .furina-essential-shortcut {
+    transition: none !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,493 @@
+/* Passage styling inherits the message's font, size and readable text color. */
+.clank-atelier-rendered .furina-markup-block {
+  --atelier-ink: var(--furina-accent, #9b7cff);
+
+  box-sizing: border-box;
+  margin: 0.85em 0;
+  padding: 0.85em 1em;
+  border-inline-start: 2px solid var(--atelier-ink);
+  border-radius: 0 0.65em 0.65em 0;
+  background: color-mix(in srgb, var(--atelier-ink) 7%, transparent);
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+.clank-atelier-rendered .furina-markup-block > :first-child {
+  margin-top: 0 !important;
+}
+
+.clank-atelier-rendered .furina-markup-block > :last-child {
+  margin-bottom: 0 !important;
+}
+
+.clank-atelier-rendered .furina-markup-whisper {
+  border-inline-start-style: dotted;
+  background: color-mix(in srgb, var(--atelier-ink) 4%, transparent);
+  font-style: italic;
+}
+
+.clank-atelier-rendered .furina-markup-thought {
+  border: 1px solid color-mix(in srgb, var(--atelier-ink) 32%, transparent);
+  border-radius: 1em 1em 1em 0.2em;
+  font-style: italic;
+  background: color-mix(in srgb, var(--atelier-ink) 9%, transparent);
+}
+
+.clank-atelier-rendered .furina-markup-narration {
+  border: 0;
+  border-block: 1px solid
+    color-mix(in srgb, var(--atelier-ink) 30%, transparent);
+  border-radius: 0;
+  padding: 1em 0.8em;
+  background: transparent;
+}
+
+.clank-atelier-rendered .furina-markup-shout {
+  border-inline-start-width: 4px;
+  background: color-mix(in srgb, var(--atelier-ink) 14%, transparent);
+  font-weight: 800;
+  letter-spacing: 0.025em;
+}
+
+/* Atelier composer tools */
+.furina-composer-atelier {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 100%;
+  grid-column: 1 / -1;
+  margin-bottom: 8px;
+  color: #eeeaf8;
+  font:
+    13px/1.5 ui-sans-serif,
+    system-ui,
+    sans-serif;
+}
+
+.furina-composer-atelier button {
+  box-sizing: border-box;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #9b7cff) 40%, transparent);
+  border-radius: 8px;
+  padding: 7px 11px;
+  background: #25202f;
+  color: #eeeaf8;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.furina-composer-atelier button:hover:not(:disabled),
+.furina-composer-atelier .furina-atelier-toggle[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--furina-accent, #9b7cff) 28%, #25202f);
+  border-color: var(--furina-accent, #9b7cff);
+}
+
+.furina-composer-atelier button:focus-visible,
+.furina-composer-atelier .furina-atelier-preview:focus-visible {
+  outline: 2px solid var(--furina-accent, #9b7cff);
+  outline-offset: 3px;
+}
+
+.furina-composer-atelier button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.furina-composer-atelier .furina-atelier-tools[hidden] {
+  display: none !important;
+}
+
+.furina-atelier-tools {
+  box-sizing: border-box;
+  max-height: min(390px, 50vh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #9b7cff) 30%, transparent);
+  border-radius: 12px;
+  background: #17141e;
+}
+
+.furina-atelier-hint {
+  margin: 0 0 10px;
+  color: #c5bdd4;
+  font-size: 12px;
+}
+
+.furina-atelier-choices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.furina-composer-atelier .furina-atelier-style {
+  padding-inline: 5px;
+}
+
+.furina-atelier-preview-title {
+  margin: 14px 0 6px;
+  color: #c5bdd4;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.furina-composer-atelier .furina-atelier-preview {
+  min-height: 44px;
+  max-height: 220px;
+  overflow: auto;
+  padding: 10px;
+  border: 1px solid #ffffff12;
+  border-radius: 8px;
+  background: #ffffff04;
+  font-size: var(--furina-font-size, 16px);
+  line-height: var(--furina-line-height, 1.55);
+  overflow-wrap: anywhere;
+}
+
+.furina-atelier-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.furina-atelier-status {
+  flex: 1 1 130px;
+  color: #c5bdd4;
+  font-size: 11px;
+}
+
+.furina-composer-atelier .furina-atelier-undo {
+  font-size: 11px;
+}
+
+@media (max-width: 480px) {
+  .furina-atelier-choices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+html.furina-focus-mode .furina-composer-atelier,
+html.furina-screenshot-mode .furina-composer-atelier {
+  display: none !important;
+}
+
+/* Authored formats and structured content. */
+.clank-atelier-rendered .furina-markup-title {
+  margin-bottom: 0.7em;
+  font:
+    700 0.7em/1.4 ui-sans-serif,
+    system-ui,
+    sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+}
+.clank-atelier-rendered .furina-markup-letter {
+  margin-inline: 0.35em;
+  padding: 1.3em;
+  border: 1px solid #caba9e;
+  border-radius: 2px;
+  background: #eee5d4;
+  color: #392c20;
+  font-family: Georgia, serif;
+  box-shadow: 3px 3px 0 #00000018;
+}
+.clank-atelier-rendered .furina-markup-phone {
+  max-width: 28em;
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 35%, transparent);
+  border-radius: 1.25em 1.25em 0.25em 1.25em;
+  background: color-mix(in srgb, var(--furina-accent) 12%, transparent);
+}
+.clank-atelier-rendered .furina-markup-radio {
+  border: 1px dashed color-mix(in srgb, var(--furina-accent) 60%, transparent);
+  border-inline-start: 4px solid var(--furina-accent);
+  border-radius: 0.4em;
+  font-family: ui-monospace, monospace;
+}
+.clank-atelier-rendered .furina-markup-system {
+  border: 1px solid #7ba7a54a;
+  border-radius: 0.25em;
+  background: #121e21;
+  color: #c1e9e4;
+  font-family: ui-monospace, monospace;
+}
+.clank-atelier-rendered .furina-markup-card,
+.clank-atelier-rendered .furina-markup-status {
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 35%, transparent);
+  border-radius: 0.65em;
+  box-shadow: 0 5px 16px #00000012;
+}
+.clank-atelier-rendered .furina-markup-status .furina-markup-title {
+  padding-bottom: 0.7em;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--furina-accent) 25%, transparent);
+}
+.clank-atelier-rendered .furina-markup-speaker {
+  background: transparent;
+  border-inline-start-width: 3px;
+}
+.clank-atelier-rendered .furina-markup-speaker .furina-markup-title {
+  color: var(--furina-accent);
+}
+.furina-markup-scene {
+  display: grid;
+  gap: 0.3em;
+  text-align: center;
+  padding: 1.6em 0.7em;
+  margin: 1em 0;
+  border-block: 1px solid
+    color-mix(in srgb, var(--furina-accent) 30%, transparent);
+}
+.furina-markup-scene > strong {
+  font-size: 1.25em;
+  letter-spacing: 0.05em;
+}
+.furina-markup-scene > :first-child {
+  color: var(--furina-accent);
+}
+.furina-markup-scene small {
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+.furina-markup-meter {
+  margin: 1em 0;
+}
+.furina-markup-meter > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5em;
+  margin-bottom: 0.3em;
+}
+.furina-markup-meter progress {
+  display: block;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #8883;
+  accent-color: var(--furina-accent);
+}
+.furina-markup-meter progress::-webkit-progress-bar {
+  background: #8883;
+}
+.furina-markup-meter progress::-webkit-progress-value {
+  background: var(--furina-accent);
+}
+.furina-markup-meter progress::-moz-progress-bar {
+  background: var(--furina-accent);
+}
+.furina-markup-details {
+  margin: 0.85em 0;
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 35%, transparent);
+  border-radius: 0.65em;
+}
+.furina-markup-details > summary {
+  padding: 0.7em 1em;
+  cursor: pointer;
+  font-weight: 650;
+}
+.furina-markup-details > div {
+  padding: 0.2em 1em 0.8em;
+}
+.furina-markup-details > summary:focus-visible {
+  outline: 2px solid var(--furina-accent);
+  outline-offset: 2px;
+}
+.furina-inline-glow {
+  text-shadow: 0 0 0.6em
+    color-mix(in srgb, var(--furina-accent) 80%, transparent);
+  font-weight: 650;
+}
+.furina-inline-key {
+  display: inline;
+  padding: 0.07em 0.35em;
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 45%, transparent);
+  border-radius: 0.3em;
+  background: color-mix(in srgb, var(--furina-accent) 10%, transparent);
+  font-weight: 650;
+  box-decoration-break: clone;
+}
+.furina-inline-sfx {
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0.07em;
+}
+.clank-atelier-rendered .furina-reveal-toggle {
+  display: inline;
+  padding: 0.1em 0.4em;
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 35%, transparent);
+  border-radius: 0.3em;
+  background: color-mix(in srgb, var(--furina-accent) 12%, transparent);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.clank-atelier-rendered .furina-reveal-toggle:focus-visible {
+  outline: 2px solid var(--furina-accent);
+  outline-offset: 2px;
+}
+.furina-reveal-content {
+  margin-inline-start: 0.3em;
+}
+.furina-inline-tip-content {
+  margin-inline: 0.4em;
+  padding: 0.2em 0.4em;
+  border-inline-start: 2px solid var(--furina-accent);
+  font-size: 0.9em;
+}
+.furina-reveal-content[hidden],
+.furina-inline-tip-content[hidden] {
+  display: none !important;
+}
+.furina-inline-tip > .furina-reveal-toggle {
+  border: 0;
+  border-bottom: 1px dotted currentColor;
+  background: transparent;
+  border-radius: 0;
+  padding-inline: 0.1em;
+}
+/* The picker exposes one small form at a time, with no second message editor. */
+.furina-atelier-picker {
+  display: grid;
+  gap: 9px;
+}
+.furina-atelier-select,
+.furina-atelier-field-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  color: #eeeaf8;
+  background: #25202f;
+  border: 1px solid #ffffff26;
+  border-radius: 7px;
+  font: inherit;
+}
+.furina-atelier-select:focus-visible,
+.furina-atelier-field-input:focus-visible {
+  outline: 2px solid var(--furina-accent);
+  outline-offset: 2px;
+}
+.furina-atelier-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: 7px;
+}
+.furina-atelier-field {
+  display: grid;
+  gap: 3px;
+  color: #c5bdd4;
+  font-size: 12px;
+}
+.furina-composer-atelier .furina-atelier-insert {
+  justify-self: start;
+}
+.furina-atelier-setting {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-block: 12px;
+  cursor: pointer;
+}
+.furina-atelier-setting input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: var(--furina-accent);
+}
+.furina-atelier-setting strong,
+.furina-atelier-setting small {
+  display: block;
+}
+.furina-atelier-setting small {
+  margin-top: 4px;
+  opacity: 0.75;
+  line-height: 1.5;
+}
+.furina-atelier-help {
+  margin-top: 16px;
+}
+.furina-atelier-help summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+.furina-atelier-example {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 9px;
+  background: #8881;
+  border-radius: 6px;
+}
+
+/* Interactive choices and dice. */
+.furina-choice-block,
+.furina-dice-widget {
+  margin: 0.75em 0;
+  padding: 0.9em;
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 35%, transparent);
+  border-radius: 0.75em;
+  background: color-mix(in srgb, var(--furina-accent) 7%, transparent);
+}
+.furina-choice-list {
+  display: grid;
+  gap: 0.45em;
+}
+.furina-choice-option,
+.furina-dice-actions button {
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 35%, transparent);
+  border-radius: 0.55em;
+  padding: 0.55em 0.7em;
+  background: color-mix(in srgb, var(--furina-accent) 10%, transparent);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.furina-choice-option:hover,
+.furina-dice-actions button:hover:not(:disabled) {
+  border-color: var(--furina-accent);
+}
+.furina-choice-option > span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5em;
+  margin-inline-end: 0.55em;
+  opacity: 0.65;
+}
+.furina-dice-widget > div:first-child {
+  display: flex;
+  gap: 0.5em;
+  align-items: baseline;
+  margin-bottom: 0.55em;
+}
+.furina-dice-widget small {
+  opacity: 0.6;
+}
+.furina-dice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55em;
+}
+.furina-dice-actions output {
+  min-width: 2.2em;
+  text-align: center;
+  font:
+    800 1.15em/1 ui-monospace,
+    monospace;
+}
+.furina-dice-actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}

@@ -1,0 +1,2706 @@
+/* ============================================================
+   MIYABI PROFILE ENGINE 2.0 - PHASE 1
+   ============================================================ */
+
+:root {
+  --m-bg: #0c0c0c;
+  --m-text: #ffffff;
+  --m-accent: #a855f7;
+  --m-card-bg: #1a1a1a;
+  --m-card-border: #333333;
+  --m-font: sans-serif;
+  --m-radius: 12px;
+  --m-grid-min: 220px;
+  --m-sidebar-width: 300px;
+}
+
+@keyframes miyabiPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes miyabiLoadingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes miyabiCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes miyabiFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes miyabiShine {
+  from {
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  to {
+    transform: translateX(180%) skewX(-18deg);
+  }
+}
+
+/* ============================================================
+   BODY / OVERLAY
+   ============================================================ */
+
+body.miyabi-open {
+  overflow: hidden !important;
+}
+
+#miyabi-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background-color: var(--m-bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--m-text);
+  font-family: var(--m-font);
+  transition:
+    opacity 0.28s ease,
+    visibility 0.28s ease,
+    background-color 0.3s,
+    color 0.3s;
+  isolation: isolate;
+}
+
+#miyabi-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+#miyabi-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -3;
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      color-mix(in srgb, var(--m-accent) 13%, transparent),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      color-mix(in srgb, var(--m-accent) 9%, transparent),
+      transparent 40%
+    );
+}
+
+#miyabi-overlay.has-custom-background::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.72));
+}
+
+#miyabi-overlay.compact-mode .miyabi-container {
+  max-width: 1500px;
+}
+#miyabi-overlay.compact-mode .miyabi-main-content {
+  gap: 18px;
+}
+#miyabi-overlay.compact-mode .miyabi-character-grid {
+  gap: 12px;
+}
+#miyabi-overlay.compact-mode .miyabi-card-body {
+  padding: 12px;
+}
+
+#miyabi-particle-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ============================================================
+   LOADING SCREEN
+   ============================================================ */
+
+#miyabi-loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #080808;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
+}
+
+#miyabi-loading-screen.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.miyabi-loading-orb {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-top-color: var(--m-accent);
+  box-shadow: 0 0 35px color-mix(in srgb, var(--m-accent) 40%, transparent);
+  animation: miyabiLoadingSpin 1s linear infinite;
+}
+
+.miyabi-loading-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.miyabi-loading-subtitle {
+  font-size: 0.78rem;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   FLOATING TOGGLE
+   ============================================================ */
+
+#miyabi-toggle-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10001;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 17px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(16, 16, 16, 0.9);
+  color: #fff;
+  cursor: pointer;
+  font:
+    800 0.86rem system-ui,
+    sans-serif;
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#miyabi-toggle-button:hover {
+  transform: translateY(-3px);
+  border-color: var(--m-accent);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.5),
+    0 0 22px color-mix(in srgb, var(--m-accent) 28%, transparent);
+}
+
+#miyabi-toggle-button.is-open {
+  border-color: var(--m-accent);
+}
+.miyabi-toggle-spark {
+  color: var(--m-accent);
+  animation: miyabiFloat 2.2s ease-in-out infinite;
+}
+
+/* ============================================================
+   MAIN CONTAINER / NAVIGATION
+   ============================================================ */
+
+.miyabi-container {
+  width: min(1400px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 24px 0 55px;
+}
+
+.miyabi-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 48px;
+  padding: 8px 0 16px;
+  border-bottom: 1px solid var(--m-card-border);
+}
+
+.miyabi-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--m-text);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.miyabi-logo {
+  display: block;
+
+  width: auto;
+  height: 24px;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 0 8px rgba(var(--m-accent-rgb), 0.08));
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.miyabi-brand:hover .miyabi-logo {
+  transform: scale(1.04);
+
+  filter: drop-shadow(0 0 10px rgba(var(--m-accent-rgb), 0.2));
+}
+
+.miyabi-brand:hover .miyabi-logo {
+  transform: scale(1.05);
+}
+.miyabi-brand-divider {
+  opacity: 0.25;
+}
+.miyabi-brand-name {
+  color: var(--m-accent);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+.miyabi-nav-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+#miyabi-overlay .clank-link {
+  color: var(--m-text);
+  opacity: 0.76;
+  text-decoration: none;
+  font: 700 0.78rem var(--m-font);
+  padding: 7px 8px;
+  border-radius: 7px;
+  transition:
+    color 0.2s,
+    background 0.2s,
+    opacity 0.2s;
+}
+
+#miyabi-overlay .clank-link:hover {
+  color: var(--m-accent);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+:is(#miyabi-overlay, #miyabi-settings-panel) .theme-btn {
+  appearance: none;
+  border: 1px solid var(--m-card-border);
+  background: var(--m-card-bg);
+  color: var(--m-text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font: 800 0.76rem var(--m-font);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+:is(#miyabi-overlay, #miyabi-settings-panel) .theme-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--m-accent);
+  color: var(--m-accent);
+}
+
+#miyabi-overlay .create-btn {
+  color: #fff !important;
+  background: #3b82f6;
+  border-color: transparent;
+}
+
+#miyabi-overlay .create-btn:hover {
+  background: #2563eb;
+  color: #fff !important;
+}
+
+#miyabi-overlay .nav-settings-btn {
+  border-color: color-mix(in srgb, var(--m-accent) 45%, var(--m-card-border));
+}
+
+/* ============================================================
+   TOOLBAR / THEMES
+   ============================================================ */
+
+.miyabi-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 0 24px;
+}
+
+#miyabi-overlay .toolbar-kicker,
+#miyabi-overlay .panel-kicker,
+#miyabi-settings-panel .settings-kicker,
+#miyabi-overlay .miyabi-profile-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--m-accent);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+#miyabi-overlay .toolbar-title {
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+#miyabi-overlay .theme-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+:is(#miyabi-overlay, #miyabi-settings-panel) .settings-theme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 82px;
+  padding: 8px 10px;
+  border: 1px solid var(--m-card-border);
+  border-radius: 8px;
+  background: var(--m-card-bg);
+  color: var(--m-text);
+  cursor: pointer;
+  font: inherit;
+  transition: 0.2s ease;
+}
+
+:is(#miyabi-overlay, #miyabi-settings-panel) .settings-theme:hover,
+:is(#miyabi-overlay, #miyabi-settings-panel) .settings-theme.active {
+  border-color: var(--m-accent);
+  color: var(--m-accent);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--m-accent) 12%, transparent);
+}
+
+:is(#miyabi-overlay, #miyabi-settings-panel) .settings-theme small {
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+/* ============================================================
+   PROFILE HERO
+   ============================================================ */
+
+.miyabi-header {
+  position: relative;
+  margin-bottom: 255px;
+}
+
+.miyabi-banner {
+  display: block;
+  width: 100%;
+  height: clamp(210px, 25vw, 340px);
+  object-fit: cover;
+  border: 1px solid var(--m-card-border);
+  border-radius: var(--m-radius);
+  box-shadow: none;
+}
+
+.miyabi-banner-empty {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(
+      circle at 30% 30%,
+      color-mix(in srgb, var(--m-accent) 18%, transparent),
+      transparent 30%
+    ),
+    linear-gradient(135deg, var(--m-card-bg), var(--m-bg));
+  color: var(--m-accent);
+  font-weight: 800;
+}
+
+.miyabi-banner-overlay {
+  position: absolute;
+  inset: 1px;
+
+  height: clamp(210px, 25vw, 340px);
+
+  border-radius: var(--m-radius);
+
+  pointer-events: none;
+
+  background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.52));
+
+  box-shadow:
+    0 22px 55px rgba(0, 0, 0, 0.32),
+    0 0 0 1px rgba(255, 255, 255, 0.035);
+}
+
+.miyabi-profile-row {
+  position: absolute;
+  left: 34px;
+  bottom: -230px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-top: 28px;
+  max-width: calc(100% - 68px);
+}
+
+.miyabi-avatar {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  flex-shrink: 0;
+  object-fit: cover;
+  border: 5px solid var(--m-bg);
+  border-radius: var(--m-radius);
+  background: var(--m-card-bg);
+  box-shadow:
+    0 0 0 1px var(--m-card-border),
+    0 0 35px color-mix(in srgb, var(--m-accent) 38%, transparent),
+    0 18px 35px rgba(0, 0, 0, 0.38);
+  transition:
+    border-radius 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.miyabi-avatar-empty {
+  box-shadow: 0 0 0 1px var(--m-card-border);
+}
+
+.miyabi-profile-copy {
+  min-width: 0;
+  width: min(820px, calc(100vw - 240px));
+  padding: 18px 20px 17px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--m-accent) 24%, rgba(255, 255, 255, 0.08));
+
+  border-radius: calc(var(--m-radius) + 4px);
+
+  background: linear-gradient(
+    145deg,
+    rgba(10, 10, 12, 0.83),
+    rgba(10, 10, 12, 0.58)
+  );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 18px 46px rgba(0, 0, 0, 0.32),
+    0 0 36px color-mix(in srgb, var(--m-accent) 8%, transparent);
+
+  backdrop-filter: blur(18px) saturate(1.12);
+
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+}
+
+/* Identity */
+
+.miyabi-identity-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.miyabi-name-group {
+  min-width: 0;
+}
+
+.miyabi-username {
+  position: relative;
+
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+
+  line-height: 1;
+
+  font-weight: 950;
+
+  letter-spacing: -0.045em;
+
+  text-shadow: 0 3px 20px rgba(0, 0, 0, 0.7);
+}
+
+.miyabi-handle {
+  margin-top: 7px;
+
+  color: var(--m-accent);
+
+  font-size: 0.76rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.035em;
+
+  opacity: 0.82;
+}
+
+.miyabi-identity-mark {
+  display: grid;
+  place-items: center;
+
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  border: 1px solid color-mix(in srgb, var(--m-accent) 42%, transparent);
+
+  border-radius: 50%;
+
+  background: color-mix(in srgb, var(--m-accent) 10%, transparent);
+
+  color: var(--m-accent);
+
+  font-size: 1rem;
+
+  box-shadow: 0 0 22px color-mix(in srgb, var(--m-accent) 22%, transparent);
+}
+
+/* Bio */
+
+.miyabi-bio {
+  max-width: 760px;
+
+  margin: 14px 0 0;
+
+  color: rgba(255, 255, 255, 0.76);
+
+  font-size: 0.84rem;
+
+  line-height: 1.6;
+
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.miyabi-muted {
+  opacity: 0.55;
+}
+
+/* Profile statistics */
+
+.miyabi-profile-stats {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+.miyabi-profile-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  min-width: 88px;
+
+  padding: 9px 11px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: calc(var(--m-radius) - 2px);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.miyabi-profile-stat:hover {
+  transform: translateY(-2px);
+
+  border-color: color-mix(in srgb, var(--m-accent) 42%, transparent);
+
+  background: color-mix(
+    in srgb,
+    var(--m-accent) 7%,
+    rgba(255, 255, 255, 0.035)
+  );
+}
+
+.miyabi-profile-stat strong {
+  color: var(--m-text);
+
+  font-size: 0.88rem;
+
+  font-weight: 900;
+
+  line-height: 1.1;
+}
+
+.miyabi-profile-stat span {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.44);
+
+  font-size: 0.57rem;
+
+  font-weight: 850;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.miyabi-profile-stat-wide {
+  min-width: 118px;
+}
+
+/* Scenes / Community */
+
+.miyabi-profile-destinations {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.miyabi-profile-destination {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 120px;
+
+  padding: 8px 11px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--m-accent) 24%, var(--m-card-border));
+
+  border-radius: calc(var(--m-radius) - 2px);
+
+  background: color-mix(
+    in srgb,
+    var(--m-accent) 5%,
+    rgba(255, 255, 255, 0.025)
+  );
+
+  color: var(--m-text);
+
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.miyabi-profile-destination:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--m-accent);
+
+  background: color-mix(
+    in srgb,
+    var(--m-accent) 10%,
+    rgba(255, 255, 255, 0.035)
+  );
+
+  box-shadow:
+    0 7px 20px rgba(0, 0, 0, 0.18),
+    0 0 18px color-mix(in srgb, var(--m-accent) 13%, transparent);
+}
+
+.miyabi-destination-icon {
+  display: grid;
+  place-items: center;
+
+  width: 27px;
+  height: 27px;
+
+  flex: 0 0 27px;
+
+  border-radius: 7px;
+
+  background: color-mix(in srgb, var(--m-accent) 13%, transparent);
+
+  color: var(--m-accent);
+
+  font-size: 0.78rem;
+}
+
+.miyabi-destination-copy {
+  display: flex;
+  align-items: baseline;
+
+  gap: 7px;
+}
+
+.miyabi-destination-copy small {
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 0.56rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.1em;
+}
+
+.miyabi-destination-copy strong {
+  color: var(--m-accent);
+
+  font-size: 0.82rem;
+
+  font-weight: 950;
+}
+
+/* ============================================================
+   MAIN CONTENT
+   ============================================================ */
+
+.miyabi-main-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.miyabi-recents-panel {
+  width: var(--m-sidebar-width);
+  flex: 0 0 var(--m-sidebar-width);
+  padding: 16px;
+  border: 1px solid var(--m-card-border);
+  border-radius: var(--m-radius);
+  background: var(--m-card-bg);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.16);
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    border-radius 0.3s;
+}
+
+.miyabi-panel-heading,
+.miyabi-grid-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.miyabi-recent-header {
+  display: block;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+#miyabi-overlay .panel-count,
+#miyabi-overlay .character-count {
+  min-width: 28px;
+  padding: 4px 7px;
+  border: 1px solid var(--m-card-border);
+  border-radius: 999px;
+  color: var(--m-accent);
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+
+#miyabi-overlay .recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 13px;
+}
+
+#miyabi-overlay .recent-chat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px;
+  border-radius: 9px;
+  color: var(--m-text);
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+#miyabi-overlay .recent-chat-item:hover {
+  background: rgba(255, 255, 255, 0.055);
+  transform: translateX(2px);
+}
+
+#miyabi-overlay .recent-avatar {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+#miyabi-overlay .recent-avatar-placeholder {
+  background: var(--m-card-border);
+}
+#miyabi-overlay .recent-text-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+#miyabi-overlay .recent-title,
+#miyabi-overlay .recent-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#miyabi-overlay .recent-title {
+  color: var(--m-accent);
+  font-size: 0.8rem;
+  font-weight: 850;
+}
+#miyabi-overlay .recent-preview {
+  margin-top: 2px;
+  opacity: 0.62;
+  font-size: 0.69rem;
+}
+.miyabi-empty-mini {
+  padding: 12px 8px;
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+.miyabi-grid-container {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.miyabi-grid-heading {
+  margin-bottom: 14px;
+}
+.miyabi-grid-heading h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 950;
+  letter-spacing: -0.03em;
+}
+
+.miyabi-character-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--m-grid-min), 1fr));
+  gap: 18px;
+}
+
+/* ============================================================
+   CHARACTER CARDS
+   ============================================================ */
+
+.miyabi-card {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--m-card-border);
+  border-radius: var(--m-radius);
+  background: var(--m-card-bg);
+  color: var(--m-text);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  transform-style: preserve-3d;
+  isolation: isolate;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.3s;
+}
+
+.miyabi-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--m-accent);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, 0.28),
+    0 0 24px color-mix(in srgb, var(--m-accent) 12%, transparent);
+}
+
+.miyabi-card.tilt-enabled {
+  transition:
+    transform 0.08s ease-out,
+    box-shadow 0.22s,
+    border-color 0.22s;
+  will-change: transform;
+}
+.miyabi-card.miyabi-card-enter {
+  animation: miyabiCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.miyabi-card-media {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  background: var(--m-bg);
+}
+
+.miyabi-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.35s ease;
+}
+
+.miyabi-card:hover .miyabi-card-media img {
+  transform: scale(1.065);
+  filter: saturate(1.06);
+}
+.miyabi-card-placeholder {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  opacity: 0.35;
+  font-size: 0.8rem;
+}
+
+.miyabi-card-shine {
+  position: absolute;
+  inset: 0 auto 0 -55%;
+  width: 45%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  transform: skewX(-18deg);
+}
+
+.miyabi-card:hover .miyabi-card-shine {
+  opacity: 1;
+  animation: miyabiShine 0.65s ease forwards;
+}
+
+.miyabi-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 14px;
+}
+.miyabi-title {
+  margin-bottom: 5px;
+  overflow: hidden;
+  color: var(--m-accent);
+  font-size: 1.03rem;
+  font-weight: 900;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: text-shadow 0.2s;
+}
+
+.miyabi-card:hover .miyabi-title {
+  text-shadow: 0 0 13px color-mix(in srgb, var(--m-accent) 55%, transparent);
+}
+.miyabi-desc {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  opacity: 0.76;
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.miyabi-tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.miyabi-tag {
+  padding: 3px 7px;
+  border: 1px solid var(--m-card-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--m-text);
+  opacity: 0.8;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.miyabi-empty-state {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 30px;
+  border: 1px dashed var(--m-card-border);
+  border-radius: var(--m-radius);
+  text-align: center;
+}
+
+.miyabi-empty-state > div {
+  color: var(--m-accent);
+  font-size: 1.7rem;
+}
+.miyabi-empty-state strong {
+  font-size: 0.95rem;
+}
+.miyabi-empty-state span {
+  max-width: 350px;
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+/* ============================================================
+   GLASS MODE
+   ============================================================ */
+
+#miyabi-overlay.glass-active {
+  --m-card-bg: rgba(18, 18, 18, 0.48);
+  --m-card-border: rgba(255, 255, 255, 0.14);
+}
+
+#miyabi-overlay.glass-active .miyabi-card,
+#miyabi-overlay.glass-active .miyabi-recents-panel {
+  backdrop-filter: blur(17px) saturate(1.15);
+  -webkit-backdrop-filter: blur(17px) saturate(1.15);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.miyabi-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 0 5px;
+  opacity: 0.38;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+#miyabi-overlay .footer-dot {
+  color: var(--m-accent);
+}
+
+/* ============================================================
+   SETTINGS PANEL
+   ============================================================ */
+
+#miyabi-settings-panel {
+  position: fixed;
+  top: 0;
+  right: -440px;
+  z-index: 10005;
+  width: min(390px, 94vw);
+  height: 100vh;
+  overflow: hidden;
+  border-left: 1px solid var(--m-card-border);
+  background: var(--m-card-bg);
+  color: var(--m-text);
+  box-shadow: -18px 0 55px rgba(0, 0, 0, 0.4);
+  font-family: var(--m-font);
+  transition: right 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#miyabi-settings-panel.open {
+  right: 0;
+}
+
+#miyabi-settings-panel .settings-shell {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#miyabi-settings-panel .settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid var(--m-card-border);
+}
+
+#miyabi-settings-panel .settings-title {
+  font-size: 1.25rem;
+  font-weight: 950;
+}
+#miyabi-settings-panel .settings-close {
+  border: 0;
+  background: transparent;
+  color: var(--m-text);
+  cursor: pointer;
+  font-size: 1.25rem;
+  opacity: 0.65;
+  transition: 0.2s;
+}
+#miyabi-settings-panel .settings-close:hover {
+  color: var(--m-accent);
+  opacity: 1;
+  transform: rotate(5deg);
+}
+
+#miyabi-settings-panel .settings-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px 30px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--m-accent) transparent;
+}
+
+#miyabi-settings-panel .settings-section {
+  padding: 0 0 22px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--m-card-border);
+}
+#miyabi-settings-panel .settings-section:last-child {
+  border-bottom: 0;
+}
+#miyabi-settings-panel .settings-section-title {
+  margin-bottom: 14px;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--m-accent);
+}
+
+#miyabi-settings-panel .settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+#miyabi-settings-panel .settings-group label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  opacity: 0.78;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+#miyabi-settings-panel .settings-value {
+  color: var(--m-accent);
+}
+
+#miyabi-settings-panel .settings-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--m-card-border);
+  border-radius: 8px;
+  outline: none;
+  padding: 10px;
+  background: var(--m-bg);
+  color: var(--m-text);
+  font: 0.78rem var(--m-font);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+#miyabi-settings-panel .settings-input:focus {
+  border-color: var(--m-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--m-accent) 10%, transparent);
+}
+#miyabi-settings-panel .settings-color-row {
+  display: flex;
+  gap: 8px;
+}
+#miyabi-settings-panel .settings-color-picker {
+  width: 42px;
+  height: 38px;
+  padding: 3px;
+  border: 1px solid var(--m-card-border);
+  border-radius: 8px;
+  background: var(--m-bg);
+  cursor: pointer;
+}
+
+#miyabi-settings-panel input[type='range'] {
+  width: 100%;
+  accent-color: var(--m-accent);
+  cursor: pointer;
+}
+
+#miyabi-settings-panel .settings-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  cursor: pointer;
+}
+
+#miyabi-settings-panel .settings-toggle-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#miyabi-settings-panel .settings-toggle-copy strong {
+  font-size: 0.76rem;
+}
+#miyabi-settings-panel .settings-toggle-copy small {
+  opacity: 0.48;
+  font-size: 0.66rem;
+}
+#miyabi-settings-panel .settings-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+#miyabi-settings-panel .settings-switch {
+  width: 40px;
+  height: 22px;
+  flex: 0 0 40px;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--m-bg);
+  border: 1px solid var(--m-card-border);
+  transition: 0.2s;
+}
+#miyabi-settings-panel .settings-switch span {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #777;
+  transition: 0.2s;
+}
+#miyabi-settings-panel .settings-toggle input:checked + .settings-switch {
+  background: color-mix(in srgb, var(--m-accent) 22%, var(--m-bg));
+  border-color: var(--m-accent);
+}
+#miyabi-settings-panel .settings-toggle input:checked + .settings-switch span {
+  transform: translateX(18px);
+  background: var(--m-accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--m-accent) 70%, transparent);
+}
+
+#miyabi-settings-panel .settings-theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+#miyabi-settings-panel .settings-action {
+  width: 100%;
+  margin-bottom: 7px;
+  padding: 10px 12px;
+  border: 1px solid var(--m-card-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--m-text);
+  cursor: pointer;
+  text-align: left;
+  font: 800 0.72rem var(--m-font);
+  transition: 0.2s;
+}
+
+#miyabi-settings-panel .settings-action:hover {
+  border-color: var(--m-accent);
+  color: var(--m-accent);
+  background: rgba(255, 255, 255, 0.03);
+}
+#miyabi-settings-panel .settings-action.danger:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+#miyabi-settings-panel .settings-footer {
+  padding: 15px 24px 20px;
+  border-top: 1px solid var(--m-card-border);
+}
+#miyabi-settings-panel .settings-save {
+  width: 100%;
+  padding: 11px;
+}
+#miyabi-settings-panel .settings-status {
+  margin-top: 7px;
+  min-height: 14px;
+  text-align: center;
+  opacity: 0.45;
+  font-size: 0.62rem;
+}
+#miyabi-settings-panel .settings-status.error {
+  color: #ef4444;
+  opacity: 1;
+}
+
+/* ============================================================
+   SCROLLBARS
+   ============================================================ */
+
+#miyabi-overlay,
+#miyabi-settings-panel {
+  scrollbar-width: thin;
+  scrollbar-color: var(--m-accent) var(--m-card-bg);
+}
+#miyabi-overlay::-webkit-scrollbar,
+#miyabi-settings-panel::-webkit-scrollbar {
+  width: 10px;
+}
+#miyabi-overlay::-webkit-scrollbar-track,
+#miyabi-settings-panel::-webkit-scrollbar-track {
+  background: var(--m-card-bg);
+}
+#miyabi-overlay::-webkit-scrollbar-thumb,
+#miyabi-settings-panel::-webkit-scrollbar-thumb {
+  background: var(--m-accent);
+  border: 2px solid var(--m-card-bg);
+  border-radius: 999px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  #miyabi-overlay .miyabi-nav-group .clank-link:nth-child(-n + 4) {
+    display: none;
+  }
+  .miyabi-main-content {
+    flex-direction: column;
+  }
+  .miyabi-recents-panel {
+    width: auto;
+    flex-basis: auto;
+  }
+  #miyabi-overlay .recent-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .miyabi-container {
+    width: min(100% - 24px, 1400px);
+    padding-top: 12px;
+  }
+  .miyabi-navbar {
+    align-items: flex-start;
+  }
+  #miyabi-overlay .miyabi-nav-group .clank-link,
+  #miyabi-overlay .create-btn {
+    display: none;
+  }
+  .miyabi-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  #miyabi-overlay .theme-switcher {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  .miyabi-profile-row {
+    left: 16px;
+    bottom: -84px;
+    max-width: calc(100% - 32px);
+    align-items: flex-start;
+  }
+  .miyabi-avatar {
+    width: 108px;
+    height: 108px;
+  }
+  .miyabi-profile-copy {
+    padding-top: 6px;
+  }
+  .miyabi-username {
+    font-size: 1.55rem;
+  }
+  .miyabi-bio {
+    font-size: 0.75rem;
+    max-height: 48px;
+    overflow: hidden;
+  }
+  .miyabi-header {
+    margin-bottom: 105px;
+  }
+  .miyabi-banner,
+  .miyabi-banner-overlay {
+    height: 220px;
+  }
+  #miyabi-overlay .recent-list {
+    grid-template-columns: 1fr;
+  }
+  .miyabi-character-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .miyabi-card-media {
+    height: 210px;
+  }
+  .miyabi-card-body {
+    padding: 10px;
+  }
+  .miyabi-title {
+    font-size: 0.88rem;
+  }
+  .miyabi-desc {
+    font-size: 0.7rem;
+  }
+  #miyabi-overlay .theme-switcher .settings-theme {
+    min-width: auto;
+  }
+  #miyabi-toggle-button {
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 440px) {
+  .miyabi-character-grid {
+    grid-template-columns: 1fr;
+  }
+  .miyabi-card-media {
+    height: 250px;
+  }
+  .miyabi-profile-row {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    margin-top: -55px;
+    padding: 0 14px;
+  }
+  .miyabi-header {
+    margin-bottom: 22px;
+  }
+  .miyabi-profile-copy {
+    padding-top: 56px;
+  }
+  .miyabi-avatar {
+    position: absolute;
+    top: -68px;
+    left: 14px;
+    width: 96px;
+    height: 96px;
+  }
+  .miyabi-username {
+    font-size: 1.45rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #miyabi-overlay *,
+  #miyabi-overlay *::before,
+  #miyabi-overlay *::after,
+  #miyabi-settings-panel *,
+  #miyabi-settings-panel *::before,
+  #miyabi-settings-panel *::after,
+  #miyabi-onboarding *,
+  #miyabi-onboarding *::before,
+  #miyabi-onboarding *::after,
+  #miyabi-loading-screen *,
+  #miyabi-loading-screen *::before,
+  #miyabi-loading-screen *::after,
+  #miyabi-toggle-button,
+  #miyabi-toggle-button::before,
+  #miyabi-toggle-button::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+   PHASE 3 FIX — FORCE THEME CARDS INTO THE GRID
+   ============================================================ */
+
+#miyabi-settings-panel .settings-theme-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+
+  width: 100% !important;
+}
+
+#miyabi-settings-panel .settings-theme-grid > .settings-theme {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Desktop: four cards in one row */
+
+@media (min-width: 850px) {
+  #miyabi-settings-panel .settings-theme-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Smaller screens: two rows */
+
+@media (min-width: 521px) and (max-width: 849px) {
+  #miyabi-settings-panel .settings-theme-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Phones: one card per row */
+
+@media (max-width: 520px) {
+  #miyabi-settings-panel .settings-theme-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Miyabi onboarding */
+
+#miyabi-onboarding {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px;
+
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
+  color: #ffffff;
+}
+
+#miyabi-onboarding.visible {
+  display: flex;
+}
+
+#miyabi-onboarding .miyabi-onboarding-backdrop {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(168, 85, 247, 0.22),
+      transparent 38%
+    ),
+    linear-gradient(145deg, #08060d 0%, #120b1d 45%, #08060d 100%);
+}
+
+#miyabi-onboarding .miyabi-onboarding-backdrop::before {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  opacity: 0.25;
+
+  background-image: radial-gradient(
+    circle,
+    rgba(192, 132, 252, 0.75) 1px,
+    transparent 1px
+  );
+
+  background-size: 48px 48px;
+
+  mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+#miyabi-onboarding .miyabi-onboarding-card {
+  position: relative;
+  z-index: 1;
+
+  width: min(520px, 100%);
+
+  padding: 44px;
+
+  border: 1px solid rgba(192, 132, 252, 0.28);
+
+  border-radius: 24px;
+
+  background: rgba(13, 10, 20, 0.88);
+
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.55);
+
+  backdrop-filter: blur(24px);
+
+  text-align: center;
+}
+
+#miyabi-onboarding .miyabi-onboarding-symbol {
+  margin-bottom: 14px;
+
+  color: #c084fc;
+
+  font-size: 34px;
+
+  text-shadow: 0 0 28px rgba(168, 85, 247, 0.75);
+}
+
+#miyabi-onboarding .miyabi-onboarding-kicker {
+  margin-bottom: 8px;
+
+  color: #c084fc;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.22em;
+}
+
+#miyabi-onboarding .miyabi-onboarding-title {
+  margin: 0 0 12px;
+
+  color: #ffffff;
+
+  font-size: clamp(28px, 5vw, 40px);
+
+  line-height: 1.05;
+}
+
+#miyabi-onboarding .miyabi-onboarding-description {
+  max-width: 420px;
+
+  margin: 0 auto 30px;
+
+  color: rgba(255, 255, 255, 0.66);
+
+  font-size: 15px;
+
+  line-height: 1.65;
+}
+
+#miyabi-onboarding .miyabi-detected-profile {
+  margin-bottom: 22px;
+
+  padding: 18px;
+
+  border: 1px solid rgba(168, 85, 247, 0.24);
+
+  border-radius: 16px;
+
+  background: rgba(168, 85, 247, 0.08);
+}
+
+#miyabi-onboarding .miyabi-detected-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #c084fc;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+}
+
+#miyabi-onboarding #miyabi-detected-name {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-size: 18px;
+}
+
+#miyabi-onboarding #miyabi-detected-url {
+  display: block;
+
+  margin-bottom: 16px;
+
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.52);
+
+  font-size: 12px;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+#miyabi-onboarding .miyabi-onboarding-divider {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 18px;
+
+  color: rgba(255, 255, 255, 0.35);
+
+  font-size: 11px;
+}
+
+#miyabi-onboarding .miyabi-onboarding-divider::before,
+#miyabi-onboarding .miyabi-onboarding-divider::after {
+  content: '';
+
+  flex: 1;
+
+  height: 1px;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#miyabi-onboarding .miyabi-onboarding-label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  text-align: left;
+}
+
+#miyabi-onboarding .miyabi-onboarding-input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 14px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 12px;
+
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  color: #ffffff;
+
+  font: inherit;
+
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+#miyabi-onboarding .miyabi-onboarding-input:focus {
+  border-color: rgba(192, 132, 252, 0.7);
+
+  background: rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.12);
+}
+
+#miyabi-onboarding .miyabi-onboarding-primary {
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 13px 18px;
+
+  border: 1px solid rgba(216, 180, 254, 0.42);
+
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #9333ea, #c084fc);
+
+  color: #ffffff;
+
+  font: inherit;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  transition:
+    transform 150ms ease,
+    filter 150ms ease;
+}
+
+#miyabi-onboarding .miyabi-onboarding-primary:hover {
+  transform: translateY(-1px);
+
+  filter: brightness(1.08);
+}
+
+#miyabi-onboarding .miyabi-onboarding-error {
+  min-height: 20px;
+
+  padding-top: 7px;
+
+  color: #fda4af;
+
+  font-size: 12px;
+
+  text-align: left;
+}
+
+#miyabi-onboarding .miyabi-onboarding-note {
+  margin: 18px 0 0;
+
+  color: rgba(255, 255, 255, 0.35);
+
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  #miyabi-onboarding {
+    padding: 18px;
+  }
+
+  #miyabi-onboarding .miyabi-onboarding-card {
+    padding: 30px 22px;
+  }
+}
+
+/* Connected profile settings */
+
+.miyabi-connected-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.miyabi-connected-profile-info {
+  padding: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.miyabi-connected-profile-name {
+  margin-bottom: 4px;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  color: var(--miyabi-accent, #a855f7);
+}
+
+.miyabi-connected-profile-url {
+  overflow: hidden;
+
+  font-size: 11px;
+
+  color: rgba(255, 255, 255, 0.48);
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Onboarding secondary action */
+
+#miyabi-onboarding .miyabi-onboarding-secondary {
+  width: 100%;
+
+  margin-top: 8px;
+
+  padding: 12px 18px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font: inherit;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+#miyabi-onboarding .miyabi-onboarding-secondary:hover {
+  background: rgba(255, 255, 255, 0.09);
+
+  color: #ffffff;
+}
+
+/* ============================================================
+   MIYABI PROFILE IDENTITY — RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .miyabi-header {
+    margin-bottom: 290px;
+  }
+
+  .miyabi-profile-row {
+    left: 20px;
+    bottom: -265px;
+
+    max-width: calc(100% - 40px);
+
+    gap: 15px;
+  }
+
+  .miyabi-avatar {
+    width: 116px;
+    height: 116px;
+  }
+
+  .miyabi-profile-copy {
+    width: calc(100vw - 195px);
+
+    padding: 15px;
+  }
+
+  .miyabi-profile-stat {
+    min-width: 72px;
+  }
+}
+
+@media (max-width: 620px) {
+  .miyabi-header {
+    margin-bottom: 390px;
+  }
+
+  .miyabi-profile-row {
+    left: 14px;
+    bottom: -365px;
+
+    display: block;
+
+    max-width: calc(100% - 28px);
+
+    padding-top: 0;
+  }
+
+  .miyabi-avatar {
+    position: relative;
+
+    width: 102px;
+    height: 102px;
+
+    margin-bottom: -18px;
+
+    z-index: 2;
+  }
+
+  .miyabi-profile-copy {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 31px 14px 14px;
+  }
+
+  .miyabi-username {
+    font-size: 1.55rem;
+  }
+
+  .miyabi-bio {
+    max-height: none;
+
+    font-size: 0.74rem;
+  }
+
+  .miyabi-profile-stats {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .miyabi-profile-stat,
+  .miyabi-profile-stat-wide {
+    min-width: 0;
+  }
+
+  .miyabi-profile-destination {
+    flex: 1 1 130px;
+  }
+}
+
+/* ============================================================
+   MIYABI SHOWCASE — LIVE BACKGROUND
+   ============================================================ */
+
+.miyabi-live-background {
+  position: fixed;
+  inset: 0;
+
+  z-index: -6;
+
+  overflow: hidden;
+  pointer-events: none;
+
+  background: #020305;
+}
+
+.miyabi-live-background-video {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 100%;
+  min-height: 100%;
+
+  object-fit: cover;
+
+  transform: translate(-50%, -50%) scale(1.03);
+
+  filter: saturate(0.82) contrast(1.06) brightness(0.72);
+
+  opacity: 0.9;
+
+  animation: miyabiLiveBackgroundBreath 18s ease-in-out infinite;
+}
+
+@keyframes miyabiLiveBackgroundBreath {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+
+  50% {
+    transform: translate(-49.4%, -50.4%) scale(1.065);
+  }
+}
+
+.miyabi-live-background-shade {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(2, 4, 8, 0.82) 0%,
+      rgba(3, 6, 12, 0.56) 38%,
+      rgba(3, 6, 12, 0.28) 68%,
+      rgba(2, 3, 6, 0.58) 100%
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.46));
+}
+
+.miyabi-live-background-vignette {
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    ellipse at center,
+    transparent 34%,
+    rgba(0, 0, 0, 0.18) 68%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+
+  box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.68);
+}
+
+/* Showcase glass surfaces */
+
+#miyabi-overlay .miyabi-recents-panel,
+#miyabi-overlay .miyabi-card,
+#miyabi-overlay .miyabi-profile-copy {
+  background: linear-gradient(
+    145deg,
+    rgba(8, 12, 18, 0.72),
+    rgba(7, 10, 16, 0.48)
+  );
+
+  border-color: rgba(190, 220, 255, 0.14);
+
+  backdrop-filter: blur(18px) saturate(1.18);
+
+  -webkit-backdrop-filter: blur(18px) saturate(1.18);
+}
+
+#miyabi-overlay .miyabi-card {
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+#miyabi-overlay .miyabi-profile-copy {
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.4),
+    0 0 38px rgba(var(--m-accent-rgb), 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* ============================================================
+   SHOWCASE POLISH — SOFT TOP NAVIGATION
+   ============================================================ */
+
+#miyabi-overlay .miyabi-navbar {
+  position: relative;
+
+  background: linear-gradient(
+    180deg,
+    rgba(8, 12, 18, 0.42),
+    rgba(8, 12, 18, 0.12)
+  );
+
+  border: 0;
+  border-bottom: 1px solid rgba(190, 220, 255, 0.09);
+
+  box-shadow: none;
+
+  backdrop-filter: blur(10px) saturate(1.08);
+
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+}
+
+#miyabi-overlay .miyabi-toolbar {
+  background: transparent;
+
+  border: 0;
+
+  box-shadow: none;
+
+  backdrop-filter: none;
+
+  -webkit-backdrop-filter: none;
+}
+
+/* ============================================================
+   SHOWCASE POLISH — FLOATING TOP NAV
+   ============================================================ */
+
+#miyabi-overlay .miyabi-navbar {
+  position: relative;
+
+  background: transparent;
+
+  border: 0;
+
+  box-shadow: none;
+
+  backdrop-filter: none;
+
+  -webkit-backdrop-filter: none;
+}
+
+#miyabi-overlay .miyabi-navbar::after {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--m-accent-rgb), 0.22) 18%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(var(--m-accent-rgb), 0.18) 82%,
+    transparent
+  );
+
+  opacity: 0.65;
+}
+
+/* ============================================================
+   BANNER FRAME — PARALLAX SAFE
+   ============================================================ */
+
+.miyabi-banner-frame {
+  position: relative;
+
+  width: 100%;
+
+  height: clamp(210px, 25vw, 340px);
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: var(--m-radius);
+
+  background: var(--m-card-bg);
+
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.3),
+    0 0 32px rgba(var(--m-accent-rgb), 0.055);
+
+  isolation: isolate;
+}
+
+.miyabi-banner-frame .miyabi-banner {
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+  border-radius: 0;
+
+  box-shadow: none;
+}
+
+.miyabi-banner-frame .miyabi-banner-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  width: auto;
+  height: auto;
+
+  border-radius: inherit;
+
+  box-shadow: none;
+
+  overflow: hidden;
+}
+
+@media (max-width: 720px) {
+  .miyabi-banner-frame {
+    height: 220px;
+  }
+}
+
+/* ============================================================
+   SHOWCASE POLISH — PROFILE LIGHT SWEEP
+   ============================================================ */
+
+.miyabi-profile-row {
+  isolation: isolate;
+}
+
+.miyabi-profile-row::before {
+  content: '';
+
+  position: absolute;
+
+  left: -110px;
+  right: -150px;
+  top: -75px;
+  bottom: -95px;
+
+  z-index: -1;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    110deg,
+    transparent 24%,
+
+    rgba(var(--m-accent-rgb), 0.02) 36%,
+
+    rgba(var(--m-accent-rgb), 0.17) 49%,
+
+    rgba(220, 240, 255, 0.08) 54%,
+
+    transparent 68%
+  );
+
+  filter: blur(34px);
+
+  opacity: 0.65;
+
+  transform: translateX(-36%);
+
+  animation: miyabiProfileLightSweep 9s ease-in-out infinite;
+}
+
+@keyframes miyabiProfileLightSweep {
+  0%,
+  18% {
+    transform: translateX(-38%);
+
+    opacity: 0.28;
+  }
+
+  48% {
+    opacity: 0.7;
+  }
+
+  76%,
+  100% {
+    transform: translateX(30%);
+
+    opacity: 0.22;
+  }
+}
+
+/* ============================================================
+   SHOWCASE POLISH — DESTINATION BUTTONS
+   ============================================================ */
+
+.miyabi-profile-destination {
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+}
+
+.miyabi-profile-destination::before {
+  content: '';
+
+  position: absolute;
+
+  top: -70%;
+  bottom: -70%;
+
+  left: -42%;
+
+  width: 28%;
+
+  z-index: -1;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(220, 240, 255, 0.13),
+    rgba(var(--m-accent-rgb), 0.16),
+    transparent
+  );
+
+  transform: skewX(-18deg);
+
+  opacity: 0;
+
+  transition:
+    left 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s ease;
+}
+
+.miyabi-profile-destination:hover::before {
+  left: 118%;
+
+  opacity: 1;
+}
+
+.miyabi-profile-destination:hover {
+  transform: translateY(-3px);
+
+  border-color: color-mix(in srgb, var(--m-accent) 78%, white);
+
+  background: color-mix(
+    in srgb,
+    var(--m-accent) 13%,
+    rgba(255, 255, 255, 0.04)
+  );
+
+  box-shadow:
+    0 10px 26px rgba(0, 0, 0, 0.26),
+    0 0 24px rgba(var(--m-accent-rgb), 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.miyabi-destination-icon {
+  transition:
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.miyabi-profile-destination:hover .miyabi-destination-icon {
+  transform: scale(1.1) rotate(-5deg);
+
+  background: rgba(var(--m-accent-rgb), 0.19);
+
+  box-shadow: 0 0 15px rgba(var(--m-accent-rgb), 0.24);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .miyabi-live-background-video,
+  .miyabi-profile-row::before {
+    animation: none !important;
+  }
+
+  .miyabi-live-background-video {
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+}
+
+/* ============================================================
+   MIYABI STYLE MENU
+   ============================================================ */
+
+.miyabi-style-menu {
+  position: relative;
+
+  flex-shrink: 0;
+}
+
+/* Main compact button */
+
+.miyabi-style-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 9px 13px;
+
+  border: 1px solid rgba(190, 220, 255, 0.16);
+
+  border-radius: 9px;
+
+  background: rgba(7, 11, 17, 0.44);
+
+  color: var(--m-text);
+
+  cursor: pointer;
+
+  font: 850 0.76rem var(--m-font);
+
+  backdrop-filter: blur(14px) saturate(1.12);
+
+  -webkit-backdrop-filter: blur(14px) saturate(1.12);
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045);
+
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.miyabi-style-toggle:hover,
+.miyabi-style-toggle.active {
+  color: var(--m-accent);
+
+  border-color: color-mix(in srgb, var(--m-accent) 58%, transparent);
+
+  background: rgba(10, 15, 23, 0.62);
+
+  box-shadow:
+    0 0 22px rgba(var(--m-accent-rgb), 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.miyabi-style-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.miyabi-style-toggle-icon {
+  color: var(--m-accent);
+}
+
+.miyabi-style-toggle-chevron {
+  margin-left: 2px;
+
+  opacity: 0.45;
+
+  font-size: 0.68rem;
+
+  transition: transform 0.2s ease;
+}
+
+.miyabi-style-toggle.active .miyabi-style-toggle-chevron {
+  transform: rotate(180deg);
+}
+
+/* Floating theme panel */
+
+.miyabi-style-popover {
+  position: absolute;
+
+  top: calc(100% + 10px);
+
+  right: 0;
+
+  z-index: 50;
+
+  width: min(520px, calc(100vw - 48px));
+
+  padding: 13px;
+
+  border: 1px solid rgba(190, 220, 255, 0.14);
+
+  border-radius: 13px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(7, 11, 18, 0.92),
+    rgba(5, 8, 14, 0.78)
+  );
+
+  backdrop-filter: blur(24px) saturate(1.2);
+
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+
+  box-shadow:
+    0 24px 65px rgba(0, 0, 0, 0.48),
+    0 0 35px rgba(var(--m-accent-rgb), 0.075),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transform: translateY(-7px) scale(0.985);
+
+  transform-origin: top right;
+
+  transition:
+    opacity 0.18s ease,
+    visibility 0.18s ease,
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.miyabi-style-popover.open {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+
+  transform: translateY(0) scale(1);
+}
+
+.miyabi-style-popover-kicker {
+  margin: 1px 2px 10px;
+
+  color: var(--m-accent);
+
+  font-size: 0.56rem;
+
+  font-weight: 900;
+
+  letter-spacing: 0.18em;
+}
+
+/* Themes inside popup */
+
+#miyabi-overlay .miyabi-style-popover .theme-switcher {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 7px;
+
+  width: 100%;
+}
+
+#miyabi-overlay .miyabi-style-popover .theme-switcher .settings-theme {
+  width: 100%;
+
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+/* Settings action */
+
+.miyabi-style-popover-footer {
+  margin-top: 10px;
+
+  padding-top: 10px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.miyabi-style-settings {
+  width: 100%;
+
+  background: rgba(255, 255, 255, 0.035);
+}
+
+@media (max-width: 720px) {
+  .miyabi-style-menu {
+    align-self: flex-end;
+  }
+
+  .miyabi-style-popover {
+    width: min(360px, calc(100vw - 36px));
+  }
+
+  #miyabi-overlay .miyabi-style-popover .theme-switcher {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

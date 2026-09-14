@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible Furina problem
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping test Furina. Please avoid including private roleplay text unless it is necessary to reproduce the problem.
+  - type: input
+    id: version
+    attributes:
+      label: Furina version
+      placeholder: 1.3.2
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Brave 1.x / Chrome 1xx / Edge 1xx
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Open...\n2. Enable...\n3. Send..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+  - type: textarea
+    id: console
+    attributes:
+      label: Console / extension errors
+      description: Paste relevant errors if available. Remove private information first.
+      render: text
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or video
+      description: Drag files here if the issue is visual.

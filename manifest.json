@@ -1,0 +1,152 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extensionName__",
+  "version": "1.3.2",
+  "description": "__MSG_extensionDescription__",
+  "minimum_chrome_version": "118",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.clank.world/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.clank.world/*"
+      ],
+      "js": [
+        "src/core/atelier.js",
+        "src/content/selectors.js",
+        "src/content/diagnostics.js",
+        "src/storage/storage.js",
+        "src/i18n/locales/en.js",
+        "src/i18n/locales/es.js",
+        "src/i18n/locales/es-1_3.js",
+        "src/i18n/locales/fr.js",
+        "src/i18n/locales/de.js",
+        "src/i18n/locales/pt_BR.js",
+        "src/i18n/locales/ro.js",
+        "src/i18n/locales/ja.js",
+        "src/i18n/locales/hi.js",
+        "src/i18n/locales/ar.js",
+        "src/i18n/i18n.js",
+        "src/features/entrance/entrance-manager.js",
+        "src/themes/theme-manager.js",
+        "src/features/sfx/sfx-manager.js",
+        "src/features/sfx/rp-sfx-manager.js",
+        "src/features/sfx/user-sfx-composer.js",
+        "src/features/cosmetics/cosmetics-manager.js",
+        "src/features/cosmetics/presentation-manager.js",
+        "src/renderer/atelier-settings.js",
+        "src/renderer/markdown.js",
+        "src/renderer/atelier-markup.js",
+        "src/renderer/atelier-composer.js",
+        "src/renderer/dom-source.js",
+        "src/renderer/lightbox.js",
+        "src/renderer/message-renderer.js",
+        "src/features/reader/reader-manager.js",
+        "src/features/atmosphere/atmosphere-manager.js",
+        "src/features/ambience/soundcloud-page-bridge.js",
+        "src/features/ambience/ambience-manager.js",
+        "src/features/stickers/sticker-manager.js",
+        "src/features/advanced-css/advanced-css-manager.js",
+        "src/features/director/scene-state-manager.js",
+        "src/features/immersion/scene-presentation-manager.js",
+        "src/features/continuity/continuity-manager.js",
+        "src/features/continuity/memory-capture-manager.js",
+        "src/features/director/director-2-manager.js",
+        "src/features/story/scene-intelligence-manager.js",
+        "src/features/director/director-manager.js",
+        "src/features/setup/setup-manager.js",
+        "src/features/guide/guide-content.js",
+        "src/features/guide/guide-manager.js",
+        "src/content/chat-lifecycle.js",
+        "src/features/phantom-chat/phantom-manager.js",
+        "src/features/visual-novel/visual-novel-parser.js",
+        "src/features/visual-novel/visual-novel-manager.js",
+        "src/ui/panel-context.js",
+        "src/ui/guide/guide-modal.js",
+        "src/ui/sections/theme-scope.js",
+        "src/ui/sections/themes.js",
+        "src/ui/sections/theme-sharing.js",
+        "src/ui/sections/setup-sharing.js",
+        "src/ui/sections/chat-look.js",
+        "src/ui/sections/assistant-look.js",
+        "src/ui/sections/user-look.js",
+        "src/ui/sections/typography.js",
+        "src/ui/sections/cosmetics.js",
+        "src/ui/sections/director.js",
+        "src/ui/sections/scene-state.js",
+        "src/ui/sections/continuity.js",
+        "src/ui/sections/memory-management.js",
+        "src/ui/sections/director-2.js",
+        "src/ui/sections/scene-presentation.js",
+        "src/ui/sections/scene-intelligence.js",
+        "src/ui/sections/response-styles.js",
+        "src/ui/sections/reader.js",
+        "src/ui/sections/ambience.js",
+        "src/ui/sections/atmosphere.js",
+        "src/ui/sections/rp-sfx.js",
+        "src/ui/sections/stickers.js",
+        "src/ui/sections/atelier.js",
+        "src/ui/sections/language.js",
+        "src/ui/sections/advanced.js",
+        "src/ui/sections/entrance-settings.js",
+        "src/ui/workspaces/home.js",
+        "src/ui/workspaces/interfaces.js",
+        "src/ui/workspace-router.js",
+        "src/ui/navigation.js",
+        "src/ui/essentials/essentials-mode.js",
+        "src/ui/essentials/essentials-workspaces.js",
+        "src/ui/essentials/essentials-router.js",
+        "src/ui/essentials/essentials-navigation.js",
+        "src/ui/panel.js"
+      ],
+      "css": [
+        "styles/base.css",
+        "styles/hud-frame.css",
+        "styles/atelier-markup.css",
+        "styles/entrance.css",
+        "styles/panel.css",
+        "styles/rp-sfx.css",
+        "styles/essentials.css",
+        "styles/guide.css",
+        "styles/phantom-chat.css",
+        "styles/visual-novel.css"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://www.clank.world/*"
+      ],
+      "js": [
+        "src/features/visual-novel/visual-novel-cast-capture.js",
+        "src/profile/miyabi-profile.js"
+      ],
+      "css": [
+        "styles/miyabi-profile.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/features/ambience/soundcloud-bridge.js"
+      ],
+      "matches": [
+        "https://www.clank.world/*"
+      ]
+    }
+  ],
+  "default_locale": "en",
+  "version_name": "1.3.2"
+}

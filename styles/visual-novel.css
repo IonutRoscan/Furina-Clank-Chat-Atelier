@@ -1,0 +1,1037 @@
+/* Visual Novel Interface - Classic Japanese ADV skin v0.6 */
+
+.furina-vn-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483600;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.97);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #06070d;
+}
+
+.furina-vn-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 50% 28%,
+      rgba(106, 99, 170, 0.12),
+      transparent 34%
+    ),
+    linear-gradient(to bottom, rgba(10, 11, 19, 0.28), rgba(5, 6, 10, 0.76)),
+    #05060b;
+}
+
+.furina-vn-shell {
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.furina-vn-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  padding: 32px 26px 206px;
+}
+
+.furina-vn-stage-background {
+  position: absolute;
+  inset: -32px;
+  z-index: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(28px) saturate(0.82) brightness(0.36);
+  transform: scale(1.08);
+  opacity: 0;
+  transition:
+    opacity 420ms ease,
+    filter 320ms ease;
+}
+
+.furina-vn-has-portrait .furina-vn-stage-background {
+  opacity: 0.92;
+}
+
+.furina-vn-stage-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(5, 6, 10, 0.18) 0%,
+      rgba(5, 6, 10, 0.02) 26%,
+      rgba(5, 6, 10, 0.28) 58%,
+      rgba(3, 4, 8, 0.92) 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 32%,
+      rgba(4, 4, 9, 0.24) 66%,
+      rgba(4, 4, 9, 0.78) 100%
+    );
+}
+
+.furina-vn-portrait-wrap {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  bottom: 146px;
+  left: 50%;
+  width: min(1120px, 84vw);
+  transform: translateX(-50%) scale(1);
+  transform-origin: center bottom;
+  transition:
+    opacity 260ms ease,
+    filter 260ms ease,
+    transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.furina-vn-portrait {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 26px 42px rgba(0, 0, 0, 0.46));
+  user-select: none;
+  pointer-events: none;
+}
+
+.furina-vn-has-cg .furina-vn-portrait {
+  object-fit: contain;
+  object-position: center center;
+  filter: drop-shadow(0 20px 38px rgba(0, 0, 0, 0.4));
+}
+
+.furina-vn-has-cg .furina-vn-portrait-wrap {
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  max-width: none;
+}
+
+.furina-vn-has-cg .furina-vn-portrait {
+  filter: none;
+}
+
+/*
+    Speaker-specific portraits plug into this same stage later.
+    The resolver exists now; group-character discovery will populate it.
+*/
+.furina-vn-has-speaker-portrait .furina-vn-portrait-wrap {
+  width: min(1120px, 84vw);
+}
+
+.furina-vn-portrait-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.07);
+  font-size: clamp(42px, 5vw, 92px);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.furina-vn-has-portrait .furina-vn-portrait-fallback {
+  display: none;
+}
+
+.furina-vn-dialogue-area {
+  position: relative;
+  z-index: 6;
+  width: min(1280px, 94vw);
+  margin: 0 auto;
+}
+
+.furina-vn-nameplate {
+  display: inline-flex;
+  align-items: center;
+  min-width: 120px;
+  max-width: min(50vw, 440px);
+  min-height: 34px;
+  margin-left: 26px;
+  margin-bottom: -1px;
+  padding: 7px 16px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(72, 76, 112, 0.92),
+    rgba(44, 47, 72, 0.96)
+  );
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.furina-vn-dialogue-box {
+  position: relative;
+  min-height: 178px;
+  max-height: 36vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: 24px 30px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(224, 219, 255, 0.28);
+  background:
+    linear-gradient(to bottom, rgba(15, 18, 31, 0.9), rgba(8, 10, 18, 0.96)),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.015) 0,
+      rgba(255, 255, 255, 0.015) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(16px);
+}
+
+.furina-vn-dialogue-box::before,
+.furina-vn-dialogue-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 84px;
+  height: 2px;
+  background: linear-gradient(to right, rgba(202, 194, 255, 0.72), transparent);
+  pointer-events: none;
+}
+
+.furina-vn-dialogue-box::before {
+  left: 0;
+}
+
+.furina-vn-dialogue-box::after {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.furina-vn-message-media {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+
+.furina-vn-message-media[hidden] {
+  display: none;
+}
+
+.furina-vn-flow-text,
+.furina-vn-dialogue-text {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: clamp(18px, 1.18vw, 24px);
+  line-height: 1.76;
+  white-space: pre-wrap;
+  text-wrap: pretty;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.22);
+}
+
+.furina-vn-dialogue-text:empty {
+  display: none;
+}
+
+.furina-vn-flow-heading {
+  margin: 4px 0;
+  color: rgba(239, 236, 255, 0.97);
+  font-size: clamp(20px, 1.8vw, 31px);
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.furina-vn-flow-break {
+  width: min(360px, 72%);
+  height: 1px;
+  margin: 8px auto;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(187, 176, 255, 0.45),
+    transparent
+  );
+}
+
+.furina-vn-flow-image {
+  display: block;
+  width: min(820px, 100%);
+  margin: 4px auto;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  cursor: zoom-in;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.3);
+}
+
+.furina-vn-flow-image img {
+  display: block;
+  width: 100%;
+  max-height: 58vh;
+  object-fit: contain;
+  object-position: center;
+  user-select: none;
+}
+
+.furina-vn-dialogue-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  min-height: 18px;
+}
+
+.furina-vn-beat-counter {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.furina-vn-continue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  color: rgba(219, 214, 255, 0.94);
+  font-size: 12px;
+  animation: furina-vn-continue-pulse 960ms ease-in-out infinite;
+}
+
+.furina-vn-continue[hidden] {
+  display: none;
+}
+
+.furina-vn-controls {
+  position: absolute;
+  right: 22px;
+  bottom: 16px;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: min(90vw, 760px);
+}
+
+.furina-vn-control-button {
+  min-width: 74px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(7, 8, 15, 0.62);
+  color: rgba(255, 255, 255, 0.84);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.furina-vn-control-button:hover:not(:disabled),
+.furina-vn-control-button.is-active {
+  background: rgba(115, 100, 220, 0.18);
+  border-color: rgba(185, 176, 255, 0.34);
+  color: rgba(255, 255, 255, 0.98);
+}
+
+.furina-vn-control-button:disabled {
+  opacity: 0.32;
+  cursor: default;
+}
+
+.furina-vn-control-exit {
+  color: rgba(255, 220, 220, 0.8);
+  border-color: rgba(255, 188, 188, 0.16);
+}
+
+.furina-vn-control-exit:hover:not(:disabled) {
+  background: rgba(150, 64, 74, 0.16);
+  border-color: rgba(255, 188, 188, 0.3);
+  color: rgba(255, 235, 235, 0.98);
+}
+
+.furina-vn-composer {
+  position: absolute;
+  left: 50%;
+  bottom: 72px;
+  z-index: 11;
+  width: min(1160px, 94vw);
+  padding: 12px 14px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(9, 11, 20, 0.9);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(18px);
+  transform: translateX(-50%) translateY(14px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.furina-vn-composer-open .furina-vn-composer {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.furina-vn-composer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 2px 8px;
+}
+
+.furina-vn-composer-label,
+.furina-vn-composer-status {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.furina-vn-composer-status[data-state='waiting'],
+.furina-vn-composer-status[data-state='busy'] {
+  color: rgba(212, 202, 255, 0.95);
+}
+
+.furina-vn-composer-status[data-state='warning'] {
+  color: rgba(255, 216, 142, 0.95);
+}
+
+.furina-vn-composer-status[data-state='error'] {
+  color: rgba(255, 145, 145, 0.95);
+}
+
+.furina-vn-composer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.furina-vn-input {
+  min-height: 54px;
+  max-height: 180px;
+  resize: none;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  outline: none;
+  background: rgba(255, 255, 255, 0.03);
+  color: white;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.56;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.furina-vn-input:focus {
+  border-color: rgba(184, 173, 255, 0.34);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.furina-vn-send {
+  min-width: 110px;
+  padding: 0 18px;
+  border: 1px solid rgba(181, 169, 255, 0.32);
+  background: linear-gradient(
+    to bottom,
+    rgba(105, 96, 165, 0.36),
+    rgba(74, 66, 124, 0.32)
+  );
+  color: white;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.furina-vn-composer-hint {
+  padding: 7px 2px 0;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.furina-vn-backlog {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+}
+
+.furina-vn-backlog-scrim {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(4, 5, 10, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.furina-vn-backlog-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: min(1120px, 92vw);
+  max-height: 82vh;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    to bottom,
+    rgba(13, 15, 26, 0.96),
+    rgba(7, 9, 16, 0.96)
+  );
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+}
+
+.furina-vn-backlog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.furina-vn-backlog-title {
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.furina-vn-backlog-close {
+  min-width: 84px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.86);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.furina-vn-backlog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px 20px;
+  overflow: auto;
+}
+
+.furina-vn-backlog-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.96);
+  text-align: left;
+  cursor: pointer;
+}
+
+.furina-vn-backlog-entry.is-current {
+  border-color: rgba(182, 172, 255, 0.3);
+  background: rgba(108, 96, 180, 0.08);
+}
+
+.furina-vn-backlog-entry-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.furina-vn-backlog-entry-speaker,
+.furina-vn-backlog-entry-index {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.furina-vn-backlog-entry-body {
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 15px;
+  line-height: 1.62;
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.furina-vn-backlog-empty {
+  padding: 32px 14px;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+}
+
+.furina-vn-image-viewer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+}
+
+.furina-vn-image-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: rgba(2, 3, 8, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+.furina-vn-image-viewer-frame {
+  position: absolute;
+  inset: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.furina-vn-image-viewer-image {
+  max-width: 100%;
+  max-height: calc(100vh - 120px);
+  object-fit: contain;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+}
+
+.furina-vn-image-viewer-caption {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 13px;
+}
+
+.furina-vn-image-viewer-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.furina-vn-state-speaker .furina-vn-portrait-wrap {
+  opacity: 1;
+  filter: brightness(1) saturate(1.03);
+  transform: translateX(-50%) scale(1.018);
+}
+
+.furina-vn-state-narration .furina-vn-portrait-wrap,
+.furina-vn-state-opening .furina-vn-portrait-wrap {
+  opacity: 0.72;
+  filter: brightness(0.74) saturate(0.84);
+}
+
+.furina-vn-state-user .furina-vn-portrait-wrap {
+  opacity: 0.34;
+  filter: brightness(0.48) saturate(0.62);
+  transform: translateX(-50%) scale(0.98);
+}
+
+.furina-vn-state-user .furina-vn-nameplate {
+  background: linear-gradient(
+    to bottom,
+    rgba(54, 58, 80, 0.94),
+    rgba(30, 33, 49, 0.94)
+  );
+}
+
+.furina-vn-state-cg-only .furina-vn-dialogue-area {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+.furina-vn-state-cg-only .furina-vn-stage-shade {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(3, 4, 8, 0.1) 0%,
+      transparent 40%,
+      rgba(3, 4, 8, 0.28) 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 48%,
+      rgba(3, 4, 8, 0.46) 100%
+    );
+}
+
+.furina-vn-state-scene-heading .furina-vn-portrait-wrap,
+.furina-vn-state-scene-break .furina-vn-portrait-wrap {
+  opacity: 0.22;
+  filter: brightness(0.4) saturate(0.48);
+  transform: translateX(-50%) scale(0.95);
+}
+
+.furina-vn-state-scene-heading .furina-vn-dialogue-area {
+  width: min(880px, 90vw);
+}
+
+.furina-vn-state-scene-heading .furina-vn-nameplate {
+  display: none;
+}
+
+.furina-vn-state-scene-heading .furina-vn-dialogue-text {
+  display: block;
+  text-align: center;
+  font-size: clamp(24px, 2.7vw, 42px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.furina-vn-state-scene-break .furina-vn-nameplate {
+  display: none;
+}
+
+.furina-vn-state-scene-break .furina-vn-dialogue-box {
+  min-height: 92px;
+}
+
+.furina-vn-state-scene-break .furina-vn-dialogue-text {
+  display: block;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.36);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.furina-vn-reply-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: 224px;
+  z-index: 12;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 7px 12px 7px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  background: linear-gradient(
+    90deg,
+    rgba(8, 10, 18, 0.92),
+    rgba(18, 20, 32, 0.82)
+  );
+
+  color: rgba(255, 255, 255, 0.9);
+
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+
+  transform: translateX(-50%) translateY(8px);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.furina-vn-awaiting .furina-vn-reply-indicator {
+  opacity: 1;
+
+  transform: translateX(-50%) translateY(0);
+}
+
+.furina-vn-reply-indicator-label {
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+}
+
+.furina-vn-reply-indicator-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.furina-vn-reply-indicator-dots i {
+  width: 4px;
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: currentColor;
+
+  opacity: 0.3;
+
+  animation: furina-vn-reply-dot 900ms ease-in-out infinite;
+}
+
+.furina-vn-reply-indicator-dots i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.furina-vn-reply-indicator-dots i:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@keyframes furina-vn-reply-dot {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.furina-vn-awaiting .furina-vn-portrait-wrap {
+  animation: furina-vn-awaiting-breathe 2.5s ease-in-out infinite;
+}
+
+.furina-vn-dialogue-box.furina-vn-beat-enter {
+  animation: furina-vn-dialogue-enter 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.furina-vn-portrait-wrap.furina-vn-beat-enter {
+  animation: furina-vn-portrait-enter 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes furina-vn-dialogue-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes furina-vn-portrait-enter {
+  from {
+    opacity: 0.34;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes furina-vn-continue-pulse {
+  0%,
+  100% {
+    opacity: 0.34;
+    transform: translateY(-2px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(2px);
+  }
+}
+
+@keyframes furina-vn-awaiting-breathe {
+  0%,
+  100% {
+    filter: brightness(0.66) saturate(0.8);
+  }
+  50% {
+    filter: brightness(0.82) saturate(0.95);
+  }
+}
+
+@media (max-width: 800px) {
+  .furina-vn-reply-indicator {
+    bottom: 210px;
+    max-width: calc(100vw - 28px);
+  }
+
+  .furina-vn-stage {
+    padding: 20px 12px 232px;
+  }
+
+  .furina-vn-portrait-wrap {
+    top: 22px;
+    bottom: 176px;
+    width: min(700px, 100vw);
+  }
+
+  .furina-vn-dialogue-area {
+    width: 100%;
+  }
+
+  .furina-vn-nameplate {
+    min-height: 31px;
+    margin-left: 14px;
+    padding: 7px 11px 6px;
+    font-size: 11px;
+  }
+
+  .furina-vn-dialogue-box {
+    min-height: 154px;
+    max-height: 34vh;
+    padding: 18px 16px 14px;
+  }
+
+  .furina-vn-flow-text,
+  .furina-vn-dialogue-text {
+    font-size: 16px;
+    line-height: 1.66;
+  }
+
+  .furina-vn-controls {
+    right: 12px;
+    left: 12px;
+    bottom: 10px;
+    justify-content: center;
+  }
+
+  .furina-vn-control-button {
+    min-width: 68px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 10px;
+  }
+
+  .furina-vn-composer {
+    bottom: 56px;
+    width: calc(100vw - 16px);
+    padding: 9px;
+  }
+
+  .furina-vn-input {
+    min-height: 48px;
+    font-size: 14px;
+  }
+
+  .furina-vn-send {
+    min-width: 82px;
+    padding: 0 12px;
+  }
+
+  .furina-vn-composer-hint {
+    display: none;
+  }
+
+  .furina-vn-backlog-panel {
+    width: calc(100vw - 16px);
+    max-height: 86vh;
+  }
+
+  .furina-vn-image-viewer-frame {
+    inset: 14px;
+  }
+}
+
+/* ADV presentation polish */
+.furina-vn-dialogue-area {
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.furina-vn-has-cg .furina-vn-stage-background {
+  filter: blur(34px) saturate(0.9) brightness(0.33);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-vn-continue,
+  .furina-vn-awaiting .furina-vn-portrait-wrap,
+  .furina-vn-dialogue-box.furina-vn-beat-enter,
+  .furina-vn-portrait-wrap.furina-vn-beat-enter {
+    animation: none !important;
+  }
+
+  .furina-vn-portrait-wrap,
+  .furina-vn-dialogue-area,
+  .furina-vn-composer {
+    transition: none !important;
+  }
+}
+
+.furina-vn-capture-cast-button {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    180deg,
+    rgba(24, 26, 36, 0.92),
+    rgba(16, 18, 26, 0.98)
+  );
+  color: rgba(255, 255, 255, 0.96);
+  border-radius: 12px;
+  padding: 0 14px;
+  min-height: 40px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
+}
+
+.furina-vn-capture-cast-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(176, 150, 255, 0.44);
+}
+
+.furina-vn-capture-cast-button[data-state='captured'] {
+  border-color: rgba(124, 222, 166, 0.48);
+  background: linear-gradient(
+    180deg,
+    rgba(17, 36, 27, 0.94),
+    rgba(13, 26, 20, 0.98)
+  );
+}
+
+.furina-vn-capture-cast-button[data-state='error'] {
+  border-color: rgba(255, 138, 138, 0.42);
+  color: rgba(255, 219, 219, 0.95);
+}

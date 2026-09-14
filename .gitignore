@@ -1,0 +1,14 @@
+# Release output
+dist/
+*.zip
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.log
+*.bak

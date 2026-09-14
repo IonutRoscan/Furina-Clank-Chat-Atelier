@@ -1,0 +1,4462 @@
+/*
+    Furina: Clank Chat Atelier
+    Core chat and renderer styling.
+*/
+
+/* ── MESSAGES ────────────────────────────────────────────────── */
+
+.clank-atelier-message {
+  border-radius: 14px;
+
+  transition:
+    background-color 150ms ease,
+    outline-color 150ms ease;
+}
+
+/* ── MESSAGE BODY ────────────────────────────────────────────── */
+
+.clank-atelier-message-body {
+  position: relative;
+}
+
+.clank-atelier-paragraph {
+  margin-top: 0.15rem;
+
+  margin-bottom: 0.15rem;
+}
+
+/* ── COMPOSER ────────────────────────────────────────────────── */
+
+.clank-atelier-composer-form {
+  outline: 1px solid color-mix(in srgb, var(--furina-accent) 50%, transparent);
+}
+
+.clank-atelier-composer {
+  caret-color: var(--furina-accent);
+}
+
+/* ── QUICK DIRECTOR ─────────────────────────────────────────── */
+
+.furina-director-quick-host {
+  position: relative;
+}
+
+.furina-director-quick {
+  position: absolute;
+  right: auto;
+  left: 101px;
+  bottom: 9px;
+  z-index: 35;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.furina-director-quick-toggle {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 35%, rgba(255, 255, 255, 0.12));
+  border-radius: 9px;
+  background: color-mix(
+    in srgb,
+    var(--furina-chat-background, #111) 88%,
+    transparent
+  );
+  color: color-mix(in srgb, var(--furina-accent) 80%, white);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.furina-director-quick-active .furina-director-quick-toggle {
+  border-color: color-mix(in srgb, var(--furina-accent) 75%, white 10%);
+  background: color-mix(in srgb, var(--furina-accent) 17%, #15131c);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--furina-accent) 12%, transparent),
+    0 7px 20px rgba(0, 0, 0, 0.28);
+}
+
+.furina-director-quick-popover {
+  position: absolute;
+  right: auto;
+  left: -92px;
+  bottom: 47px;
+  width: min(330px, calc(100vw - 28px));
+  padding: 12px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 38%, rgba(255, 255, 255, 0.1));
+  border-radius: 13px;
+  background: color-mix(
+    in srgb,
+    var(--furina-chat-background, #11131a) 94%,
+    #000
+  );
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.48);
+  color: white;
+}
+
+.furina-director-quick-heading {
+  margin-bottom: 7px;
+  color: color-mix(in srgb, var(--furina-accent) 75%, white);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+.furina-director-quick-input {
+  box-sizing: border-box;
+  width: 100%;
+  resize: vertical;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  outline: none;
+  background: rgba(0, 0, 0, 0.25);
+  color: white;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.furina-director-quick-input:focus {
+  border-color: var(--furina-accent);
+}
+.furina-director-quick-cue {
+  max-height: 44px;
+  margin: 8px 0;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 9px;
+  line-height: 1.45;
+}
+.furina-director-quick-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+}
+.furina-director-quick-actions button {
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 9px;
+  cursor: pointer;
+}
+.furina-director-quick-actions .furina-director-quick-save {
+  border-color: color-mix(in srgb, var(--furina-accent) 45%, transparent);
+  background: color-mix(in srgb, var(--furina-accent) 16%, transparent);
+  color: white;
+}
+
+html.furina-focus-mode .furina-director-quick,
+html.furina-screenshot-mode .furina-director-quick {
+  display: none !important;
+}
+
+/* ── PREVIOUSLY ON ──────────────────────────────────────────── */
+
+.furina-previously-on {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(5, 4, 9, 0.8);
+  backdrop-filter: blur(10px);
+  animation: furina-previously-fade 0.22s ease both;
+}
+
+.furina-previously-on-card {
+  width: min(620px, 100%);
+  max-height: min(720px, calc(100vh - 48px));
+  overflow: auto;
+  box-sizing: border-box;
+  padding: clamp(22px, 5vw, 42px);
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 42%, rgba(255, 255, 255, 0.1));
+  border-radius: 20px;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--furina-chat-background, #11131a) 94%, #000),
+    color-mix(in srgb, var(--furina-accent) 7%, #0d0c12)
+  );
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.58);
+  color: white;
+}
+
+.furina-previously-on-kicker {
+  color: color-mix(in srgb, var(--furina-accent) 78%, white);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.18em;
+}
+.furina-previously-on-card h2 {
+  margin: 9px 0 2px;
+  color: white;
+  font-size: clamp(22px, 4vw, 34px);
+  line-height: 1.15;
+}
+.furina-previously-on-chapter {
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 10px;
+}
+.furina-previously-on-card > p {
+  margin: 20px 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.furina-previously-on-facts {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.furina-previously-on-facts > div {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.furina-previously-on-facts strong {
+  color: color-mix(in srgb, var(--furina-accent) 65%, white);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.furina-previously-on-facts span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.furina-previously-on-card button {
+  float: right;
+  padding: 9px 14px;
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--furina-accent) 17%, transparent);
+  color: white;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+@keyframes furina-previously-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-previously-on {
+    animation: none;
+  }
+}
+
+/* ── RENDERER ────────────────────────────────────────────────── */
+
+.clank-atelier-native-hidden {
+  display: none !important;
+}
+
+/* ── ACTIVE FURINA RENDER ────────────────────────────────────── */
+
+/*
+    Clank can leave raw text nodes directly inside the
+    message body.
+
+    CSS cannot target text nodes individually, so while
+    Furina's renderer is active we collapse the native
+    body's inherited text metrics.
+
+    Furina's own rendered container restores them below.
+*/
+
+.clank-atelier-message-body.clank-atelier-render-active {
+  font-size: 0 !important;
+
+  line-height: 0 !important;
+}
+
+.clank-atelier-message-body.clank-atelier-render-active
+  > .clank-atelier-rendered {
+  font-size: var(--furina-font-size) !important;
+  line-height: var(--furina-line-height, 1.55) !important;
+}
+
+.clank-atelier-rendered {
+  display: block;
+
+  white-space: normal;
+
+  font-family: var(--furina-message-font) !important;
+
+  line-height: 1.55;
+
+  overflow-wrap: anywhere;
+}
+
+html.clank-atelier-enabled #chat-scroll-container .clank-atelier-rendered {
+  font-size: var(--furina-font-size) !important;
+
+  line-height: var(--furina-line-height) !important;
+}
+
+/* ── PARAGRAPHS ──────────────────────────────────────────────── */
+
+.clank-atelier-rendered-paragraph {
+  margin: 0 0 0.65rem 0;
+}
+
+.clank-atelier-rendered-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* ── HEADINGS ────────────────────────────────────────────────── */
+
+.clank-atelier-heading {
+  margin: 0.85rem 0 0.45rem;
+
+  line-height: 1.25;
+
+  font-family: var(--furina-heading-font) !important;
+
+  font-weight: 700;
+}
+
+/* ── FURINA HEADING SCALE ────────────────────────────────────── */
+
+html.clank-atelier-enabled .clank-atelier-h1 {
+  font-size: calc(1.55rem * var(--furina-heading-scale)) !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-h2 {
+  font-size: calc(1.35rem * var(--furina-heading-scale)) !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-h3 {
+  font-size: calc(1.18rem * var(--furina-heading-scale)) !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-h4,
+html.clank-atelier-enabled .clank-atelier-h5,
+html.clank-atelier-enabled .clank-atelier-h6 {
+  font-size: calc(1rem * var(--furina-heading-scale)) !important;
+}
+
+.clank-atelier-h1 {
+  font-size: 1.55rem;
+}
+
+.clank-atelier-h2 {
+  font-size: 1.35rem;
+}
+
+.clank-atelier-h3 {
+  font-size: 1.18rem;
+}
+
+.clank-atelier-h4,
+.clank-atelier-h5,
+.clank-atelier-h6 {
+  font-size: 1rem;
+}
+
+/* ── LISTS ───────────────────────────────────────────────────── */
+
+.clank-atelier-list {
+  margin: 0.45rem 0 0.7rem;
+
+  padding-left: 1.4rem;
+}
+
+.clank-atelier-list li {
+  margin: 0.15rem 0;
+}
+
+.clank-atelier-list-ul {
+  list-style: disc;
+}
+
+.clank-atelier-list-ol {
+  list-style: decimal;
+}
+
+/* ── BLOCKQUOTES ─────────────────────────────────────────────── */
+
+.clank-atelier-blockquote {
+  margin: 0.7rem 0;
+
+  padding: 0.55rem 0.8rem;
+
+  border-left: 3px solid var(--furina-accent);
+
+  background: rgba(155, 124, 255, 0.07);
+
+  border-radius: 0 8px 8px 0;
+
+  opacity: 0.95;
+}
+
+/* ── INLINE CODE ─────────────────────────────────────────────── */
+
+.clank-atelier-inline-code {
+  padding: 0.12em 0.38em;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 5px;
+
+  background: rgba(0, 0, 0, 0.3);
+
+  font-family: var(--furina-code-font) !important;
+
+  font-size: var(--furina-code-font-size) !important;
+}
+
+/* ── CODE BLOCKS ─────────────────────────────────────────────── */
+
+.clank-atelier-code-block {
+  margin: 0.7rem 0;
+
+  padding: 0.8rem;
+
+  overflow-x: auto;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.38);
+
+  white-space: pre;
+
+  font-size: var(--furina-code-font-size) !important;
+}
+
+.clank-atelier-code-block code {
+  font-family: var(--furina-code-font) !important;
+
+  font-size: 0.9rem;
+}
+
+/* ── LINKS ───────────────────────────────────────────────────── */
+
+.clank-atelier-link {
+  color: #b9a8ff;
+
+  text-decoration: underline;
+
+  text-underline-offset: 2px;
+}
+
+.clank-atelier-link:hover {
+  opacity: 0.8;
+}
+
+/* ── DIVIDER ─────────────────────────────────────────────────── */
+
+.clank-atelier-hr {
+  border: 0;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+
+  margin: 0.85rem 0;
+}
+
+/* ── TABLES ──────────────────────────────────────────────────── */
+
+.clank-atelier-table-wrap {
+  width: 100%;
+
+  overflow-x: auto;
+
+  margin: 0.7rem 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+
+  border-radius: 10px;
+}
+
+.clank-atelier-table {
+  width: 100%;
+
+  min-width: 360px;
+
+  border-collapse: collapse;
+
+  white-space: normal;
+}
+
+.clank-atelier-table th,
+.clank-atelier-table td {
+  padding: 0.55rem 0.7rem;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  vertical-align: top;
+}
+
+.clank-atelier-table th:last-child,
+.clank-atelier-table td:last-child {
+  border-right: 0;
+}
+
+.clank-atelier-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.clank-atelier-table th {
+  background: rgba(155, 124, 255, 0.11);
+
+  font-weight: 700;
+}
+
+/* ── IMAGES ──────────────────────────────────────────────────── */
+
+.clank-atelier-image-wrap {
+  display: block;
+
+  width: 100%;
+
+  margin: 0.7rem 0;
+}
+
+.clank-atelier-image-link {
+  display: block;
+
+  width: fit-content;
+
+  max-width: 100%;
+
+  text-decoration: none;
+}
+
+.clank-atelier-image {
+  display: block;
+
+  max-width: 100%;
+
+  max-height: 560px;
+
+  width: auto;
+
+  height: auto;
+
+  object-fit: contain;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  background: rgba(0, 0, 0, 0.18);
+
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+
+  cursor: zoom-in;
+}
+
+/* ── FURINA THEME VARIABLES ──────────────────────────────────── */
+
+:root {
+  --furina-accent: #9b7cff;
+
+  --furina-chat-bg: #151515;
+  --furina-chat-gradient-color: #241b35;
+  --furina-chat-gradient-angle: 135deg;
+
+  --furina-chat-image: none;
+  --furina-chat-image-fit: cover;
+  --furina-chat-image-position: center;
+  --furina-chat-image-darkness: 0.35;
+
+  --furina-chat-overlay-color: #000000;
+  --furina-chat-overlay-opacity: 0;
+
+  --furina-chat-vignette: 0;
+
+  --furina-chat-image-blur: 0px;
+
+  --furina-assistant-bg: #1b1b1f;
+  --furina-assistant-text: #ffffff;
+
+  --furina-user-bg: #29202d;
+  --furina-user-text: #ffffff;
+
+  --furina-assistant-radius: 14px;
+  --furina-user-radius: 14px;
+
+  --furina-message-font:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --furina-heading-font:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --furina-code-font:
+    ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --furina-font-size: 16px;
+  --furina-heading-scale: 1;
+  --furina-code-font-size: 14px;
+
+  --furina-line-height: 1.55;
+
+  --furina-paragraph-spacing: 10px;
+
+  --furina-message-width: 672px;
+
+  --furina-avatar-size: 56px;
+
+  --furina-message-spacing: 10px;
+
+  --furina-assistant-padding-x: 13px;
+  --furina-assistant-padding-y: 11px;
+
+  --furina-user-padding-x: 13px;
+  --furina-user-padding-y: 11px;
+
+  --furina-assistant-opacity: 1;
+  --furina-user-opacity: 1;
+
+  --furina-assistant-border-width: 0px;
+  --furina-assistant-border-color: #9b7cff;
+
+  --furina-user-border-width: 0px;
+  --furina-user-border-color: #9b7cff;
+
+  --furina-assistant-shadow-alpha: 0;
+  --furina-user-shadow-alpha: 0;
+}
+
+/* ── CHAT WIDTH ──────────────────────────────────────────────── */
+
+html.clank-atelier-enabled #chat-scroll-container {
+  /*
+        Keep a small protected gutter around the message area.
+
+        Clank clips horizontal overflow on the chat scroller, so
+        avatar frames and other decorations can otherwise lose a
+        few pixels at the far left/right edges.
+
+        The extra width compensates for the padding so the user's
+        configured Chat Width still controls the actual message area.
+    */
+
+  width: 100% !important;
+
+  max-width: calc(var(--furina-message-width) + 40px) !important;
+
+  padding-left: 20px !important;
+
+  padding-right: 20px !important;
+
+  box-sizing: border-box;
+
+  transition: max-width 180ms ease;
+}
+
+/* ── MESSAGE SPACING ─────────────────────────────────────────── */
+
+html.clank-atelier-enabled #chat-scroll-container {
+  gap: var(--furina-message-spacing) !important;
+}
+
+/* ── CHAT BACKGROUND / SCENE BOUNDS ─────────────────────────── */
+
+/*
+    TEMP TEST:
+    Let Furina's expanded scene layer escape Clank's
+    normal inner-content clipping.
+
+    If this makes the wallpaper reach the outer page
+    margins, we know the scene geometry is already
+    correct and the remaining problem was clipping.
+*/
+html.clank-atelier-enabled .clank-atelier-main-content {
+  overflow: visible !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-viewport-shell {
+  overflow-x: visible !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-chat-shell {
+  position: relative !important;
+
+  isolation: isolate;
+
+  background-color: var(--furina-chat-bg) !important;
+
+  transition:
+    background 180ms ease,
+    background-color 180ms ease;
+}
+
+/*
+    The scene layer is deliberately wider than Clank's inner chat shell.
+    ThemeManager measures the current main-content region and updates the
+    extension variables when the sidebar expands, collapses, or the window
+    resizes. The layer itself clips the blurred media, preventing the old
+    30px wallpaper leak into Clank's sidebar.
+*/
+html.clank-atelier-enabled .clank-atelier-chat-shell > .furina-scene-layer {
+  /*
+        Furina's scene is a page-level visual background.
+
+        Fixed positioning lets image/video/gradient backgrounds
+        fill the viewport instead of inheriting Clank's chat
+        column dimensions.
+    */
+
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+
+  height: 100vh;
+
+  z-index: -2;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  background: var(--furina-chat-bg);
+
+  transition:
+    left 120ms ease,
+    right 120ms ease,
+    background 180ms ease;
+}
+
+/* ------------------------------------------------------------
+   SOLID
+   ------------------------------------------------------------ */
+
+html.clank-atelier-enabled[data-furina-background-mode='solid']
+  .clank-atelier-chat-shell,
+html.clank-atelier-enabled[data-furina-background-mode='solid']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer {
+  background: var(--furina-chat-bg) !important;
+}
+
+/* ------------------------------------------------------------
+   GRADIENT
+   ------------------------------------------------------------ */
+
+html.clank-atelier-enabled[data-furina-background-mode='gradient']
+  .clank-atelier-chat-shell,
+html.clank-atelier-enabled[data-furina-background-mode='gradient']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer {
+  background: linear-gradient(
+    var(--furina-chat-gradient-angle),
+    var(--furina-chat-bg),
+    var(--furina-chat-gradient-color)
+  ) !important;
+}
+
+/* ------------------------------------------------------------
+   IMAGE
+   ------------------------------------------------------------ */
+
+html.clank-atelier-enabled[data-furina-background-mode='image']
+  .clank-atelier-chat-shell {
+  background: transparent !important;
+}
+
+html.clank-atelier-enabled[data-furina-background-mode='image']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer::before {
+  content: '';
+
+  position: absolute;
+
+  inset: -30px;
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(
+      ellipse at center,
+      transparent 35%,
+      rgb(0 0 0 / var(--furina-chat-vignette)) 100%
+    ),
+    linear-gradient(
+      color-mix(
+        in srgb,
+        var(--furina-chat-overlay-color)
+          calc(var(--furina-chat-overlay-opacity) * 100%),
+        transparent
+      ),
+      color-mix(
+        in srgb,
+        var(--furina-chat-overlay-color)
+          calc(var(--furina-chat-overlay-opacity) * 100%),
+        transparent
+      )
+    ),
+    linear-gradient(
+      rgb(0 0 0 / var(--furina-chat-image-darkness)),
+      rgb(0 0 0 / var(--furina-chat-image-darkness))
+    ),
+    var(--furina-chat-image);
+
+  background-size: auto, auto, auto, var(--furina-chat-image-fit);
+
+  background-position:
+    center, center, center, var(--furina-chat-image-position);
+
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+
+  filter: blur(var(--furina-chat-image-blur));
+
+  transform: translateZ(0);
+}
+
+/* ------------------------------------------------------------
+   VIDEO
+   ------------------------------------------------------------ */
+
+html.clank-atelier-enabled[data-furina-background-mode='video']
+  .clank-atelier-chat-shell {
+  background: transparent !important;
+}
+
+/*
+    Let Furina wallpaper continue behind Clank's navigation
+    while keeping the sidebar controls themselves usable.
+*/
+html.clank-atelier-enabled[data-furina-background-mode='image']
+  .clank-atelier-sidebar,
+html.clank-atelier-enabled[data-furina-background-mode='image']
+  .clank-atelier-sidebar
+  > div,
+html.clank-atelier-enabled[data-furina-background-mode='video']
+  .clank-atelier-sidebar,
+html.clank-atelier-enabled[data-furina-background-mode='video']
+  .clank-atelier-sidebar
+  > div {
+  background-color: transparent !important;
+}
+
+html.clank-atelier-enabled[data-furina-background-mode='video']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer
+  > .furina-video-background {
+  position: absolute;
+
+  top: -40px;
+
+  right: -40px;
+
+  bottom: -40px;
+
+  left: -40px;
+
+  width: auto;
+
+  height: auto;
+
+  min-width: calc(100% + 80px);
+
+  min-height: calc(100% + 80px);
+
+  z-index: 0;
+
+  display: block;
+
+  pointer-events: none;
+
+  object-fit: var(--furina-chat-image-fit);
+
+  object-position: var(--furina-chat-image-position);
+
+  filter: blur(var(--furina-chat-image-blur));
+
+  transform: translateZ(0);
+}
+
+html.clank-atelier-enabled[data-furina-background-mode='video']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer::after {
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(
+      ellipse at center,
+      transparent 35%,
+      rgb(0 0 0 / var(--furina-chat-vignette)) 100%
+    ),
+    linear-gradient(
+      color-mix(
+        in srgb,
+        var(--furina-chat-overlay-color)
+          calc(var(--furina-chat-overlay-opacity) * 100%),
+        transparent
+      ),
+      color-mix(
+        in srgb,
+        var(--furina-chat-overlay-color)
+          calc(var(--furina-chat-overlay-opacity) * 100%),
+        transparent
+      )
+    ),
+    linear-gradient(
+      rgb(0 0 0 / var(--furina-chat-image-darkness)),
+      rgb(0 0 0 / var(--furina-chat-image-darkness))
+    );
+}
+
+html.clank-atelier-enabled #chat-scroll-container {
+  background: transparent !important;
+}
+
+/* ── Stickers ───────────────────────────────────────────────── */
+
+.furina-sticker-layer {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 6;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+.furina-sticker-fixed-layer {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 2147483000;
+}
+
+.furina-sticker {
+  position: absolute;
+
+  display: block;
+
+  max-width: min(640px, 90%);
+
+  transform: translateZ(0);
+
+  user-select: none;
+
+  touch-action: none;
+
+  pointer-events: none;
+}
+
+.furina-sticker-image {
+  transform: rotate(var(--furina-sticker-rotation, 0deg))
+    scale(var(--furina-sticker-flip-x, 1), var(--furina-sticker-flip-y, 1));
+
+  transform-origin: center;
+
+  transition: transform 120ms ease;
+
+  display: block;
+
+  width: 100%;
+
+  height: auto;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+/*
+    Sticker controls are intentionally active only while the
+    Furina panel is open. Normal chat interaction stays untouched.
+*/
+
+.furina-sticker-layer-editing .furina-sticker {
+  pointer-events: auto;
+
+  cursor: move;
+}
+
+.furina-sticker-layer-editing .furina-sticker:hover,
+.furina-sticker-layer-editing .furina-sticker:focus-within,
+.furina-sticker-layer-editing .furina-sticker-selected {
+  outline: 1px dashed color-mix(in srgb, var(--furina-accent) 75%, white);
+
+  outline-offset: 4px;
+}
+
+.furina-sticker-resize {
+  position: absolute;
+
+  right: -9px;
+
+  bottom: -9px;
+
+  width: 18px;
+
+  height: 18px;
+
+  display: none;
+
+  padding: 0;
+
+  border: 2px solid rgba(255, 255, 255, 0.9);
+
+  border-radius: 50%;
+
+  background: var(--furina-accent);
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+
+  cursor: nwse-resize;
+
+  touch-action: none;
+}
+
+.furina-sticker-layer-editing .furina-sticker:hover .furina-sticker-resize,
+.furina-sticker-layer-editing
+  .furina-sticker:focus-within
+  .furina-sticker-resize,
+.furina-sticker-layer-editing .furina-sticker-selected .furina-sticker-resize {
+  display: block;
+}
+
+.furina-sticker-layer-editing .furina-sticker-locked {
+  cursor: default;
+}
+
+.furina-sticker-layer-editing .furina-sticker-locked::after {
+  content: '🔒';
+
+  position: absolute;
+
+  top: -10px;
+
+  left: -10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 20px;
+
+  height: 20px;
+
+  border-radius: 999px;
+
+  background: rgba(18, 18, 23, 0.92);
+
+  font-size: 10px;
+
+  pointer-events: none;
+}
+
+.furina-sticker-layer-editing .furina-sticker-locked .furina-sticker-resize {
+  display: none;
+}
+
+/* ── CHAT TOP BAR ────────────────────────────────────────────── */
+
+html.clank-atelier-enabled
+  .clank-atelier-chat-shell
+  div.sticky.top-0.flex-shrink-0.pt-4.pb-4.px-4.z-10 {
+  background: color-mix(
+    in srgb,
+    var(--furina-chat-bg) 72%,
+    transparent
+  ) !important;
+
+  -webkit-backdrop-filter: blur(14px) saturate(135%);
+
+  backdrop-filter: blur(14px) saturate(135%);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* ── CHAT SCROLLBAR ──────────────────────────────────────────── */
+
+html.clank-atelier-enabled #chat-scroll-container {
+  scrollbar-width: thin;
+
+  scrollbar-color: color-mix(in srgb, var(--furina-accent) 55%, transparent)
+    transparent;
+}
+
+html.clank-atelier-enabled #chat-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+html.clank-atelier-enabled #chat-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html.clank-atelier-enabled #chat-scroll-container::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--furina-accent) 45%, transparent);
+
+  border-radius: 999px;
+
+  border: 2px solid transparent;
+
+  background-clip: padding-box;
+}
+
+html.clank-atelier-enabled
+  #chat-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--furina-accent) 70%, transparent);
+
+  background-clip: padding-box;
+}
+
+/* ── ASSISTANT MESSAGE LAYOUT FIX ────────────────────────────── */
+
+html.clank-atelier-enabled
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body {
+  display: block !important;
+
+  width: 100% !important;
+
+  height: auto !important;
+
+  min-height: 0 !important;
+
+  max-height: none !important;
+
+  align-self: flex-start !important;
+
+  justify-content: initial !important;
+
+  align-items: initial !important;
+
+  padding: 0 !important;
+
+  margin: 0 !important;
+}
+
+html.clank-atelier-enabled
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-rendered {
+  display: block !important;
+
+  width: 100% !important;
+
+  height: auto !important;
+
+  min-height: 0 !important;
+
+  max-height: none !important;
+
+  margin: 0 !important;
+}
+
+html.clank-atelier-enabled
+  .clank-atelier-rendered
+  > .clank-atelier-heading:first-child {
+  margin-top: 0 !important;
+}
+
+/* ── ASSISTANT MESSAGE ───────────────────────────────────────── */
+
+html.clank-atelier-enabled
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered {
+  background: color-mix(
+    in srgb,
+    var(--furina-assistant-bg) calc(var(--furina-assistant-opacity) * 100%),
+    transparent
+  ) !important;
+
+  color: var(--furina-assistant-text) !important;
+
+  border: var(--furina-assistant-border-width) solid
+    var(--furina-assistant-border-color) !important;
+
+  border-radius: var(--furina-assistant-radius) !important;
+
+  padding: var(--furina-assistant-padding-y) var(--furina-assistant-padding-x) !important;
+
+  line-height: var(--furina-line-height) !important;
+
+  box-shadow: 0 8px 24px rgb(0 0 0 / var(--furina-assistant-shadow-alpha)) !important;
+}
+
+/* ── USER MESSAGE ────────────────────────────────────────────── */
+
+html.clank-atelier-enabled #chat-scroll-container .clank-atelier-user-bubble {
+  background: color-mix(
+    in srgb,
+    var(--furina-user-bg) calc(var(--furina-user-opacity) * 100%),
+    transparent
+  ) !important;
+
+  color: var(--furina-user-text) !important;
+
+  border: var(--furina-user-border-width) solid var(--furina-user-border-color) !important;
+
+  border-radius: var(--furina-user-radius) !important;
+
+  padding: var(--furina-user-padding-y) var(--furina-user-padding-x) !important;
+
+  line-height: var(--furina-line-height) !important;
+
+  box-shadow: 0 8px 24px rgb(0 0 0 / var(--furina-user-shadow-alpha)) !important;
+}
+
+/*
+    Furina's renderer lives inside the Clank bubble,
+    so it remains visually transparent.
+*/
+
+html.clank-atelier-enabled
+  #chat-scroll-container
+  .clank-atelier-message-user
+  .clank-atelier-rendered {
+  background: transparent !important;
+
+  color: inherit !important;
+
+  border: none !important;
+
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+
+  padding: 0 !important;
+
+  margin: 0 !important;
+}
+
+/* ── CHILD TEXT INHERITANCE ──────────────────────────────────── */
+
+html.clank-atelier-enabled
+  .clank-atelier-message-assistant
+  .clank-atelier-rendered
+  * {
+  color: inherit;
+}
+
+html.clank-atelier-enabled
+  .clank-atelier-message-user
+  .clank-atelier-rendered
+  * {
+  color: inherit;
+}
+
+/* ── LINKS / ACCENTS ─────────────────────────────────────────── */
+
+html.clank-atelier-enabled .clank-atelier-rendered .clank-atelier-link {
+  color: var(--furina-accent) !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-blockquote {
+  border-left-color: var(--furina-accent) !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-table th {
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 18%,
+    transparent
+  ) !important;
+}
+
+/* ── PARAGRAPHS ──────────────────────────────────────────────── */
+
+html.clank-atelier-enabled .clank-atelier-rendered-paragraph {
+  margin-top: 0 !important;
+
+  margin-bottom: var(--furina-paragraph-spacing) !important;
+}
+
+html.clank-atelier-enabled .clank-atelier-rendered-paragraph:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* ── AVATARS ─────────────────────────────────────────────────── */
+
+html.clank-atelier-enabled #chat-scroll-container .clank-atelier-avatar {
+  width: var(--furina-avatar-size) !important;
+
+  height: var(--furina-avatar-size) !important;
+
+  min-width: var(--furina-avatar-size) !important;
+
+  min-height: var(--furina-avatar-size) !important;
+
+  max-width: var(--furina-avatar-size) !important;
+
+  max-height: var(--furina-avatar-size) !important;
+
+  object-fit: cover !important;
+
+  transition:
+    width 180ms ease,
+    height 180ms ease;
+}
+
+/* ── COMPACT MODE ────────────────────────────────────────────── */
+
+html.clank-atelier-compact #chat-scroll-container {
+  gap: 4px !important;
+}
+
+html.clank-atelier-compact
+  .clank-atelier-message-assistant
+  .clank-atelier-rendered {
+  padding: 7px 10px !important;
+}
+
+html.clank-atelier-compact .clank-atelier-user-bubble {
+  padding: 7px 10px !important;
+}
+
+html.clank-atelier-compact .clank-atelier-rendered-paragraph {
+  margin-bottom: 4px !important;
+}
+
+html.clank-atelier-compact .clank-atelier-list {
+  margin-top: 3px !important;
+
+  margin-bottom: 4px !important;
+}
+
+/* ── Reader mode ─────────────────────────────────────────────── */
+
+html.furina-reader-active .clank-atelier-chat-shell {
+  --furina-reader-transition: 180ms ease;
+}
+
+/* Hide the composer only while Reader Mode requests it. */
+
+html.furina-reader-active.furina-reader-hide-composer
+  .clank-atelier-composer-form {
+  display: none !important;
+}
+
+/* Hide Clank's per-message controls while keeping the message itself. */
+
+html.furina-reader-active.furina-reader-hide-actions
+  .clank-atelier-message-actions {
+  display: none !important;
+}
+
+/* Hide Clank's main navigation/sidebar in Reader Mode. */
+
+html.furina-reader-active.furina-reader-hide-sidebar .clank-atelier-sidebar {
+  display: none !important;
+}
+
+html.furina-reader-active.furina-reader-hide-sidebar
+  .clank-atelier-main-content {
+  margin-left: 0 !important;
+
+  margin-right: 0 !important;
+
+  max-width: none !important;
+
+  width: 100% !important;
+}
+
+/* Avatars are already tagged reliably by Furina. */
+
+html.furina-reader-active.furina-reader-hide-avatars
+  #chat-scroll-container
+  .clank-atelier-avatar {
+  display: none !important;
+}
+
+/* Give long-form RP a more comfortable reading column. */
+
+html.furina-reader-active.furina-reader-wide #chat-scroll-container {
+  max-width: min(900px, calc(100vw - 48px)) !important;
+}
+
+/*
+    Reader spacing intentionally overrides both normal message
+    spacing and Furina's compact-mode spacing.
+*/
+
+html.furina-reader-active.furina-reader-clean-spacing #chat-scroll-container {
+  gap: 16px !important;
+}
+
+html.furina-reader-active.furina-reader-clean-spacing
+  .clank-atelier-rendered-paragraph {
+  margin-bottom: 12px !important;
+}
+
+html.furina-reader-active.furina-reader-clean-spacing .clank-atelier-rendered {
+  line-height: max(var(--furina-line-height, 1.55), 1.6) !important;
+}
+
+/* ── Focus mode ──────────────────────────────────────────────── */
+
+html.furina-focus-mode .clank-atelier-sidebar,
+html.furina-focus-mode .clank-atelier-composer-form,
+html.furina-focus-mode .clank-atelier-message-actions,
+html.furina-focus-mode #furina-panel,
+html.furina-focus-mode #furina-launcher {
+  display: none !important;
+}
+
+html.furina-focus-mode .clank-atelier-main-content {
+  margin-left: 0 !important;
+
+  margin-right: 0 !important;
+
+  max-width: none !important;
+
+  width: 100% !important;
+}
+
+/*
+    Focus Mode keeps avatars by default so the transcript still
+    has character identity. Reader's Hide Avatars setting can
+    still remove them independently if the user enabled it.
+*/
+
+html.furina-focus-mode #chat-scroll-container {
+  max-width: min(980px, calc(100vw - 64px)) !important;
+}
+
+.furina-focus-exit {
+  position: fixed;
+
+  top: 18px;
+
+  right: 18px;
+
+  z-index: 2147483646;
+
+  padding: 8px 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  border-radius: 999px;
+
+  background: rgba(18, 18, 23, 0.9);
+
+  color: #ffffff;
+
+  font-family: system-ui, sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+
+  backdrop-filter: blur(12px);
+
+  opacity: 0.72;
+
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.furina-focus-exit:hover {
+  opacity: 1;
+
+  transform: translateY(-1px);
+}
+/* ── Furina Atmosphere ───────────────────────────────────────── */
+.furina-atmosphere-layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(0px - var(--furina-scene-left-extension, 0px));
+  right: calc(0px - var(--furina-scene-right-extension, 0px));
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  color: var(--furina-accent, #9b7cff);
+}
+
+.furina-atmosphere-layer * {
+  pointer-events: none;
+}
+.furina-atmosphere-enabled {
+  opacity: 1;
+}
+
+html.clank-atelier-enabled .clank-atelier-chat-shell #chat-scroll-container {
+  position: relative;
+  z-index: 1;
+}
+
+.furina-atmosphere-mote {
+  position: absolute;
+  left: var(--furina-mote-left);
+  bottom: -24px;
+  width: var(--furina-mote-size);
+  height: var(--furina-mote-size);
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+  opacity: calc(0.65 * var(--furina-atmosphere-intensity, 0.35));
+  animation: furina-mote-rise var(--furina-mote-duration) linear
+    var(--furina-mote-delay) infinite;
+}
+
+@keyframes furina-mote-rise {
+  0% {
+    transform: translate3d(0, 20px, 0) scale(0.7);
+    opacity: 0;
+  }
+  12% {
+    opacity: calc(0.65 * var(--furina-atmosphere-intensity, 0.35));
+  }
+  85% {
+    opacity: calc(0.5 * var(--furina-atmosphere-intensity, 0.35));
+  }
+  100% {
+    transform: translate3d(var(--furina-mote-drift, 20px), -105vh, 0)
+      scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   LAYERED RAIN
+   ============================================================ */
+
+/*
+    Very faint distant rainfall.
+
+    The actual visible drops are individual DOM particles.
+*/
+
+.furina-atmosphere-layer[data-effect='rain']::before {
+  content: '';
+
+  position: absolute;
+
+  inset: -15%;
+
+  background-image: repeating-linear-gradient(
+    108deg,
+    transparent 0,
+    transparent 12px,
+    rgba(205, 225, 255, 0.15) 13px,
+    transparent 14px,
+    transparent 28px
+  );
+
+  background-size: 34px 72px;
+
+  opacity: calc(0.34 * var(--furina-atmosphere-intensity, 0.35));
+
+  filter: blur(0.35px);
+
+  animation: furina-rain-background var(--furina-rain-duration, 1.15s) linear
+    infinite;
+}
+
+/*
+    Soft rainy haze toward the bottom.
+
+    This makes the rain feel like it's occupying the scene
+    instead of existing as lines pasted over it.
+*/
+
+.furina-atmosphere-layer[data-effect='rain']::after {
+  content: '';
+
+  position: absolute;
+
+  left: -10%;
+
+  right: -10%;
+
+  bottom: -8%;
+
+  height: 42%;
+
+  background: radial-gradient(
+    ellipse at center bottom,
+    rgba(155, 190, 225, 0.16),
+    transparent 68%
+  );
+
+  filter: blur(24px);
+
+  opacity: calc(0.7 * var(--furina-atmosphere-intensity, 0.35));
+}
+
+.furina-atmosphere-rain-drop {
+  position: absolute;
+
+  top: -90px;
+
+  left: var(--furina-rain-left);
+
+  width: var(--furina-rain-width, 1px);
+
+  height: var(--furina-rain-height, 35px);
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(225, 238, 255, 0.92)
+  );
+
+  box-shadow: 0 0 3px rgba(180, 215, 255, 0.25);
+
+  opacity: calc(
+    var(--furina-rain-opacity, 0.5) * var(--furina-atmosphere-intensity, 0.35)
+  );
+
+  transform: rotate(-11deg);
+
+  transform-origin: center;
+
+  animation: furina-rain-drop-fall var(--furina-rain-drop-duration, 1s) linear
+    var(--furina-rain-drop-delay, 0s) infinite;
+
+  will-change: transform;
+}
+
+@keyframes furina-rain-background {
+  from {
+    background-position: 0 -72px;
+  }
+
+  to {
+    background-position: 34px 72px;
+  }
+}
+
+@keyframes furina-rain-drop-fall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(-11deg);
+  }
+
+  100% {
+    transform: translate3d(var(--furina-rain-drift, 55px), 120vh, 0)
+      rotate(-11deg);
+  }
+}
+
+/* ============================================================
+   SNOW
+   ============================================================ */
+
+.furina-atmosphere-layer[data-effect='snow']::before {
+  content: '';
+
+  position: absolute;
+
+  inset: 0;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(205, 225, 255, 0.035),
+    transparent 38%
+  );
+}
+
+.furina-atmosphere-snowflake {
+  position: absolute;
+
+  top: -20px;
+
+  left: var(--furina-snow-left);
+
+  width: var(--furina-snow-size);
+
+  height: var(--furina-snow-size);
+
+  border-radius: 50%;
+
+  background: rgba(245, 250, 255, 0.92);
+
+  box-shadow: 0 0 6px rgba(215, 235, 255, 0.5);
+
+  opacity: calc(0.85 * var(--furina-atmosphere-intensity, 0.35));
+
+  animation: furina-snow-fall var(--furina-snow-duration) ease-in-out
+    var(--furina-snow-delay) infinite;
+}
+
+@keyframes furina-snow-fall {
+  0% {
+    transform: translate3d(0, -5vh, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(calc(var(--furina-snow-drift) * 0.45), 52vh, 0)
+      rotate(150deg);
+  }
+
+  100% {
+    transform: translate3d(var(--furina-snow-drift), 110vh, 0) rotate(300deg);
+  }
+}
+
+/* ============================================================
+   EMBERS
+   ============================================================ */
+
+.furina-atmosphere-layer[data-effect='embers'] {
+  color: #ff8a3d;
+}
+
+.furina-atmosphere-layer[data-effect='embers']::after {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+
+  right: 0;
+
+  bottom: -10%;
+
+  height: 42%;
+
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(255, 78, 18, 0.12),
+    transparent 68%
+  );
+
+  opacity: var(--furina-atmosphere-intensity, 0.35);
+}
+
+.furina-atmosphere-ember {
+  position: absolute;
+
+  left: var(--furina-ember-left);
+
+  bottom: -16px;
+
+  width: var(--furina-ember-size);
+
+  height: var(--furina-ember-size);
+
+  border-radius: 50%;
+
+  background: #ffb04c;
+
+  box-shadow:
+    0 0 5px #ff7836,
+    0 0 11px rgba(255, 58, 20, 0.55);
+
+  opacity: calc(0.9 * var(--furina-atmosphere-intensity, 0.35));
+
+  animation: furina-ember-rise var(--furina-ember-duration) ease-out
+    var(--furina-ember-delay) infinite;
+}
+
+@keyframes furina-ember-rise {
+  0% {
+    transform: translate3d(0, 25px, 0) scale(0.5);
+
+    opacity: 0;
+  }
+
+  15% {
+    opacity: calc(0.9 * var(--furina-atmosphere-intensity, 0.35));
+  }
+
+  65% {
+    opacity: calc(0.65 * var(--furina-atmosphere-intensity, 0.35));
+  }
+
+  100% {
+    transform: translate3d(var(--furina-ember-drift), -105vh, 0) scale(0.15);
+
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   MAGIC SPARKLES
+   ============================================================ */
+
+.furina-atmosphere-sparkle {
+  position: absolute;
+
+  left: var(--furina-sparkle-left);
+
+  top: var(--furina-sparkle-top);
+
+  width: var(--furina-sparkle-size);
+
+  height: var(--furina-sparkle-size);
+
+  opacity: 0;
+
+  animation: furina-sparkle-pulse var(--furina-sparkle-duration) ease-in-out
+    var(--furina-sparkle-delay) infinite;
+}
+
+.furina-atmosphere-sparkle::before,
+.furina-atmosphere-sparkle::after {
+  content: '';
+
+  position: absolute;
+
+  left: 50%;
+
+  top: 50%;
+
+  background: currentColor;
+
+  border-radius: 999px;
+
+  box-shadow: 0 0 8px currentColor;
+
+  transform: translate(-50%, -50%);
+}
+
+.furina-atmosphere-sparkle::before {
+  width: 100%;
+
+  height: 1px;
+}
+
+.furina-atmosphere-sparkle::after {
+  width: 1px;
+
+  height: 100%;
+}
+
+@keyframes furina-sparkle-pulse {
+  0%,
+  72%,
+  100% {
+    opacity: 0;
+
+    transform: scale(0.25) rotate(0deg);
+  }
+
+  82% {
+    opacity: calc(0.9 * var(--furina-atmosphere-intensity, 0.35));
+
+    transform: scale(1.15) rotate(22deg);
+  }
+
+  90% {
+    opacity: calc(0.5 * var(--furina-atmosphere-intensity, 0.35));
+
+    transform: scale(0.7) rotate(45deg);
+  }
+}
+
+.furina-atmosphere-layer[data-effect='fog']::before,
+.furina-atmosphere-layer[data-effect='fog']::after {
+  content: '';
+  position: absolute;
+  width: 95%;
+  height: 48%;
+  border-radius: 50%;
+  filter: blur(55px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(220, 225, 240, 0.32),
+    transparent 68%
+  );
+  opacity: calc(0.58 * var(--furina-atmosphere-intensity, 0.35));
+  animation: furina-fog-drift var(--furina-fog-duration, 22s) ease-in-out
+    infinite alternate;
+}
+
+.furina-atmosphere-layer[data-effect='fog']::before {
+  top: 12%;
+  left: -38%;
+}
+.furina-atmosphere-layer[data-effect='fog']::after {
+  right: -42%;
+  bottom: 8%;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes furina-fog-drift {
+  from {
+    transform: translate3d(-6%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(38%, 8%, 0) scale(1.15);
+  }
+}
+
+.furina-atmosphere-layer[data-effect='grain']::before {
+  content: '';
+  position: absolute;
+  inset: -35%;
+  background-image: repeating-radial-gradient(
+    circle at 20% 30%,
+    rgba(255, 255, 255, 0.22) 0,
+    rgba(255, 255, 255, 0.22) 0.6px,
+    transparent 0.8px,
+    transparent 2.3px
+  );
+  background-size: 7px 7px;
+  opacity: calc(0.22 * var(--furina-atmosphere-intensity, 0.35));
+  animation: furina-grain-shift var(--furina-grain-duration, 0.22s) steps(2)
+    infinite;
+}
+
+@keyframes furina-grain-shift {
+  0% {
+    transform: translate(-2%, 1%);
+  }
+  25% {
+    transform: translate(1%, -2%);
+  }
+  50% {
+    transform: translate(3%, 1%);
+  }
+  75% {
+    transform: translate(-1%, 3%);
+  }
+  100% {
+    transform: translate(-3%, -1%);
+  }
+}
+
+.furina-atmosphere-layer[data-effect='scanlines']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(0, 0, 0, 0.5) 4px
+  );
+  opacity: calc(0.7 * var(--furina-atmosphere-intensity, 0.35));
+}
+
+.furina-atmosphere-layer[data-effect='scanlines']::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 16%;
+  top: -20%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, currentColor 12%, transparent),
+    transparent
+  );
+  opacity: calc(0.85 * var(--furina-atmosphere-intensity, 0.35));
+  animation: furina-scan-sweep var(--furina-scan-duration, 7s) linear infinite;
+}
+
+@keyframes furina-scan-sweep {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(750%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-atmosphere-layer *,
+  .furina-atmosphere-layer::before,
+  .furina-atmosphere-layer::after {
+    animation: none !important;
+  }
+}
+
+/* ── Furina image lightbox ─────────────────────────────────── */
+
+.clank-atelier-image-link {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  font: inherit;
+}
+
+.clank-atelier-image-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.clank-atelier-lightbox {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px;
+
+  background: rgba(0, 0, 0, 0.82);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 140ms ease,
+    visibility 140ms ease;
+
+  z-index: 2147483646;
+}
+
+.clank-atelier-lightbox-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.clank-atelier-lightbox-frame {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  max-width: min(94vw, 1600px);
+  max-height: 92vh;
+}
+
+.clank-atelier-lightbox-image {
+  display: block;
+
+  max-width: 94vw;
+  max-height: 92vh;
+
+  width: auto;
+  height: auto;
+
+  object-fit: contain;
+
+  border-radius: 10px;
+
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.55);
+}
+
+.clank-atelier-lightbox-close {
+  position: absolute;
+
+  top: -14px;
+  right: -14px;
+
+  width: 34px;
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+
+  background: rgba(18, 18, 22, 0.94);
+  color: white;
+
+  font-size: 22px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+}
+
+.clank-atelier-lightbox-close:hover {
+  background: rgba(32, 32, 38, 0.98);
+}
+
+.clank-atelier-lightbox-active {
+  overflow: hidden;
+}
+@media (prefers-reduced-motion: reduce) {
+  .clank-atelier-message,
+  .clank-atelier-image,
+  .clank-atelier-lightbox,
+  .furina-focus-exit,
+  .furina-sticker-image,
+  html.clank-atelier-enabled #chat-scroll-container,
+  html.clank-atelier-enabled #chat-scroll-container .clank-atelier-avatar {
+    transition: none !important;
+  }
+}
+
+/* ========================================================================
+   FURINA 1.0 COSMETIC EFFECTS
+   ======================================================================== */
+
+html.clank-atelier-enabled {
+  --furina-edge-glow-strength: 0;
+  --furina-gradient-animation-speed: 30s;
+  --furina-glass-blur: 14px;
+  --furina-glass-highlight: 0.18;
+  --furina-assistant-glass-pct: 66%;
+  --furina-user-glass-pct: 66%;
+
+  --furina-background-brightness: 1;
+  --furina-background-contrast: 1;
+  --furina-background-saturation: 1;
+  --furina-background-sepia: 0;
+  --furina-background-hue: 0deg;
+
+  --furina-parallax-x: 0px;
+  --furina-parallax-y: 0px;
+
+  --furina-ornament-opacity: 0.8;
+  --furina-ornament-scale: 1;
+  --furina-ornament-glow: 0.35;
+  --furina-ornament-glow-pct: 35%;
+  --furina-ornament-inset: 12px;
+}
+
+html.clank-atelier-enabled #chat-scroll-container {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── ANIMATED GRADIENT ──────────────────────────────────────── */
+
+@keyframes furina-gradient-drift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+html.clank-atelier-enabled[data-furina-background-mode='gradient'][data-furina-animated-gradient='true']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer {
+  background-size: 240% 240% !important;
+  animation: furina-gradient-drift var(--furina-gradient-animation-speed)
+    ease-in-out infinite;
+}
+
+/* ── WALLPAPER COLOR GRADING + PARALLAX ─────────────────────── */
+
+html.clank-atelier-enabled[data-furina-background-mode='image']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer::before {
+  filter: blur(var(--furina-chat-image-blur))
+    brightness(var(--furina-background-brightness))
+    contrast(var(--furina-background-contrast))
+    saturate(var(--furina-background-saturation))
+    sepia(var(--furina-background-sepia))
+    hue-rotate(var(--furina-background-hue));
+
+  transform: translate(var(--furina-parallax-x), var(--furina-parallax-y))
+    translateZ(0);
+
+  transition:
+    transform 90ms linear,
+    filter 180ms ease;
+}
+
+html.clank-atelier-enabled[data-furina-background-mode='video']
+  .clank-atelier-chat-shell
+  > .furina-scene-layer
+  > .furina-video-background {
+  filter: blur(var(--furina-chat-image-blur))
+    brightness(var(--furina-background-brightness))
+    contrast(var(--furina-background-contrast))
+    saturate(var(--furina-background-saturation))
+    sepia(var(--furina-background-sepia))
+    hue-rotate(var(--furina-background-hue));
+
+  transform: translate(var(--furina-parallax-x), var(--furina-parallax-y))
+    translateZ(0);
+
+  transition:
+    transform 90ms linear,
+    filter 180ms ease;
+
+  will-change: transform, filter;
+}
+
+/* ── AMBIENT EDGE GLOW ──────────────────────────────────────── */
+
+html.clank-atelier-enabled .clank-atelier-chat-shell::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(0px - var(--furina-scene-left-extension, 0px));
+  right: calc(0px - var(--furina-scene-right-extension, 0px));
+  z-index: 4;
+  pointer-events: none;
+
+  box-shadow: inset 0 0 34px
+    color-mix(in srgb, var(--furina-accent) 58%, transparent);
+
+  opacity: var(--furina-edge-glow-strength);
+  transition: opacity 180ms ease;
+}
+
+@keyframes furina-edge-glow-pulse {
+  0%,
+  100% {
+    opacity: calc(var(--furina-edge-glow-strength) * 0.62);
+  }
+
+  50% {
+    opacity: var(--furina-edge-glow-strength);
+  }
+}
+
+html.clank-atelier-enabled[data-furina-edge-glow-pulse='true']
+  .clank-atelier-chat-shell::after {
+  animation: furina-edge-glow-pulse 4.8s ease-in-out infinite;
+}
+
+/* ── GLASS BUBBLES ──────────────────────────────────────────── */
+
+html.clank-atelier-enabled[data-furina-glass-bubbles='true']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html.clank-atelier-enabled[data-furina-glass-bubbles='true']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  backdrop-filter: blur(var(--furina-glass-blur)) saturate(1.1);
+
+  -webkit-backdrop-filter: blur(var(--furina-glass-blur)) saturate(1.1);
+
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 28%,
+    rgba(255, 255, 255, 0.16)
+  ) !important;
+}
+
+html.clank-atelier-enabled[data-furina-glass-bubbles='true']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered {
+  background: color-mix(
+    in srgb,
+    var(--furina-assistant-bg) var(--furina-assistant-glass-pct),
+    transparent
+  ) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / var(--furina-glass-highlight)),
+    0 10px 28px rgb(0 0 0 / var(--furina-assistant-shadow-alpha)) !important;
+}
+
+html.clank-atelier-enabled[data-furina-glass-bubbles='true']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  background: color-mix(
+    in srgb,
+    var(--furina-user-bg) var(--furina-user-glass-pct),
+    transparent
+  ) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / var(--furina-glass-highlight)),
+    0 10px 28px rgb(0 0 0 / var(--furina-user-shadow-alpha)) !important;
+}
+
+/* ── BUBBLE TEXTURES ────────────────────────────────────────── */
+
+html.clank-atelier-enabled[data-furina-bubble-texture='grain']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html.clank-atelier-enabled[data-furina-bubble-texture='grain']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  background-image:
+    radial-gradient(
+      circle at 20% 30%,
+      rgb(255 255 255 / 0.035) 0 1px,
+      transparent 1.4px
+    ),
+    radial-gradient(
+      circle at 70% 65%,
+      rgb(0 0 0 / 0.045) 0 1px,
+      transparent 1.5px
+    ) !important;
+
+  background-size:
+    7px 7px,
+    9px 9px !important;
+}
+
+html.clank-atelier-enabled[data-furina-bubble-texture='scanlines']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html.clank-atelier-enabled[data-furina-bubble-texture='scanlines']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgb(255 255 255 / 0.035) 4px
+  ) !important;
+}
+
+html.clank-atelier-enabled[data-furina-bubble-texture='paper']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html.clank-atelier-enabled[data-furina-bubble-texture='paper']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  background-image:
+    radial-gradient(
+      ellipse at 12% 20%,
+      rgb(255 255 255 / 0.05),
+      transparent 42%
+    ),
+    radial-gradient(ellipse at 82% 78%, rgb(0 0 0 / 0.055), transparent 46%) !important;
+}
+
+@keyframes furina-holographic-bubble {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+html.clank-atelier-enabled[data-furina-bubble-texture='holographic']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html.clank-atelier-enabled[data-furina-bubble-texture='holographic']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  background-image: linear-gradient(
+    115deg,
+    transparent 0%,
+    color-mix(in srgb, var(--furina-accent) 12%, transparent) 32%,
+    rgb(255 255 255 / 0.08) 50%,
+    color-mix(in srgb, var(--furina-accent) 10%, transparent) 68%,
+    transparent 100%
+  ) !important;
+
+  background-size: 220% 100% !important;
+  animation: furina-holographic-bubble 8s linear infinite;
+}
+
+/* ── MESSAGE ENTRANCE ANIMATIONS ────────────────────────────── */
+
+@keyframes furina-message-soft {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes furina-message-float {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes furina-message-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.975);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes furina-message-dream {
+  0% {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateY(6px) scale(0.985);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes furina-message-glitch {
+  0% {
+    opacity: 0;
+    transform: translateX(-5px);
+    filter: hue-rotate(22deg);
+  }
+
+  35% {
+    opacity: 0.8;
+    transform: translateX(4px);
+  }
+
+  68% {
+    transform: translateX(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: none;
+  }
+}
+
+html[data-furina-message-entrance='soft'] .furina-message-enter {
+  animation: furina-message-soft 280ms ease-out both;
+}
+
+html[data-furina-message-entrance='float'] .furina-message-enter {
+  animation: furina-message-float 340ms ease-out both;
+}
+
+html[data-furina-message-entrance='scale'] .furina-message-enter {
+  animation: furina-message-scale 300ms ease-out both;
+}
+
+html[data-furina-message-entrance='dream'] .furina-message-enter {
+  animation: furina-message-dream 620ms ease-out both;
+}
+
+html[data-furina-message-entrance='glitch'] .furina-message-enter {
+  animation: furina-message-glitch 360ms steps(5, end) both;
+}
+
+/* ── AVATAR FRAMES + HOVER ──────────────────────────────────── */
+
+html.clank-atelier-enabled #chat-scroll-container .clank-atelier-avatar {
+  border-radius: 50% !important;
+  transition:
+    width 180ms ease,
+    height 180ms ease,
+    transform 180ms ease,
+    filter 180ms ease,
+    box-shadow 180ms ease,
+    outline-color 180ms ease;
+}
+
+html[data-furina-avatar-frame='ring']
+  #chat-scroll-container
+  .clank-atelier-avatar {
+  outline: 2px solid var(--furina-accent);
+  outline-offset: 2px;
+}
+
+html[data-furina-avatar-frame='double']
+  #chat-scroll-container
+  .clank-atelier-avatar {
+  outline: 2px solid var(--furina-accent);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 5px rgb(255 255 255 / 0.12),
+    0 0 16px color-mix(in srgb, var(--furina-accent) 35%, transparent);
+}
+
+html[data-furina-avatar-frame='arcane']
+  #chat-scroll-container
+  .clank-atelier-avatar {
+  outline: 1px solid color-mix(in srgb, var(--furina-accent) 80%, white);
+  outline-offset: 3px;
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--furina-accent) 60%, transparent),
+    0 0 24px color-mix(in srgb, var(--furina-accent) 28%, transparent);
+}
+
+html[data-furina-avatar-frame='cyber']
+  #chat-scroll-container
+  .clank-atelier-avatar {
+  border-radius: 18% !important;
+  outline: 2px solid var(--furina-accent);
+  outline-offset: 2px;
+  clip-path: polygon(
+    10% 0,
+    90% 0,
+    100% 10%,
+    100% 90%,
+    90% 100%,
+    10% 100%,
+    0 90%,
+    0 10%
+  );
+}
+
+html[data-furina-avatar-frame='floral']
+  #chat-scroll-container
+  .clank-atelier-avatar {
+  outline: 3px dotted color-mix(in srgb, var(--furina-accent) 80%, white);
+  outline-offset: 3px;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--furina-accent) 30%, transparent);
+}
+
+html[data-furina-avatar-hover='glow']
+  #chat-scroll-container
+  .clank-atelier-avatar:hover {
+  filter: drop-shadow(
+    0 0 8px color-mix(in srgb, var(--furina-accent) 76%, transparent)
+  );
+}
+
+html[data-furina-avatar-hover='lift']
+  #chat-scroll-container
+  .clank-atelier-avatar:hover {
+  transform: translateY(-3px) scale(1.045);
+}
+
+html[data-furina-avatar-hover='tilt']
+  #chat-scroll-container
+  .clank-atelier-avatar:hover {
+  transform: rotate(-3deg) scale(1.04);
+}
+
+@keyframes furina-avatar-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.065);
+  }
+}
+
+html[data-furina-avatar-hover='pulse']
+  #chat-scroll-container
+  .clank-atelier-avatar:hover {
+  animation: furina-avatar-pulse 900ms ease-in-out infinite;
+}
+
+/* ── SPEAKER ACCENT LINES ───────────────────────────────────── */
+
+html.clank-atelier-enabled
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html.clank-atelier-enabled #chat-scroll-container .clank-atelier-user-bubble {
+  position: relative;
+}
+
+html[data-furina-speaker-accent]:not([data-furina-speaker-accent='none'])
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered::before,
+html[data-furina-speaker-accent]:not([data-furina-speaker-accent='none'])
+  #chat-scroll-container
+  .clank-atelier-user-bubble::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--furina-accent);
+  pointer-events: none;
+}
+
+html[data-furina-speaker-accent]:not([data-furina-speaker-accent='none'])
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered::before {
+  left: 5px;
+}
+
+html[data-furina-speaker-accent]:not([data-furina-speaker-accent='none'])
+  #chat-scroll-container
+  .clank-atelier-user-bubble::before {
+  right: 5px;
+}
+
+html[data-furina-speaker-accent='line']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered::before,
+html[data-furina-speaker-accent='line']
+  #chat-scroll-container
+  .clank-atelier-user-bubble::before {
+  opacity: 0.52;
+  width: 1px;
+}
+
+html[data-furina-speaker-accent='bar']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered::before,
+html[data-furina-speaker-accent='bar']
+  #chat-scroll-container
+  .clank-atelier-user-bubble::before {
+  opacity: 0.88;
+  width: 3px;
+}
+
+html[data-furina-speaker-accent='glow']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered::before,
+html[data-furina-speaker-accent='glow']
+  #chat-scroll-container
+  .clank-atelier-user-bubble::before {
+  opacity: 0.78;
+  box-shadow:
+    0 0 8px var(--furina-accent),
+    0 0 16px color-mix(in srgb, var(--furina-accent) 52%, transparent);
+}
+
+/* ── MESSAGE SEPARATORS ─────────────────────────────────────── */
+
+html.clank-atelier-enabled #chat-scroll-container .clank-atelier-message {
+  position: relative;
+}
+
+html[data-furina-separator]:not([data-furina-separator='none'])
+  #chat-scroll-container
+  .clank-atelier-message:not(:last-child)::after {
+  position: absolute;
+  left: 50%;
+  bottom: calc((var(--furina-message-spacing) * -0.5) - 0.5em);
+  z-index: 3;
+
+  transform: translateX(-50%);
+  color: color-mix(in srgb, var(--furina-accent) 76%, white);
+  opacity: 0.62;
+  pointer-events: none;
+
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.26em;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--furina-accent) 50%, transparent);
+}
+
+html[data-furina-separator='sparkle']
+  #chat-scroll-container
+  .clank-atelier-message:not(:last-child)::after {
+  content: '✦';
+}
+
+html[data-furina-separator='diamond']
+  #chat-scroll-container
+  .clank-atelier-message:not(:last-child)::after {
+  content: '◇';
+}
+
+html[data-furina-separator='dots']
+  #chat-scroll-container
+  .clank-atelier-message:not(:last-child)::after {
+  content: '• · •';
+}
+
+html[data-furina-separator='rune']
+  #chat-scroll-container
+  .clank-atelier-message:not(:last-child)::after {
+  content: '⌁ ✧ ⌁';
+}
+
+html[data-furina-separator='line']
+  #chat-scroll-container
+  .clank-atelier-message:not(:last-child)::after {
+  content: '';
+  width: min(180px, 32%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--furina-accent) 72%, transparent),
+    transparent
+  );
+}
+
+/* ── FLOATING PARTICLES ─────────────────────────────────────── */
+
+.furina-cosmetic-particles {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(0px - var(--furina-scene-left-extension, 0px));
+  right: calc(0px - var(--furina-scene-right-extension, 0px));
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.furina-cosmetic-particle {
+  position: absolute;
+  left: var(--furina-particle-x);
+  bottom: -12%;
+
+  color: color-mix(in srgb, var(--furina-accent) 78%, white);
+  opacity: 0;
+
+  font-size: var(--furina-particle-size);
+  line-height: 1;
+
+  text-shadow: 0 0 8px color-mix(in srgb, var(--furina-accent) 45%, transparent);
+
+  animation: furina-particle-rise var(--furina-particle-duration) linear
+    var(--furina-particle-delay) infinite;
+}
+
+.furina-cosmetic-particles[data-particle-style='dust']
+  .furina-cosmetic-particle {
+  color: rgb(255 255 255 / 0.72);
+  text-shadow: none;
+}
+
+.furina-cosmetic-particles[data-particle-style='snow']
+  .furina-cosmetic-particle {
+  color: rgb(255 255 255 / 0.9);
+}
+
+.furina-cosmetic-particles[data-particle-style='embers']
+  .furina-cosmetic-particle {
+  color: color-mix(in srgb, var(--furina-accent) 42%, #ff9d57);
+}
+
+@keyframes furina-particle-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  12% {
+    opacity: var(--furina-particle-opacity);
+  }
+
+  78% {
+    opacity: var(--furina-particle-opacity);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--furina-particle-drift), -118vh, 0)
+      rotate(220deg);
+  }
+}
+
+/* ── CORNER ORNAMENTS ───────────────────────────────────────── */
+
+.furina-corner-ornaments {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(0px - var(--furina-scene-left-extension, 0px));
+  right: calc(0px - var(--furina-scene-right-extension, 0px));
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+
+  opacity: var(--furina-ornament-opacity);
+}
+
+.furina-corner-ornament {
+  position: absolute;
+  width: 86px;
+  height: 86px;
+
+  color: color-mix(in srgb, var(--furina-accent) 78%, white);
+
+  filter: drop-shadow(
+    0 0 11px
+      color-mix(
+        in srgb,
+        var(--furina-accent) var(--furina-ornament-glow-pct),
+        transparent
+      )
+  );
+
+  transform-origin: center;
+}
+
+.furina-corner-ornament::before {
+  position: absolute;
+  inset: 0;
+
+  display: grid;
+  place-items: start;
+
+  border-top: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+  border-radius: 14px 0 0 0;
+
+  content: '✦';
+
+  padding: 8px;
+  box-sizing: border-box;
+
+  font-size: 23px;
+  line-height: 1;
+}
+
+.furina-corner-ornaments[data-ornament-style='gothic']
+  .furina-corner-ornament::before {
+  content: '✢';
+  border-radius: 2px 0 0 0;
+  border-width: 2px;
+}
+
+.furina-corner-ornaments[data-ornament-style='arcane']
+  .furina-corner-ornament::before {
+  content: '◇';
+  border-style: double;
+  border-width: 3px;
+}
+
+.furina-corner-ornaments[data-ornament-style='floral']
+  .furina-corner-ornament::before {
+  content: '❦';
+  border-radius: 28px 0 0 0;
+  border-style: dotted;
+}
+
+.furina-corner-ornaments[data-ornament-style='cyber']
+  .furina-corner-ornament::before {
+  content: '⌁';
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 14%, 18% 14%, 18% 100%, 0 100%);
+  background: color-mix(in srgb, var(--furina-accent) 10%, transparent);
+}
+
+.furina-corner-ornaments[data-ornament-style='lace']
+  .furina-corner-ornament::before {
+  content: '✧';
+  border-style: dashed;
+  border-radius: 30px 0 0 0;
+}
+
+.furina-corner-top-left {
+  top: var(--furina-ornament-inset);
+  left: var(--furina-ornament-inset);
+  transform: scale(var(--furina-ornament-scale));
+}
+
+.furina-corner-top-right {
+  top: var(--furina-ornament-inset);
+  right: var(--furina-ornament-inset);
+  transform: scaleX(-1) scale(var(--furina-ornament-scale));
+}
+
+.furina-corner-bottom-left {
+  bottom: var(--furina-ornament-inset);
+  left: var(--furina-ornament-inset);
+  transform: scaleY(-1) scale(var(--furina-ornament-scale));
+}
+
+.furina-corner-bottom-right {
+  right: var(--furina-ornament-inset);
+  bottom: var(--furina-ornament-inset);
+  transform: scale(-1, -1) scale(var(--furina-ornament-scale));
+}
+
+.furina-corner-ornaments-custom .furina-corner-ornament {
+  width: 112px;
+  height: 112px;
+
+  background-image: var(--furina-ornament-image);
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: contain;
+}
+
+.furina-corner-ornaments-custom .furina-corner-ornament::before {
+  display: none;
+}
+
+/* ── SCREENSHOT MODE ────────────────────────────────────────── */
+
+html.furina-screenshot-mode #furina-panel,
+html.furina-screenshot-mode #furina-launcher,
+html.furina-screenshot-mode .clank-atelier-composer-form,
+html.furina-screenshot-mode .clank-atelier-message-actions,
+html.furina-screenshot-mode .clank-atelier-sidebar,
+html.furina-screenshot-mode .furina-ambience-player,
+html.furina-screenshot-mode button[aria-label='Scroll to bottom'] {
+  display: none !important;
+}
+
+html.furina-screenshot-mode .clank-atelier-main-content {
+  margin-left: 0 !important;
+}
+
+html.furina-screenshot-mode #chat-scroll-container {
+  scrollbar-width: none !important;
+}
+
+html.furina-screenshot-mode #chat-scroll-container::-webkit-scrollbar {
+  display: none !important;
+}
+
+.furina-screenshot-notice {
+  position: fixed;
+  left: 50%;
+  top: 18px;
+  z-index: 2147483646;
+
+  padding: 8px 12px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 999px;
+
+  background: rgb(17 17 22 / 0.9);
+  color: #ffffff;
+
+  font:
+    600 12px/1.2 system-ui,
+    sans-serif;
+
+  opacity: 0;
+  transform: translate(-50%, -6px);
+  pointer-events: none;
+
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.furina-screenshot-notice-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ── REDUCED MOTION ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html.clank-atelier-enabled[data-furina-animated-gradient='true']
+    .clank-atelier-chat-shell,
+  html.clank-atelier-enabled[data-furina-edge-glow-pulse='true']
+    .clank-atelier-chat-shell::after,
+  .furina-message-enter,
+  .furina-cosmetic-particle,
+  html[data-furina-avatar-hover='pulse']
+    #chat-scroll-container
+    .clank-atelier-avatar:hover,
+  html[data-furina-bubble-texture='holographic']
+    #chat-scroll-container
+    .clank-atelier-message-assistant
+    .clank-atelier-rendered,
+  html[data-furina-bubble-texture='holographic']
+    #chat-scroll-container
+    .clank-atelier-user-bubble {
+    animation: none !important;
+  }
+
+  html.clank-atelier-enabled[data-furina-background-mode='image']
+    .clank-atelier-chat-shell
+    > .furina-scene-layer::before,
+  html.clank-atelier-enabled[data-furina-background-mode='video']
+    .clank-atelier-chat-shell
+    > .furina-scene-layer
+    > .furina-video-background {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── MESSAGE BOOKMARK / CHAPTER ACTIONS ────────────────────── */
+
+.furina-message-bookmark-button,
+.furina-message-remember-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 30px;
+
+  height: 30px;
+
+  flex: 0 0 30px;
+
+  padding: 0;
+
+  border: 1px solid rgb(255 255 255 / 0.14);
+
+  border-radius: 10px;
+
+  background: rgb(15 15 18 / 0.7);
+
+  color: var(--furina-accent);
+
+  font: inherit;
+
+  font-size: 15px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.furina-message-remember-button {
+  color: color-mix(in srgb, var(--furina-accent) 72%, white);
+  font-size: 13px;
+}
+
+.furina-message-chapter-button {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 30px;
+
+  height: 30px;
+
+  flex: 0 0 30px;
+
+  padding: 0;
+
+  border: 1px solid rgb(255 255 255 / 0.14);
+
+  border-radius: 10px;
+
+  background: rgb(15 15 18 / 0.7);
+
+  color: rgb(255 255 255 / 0.55);
+
+  font: inherit;
+
+  font-size: 12px;
+
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.furina-message-chapter-button:hover {
+  color: var(--furina-accent);
+
+  border-color: color-mix(in srgb, var(--furina-accent) 45%, transparent);
+
+  background: color-mix(in srgb, var(--furina-accent) 10%, rgb(15 15 18 / 0.7));
+}
+
+.furina-message-bookmark-button:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+
+.furina-message-remember-button:hover {
+  border-color: color-mix(in srgb, var(--furina-accent) 48%, transparent);
+  background: color-mix(in srgb, var(--furina-accent) 12%, rgb(15 15 18 / 0.7));
+}
+
+/* ── MEMORY CAPTURE ─────────────────────────────────────────── */
+
+.furina-memory-quick-host {
+  position: relative;
+}
+.furina-memory-quick {
+  position: absolute;
+  left: 147px;
+  bottom: 9px;
+  z-index: 35;
+  display: grid;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 35%, rgba(255, 255, 255, 0.12));
+  border-radius: 9px;
+  background: color-mix(
+    in srgb,
+    var(--furina-chat-background, #111) 88%,
+    transparent
+  );
+  color: white;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  font-size: 15px;
+}
+.furina-memory-quick:hover {
+  border-color: color-mix(in srgb, var(--furina-accent) 70%, white 8%);
+  background: color-mix(in srgb, var(--furina-accent) 14%, #15131c);
+}
+
+.furina-remember-selection {
+  position: fixed;
+  z-index: 2147483100;
+  padding: 7px 10px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 48%, rgba(255, 255, 255, 0.12));
+  border-radius: 9px;
+  background: #17151e;
+  color: white;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.42);
+  font:
+    650 10px/1.2 Inter,
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+  cursor: pointer;
+}
+
+.furina-memory-capture {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483300;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 3, 7, 0.78);
+  backdrop-filter: blur(8px);
+}
+.furina-memory-capture-card {
+  box-sizing: border-box;
+  width: min(580px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 42%, rgba(255, 255, 255, 0.1));
+  border-radius: 16px;
+  background: color-mix(
+    in srgb,
+    var(--furina-chat-background, #11131a) 95%,
+    #000
+  );
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.56);
+  color: white;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.furina-memory-capture-heading {
+  margin-bottom: 10px;
+  color: color-mix(in srgb, var(--furina-accent) 76%, white);
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+}
+.furina-memory-capture-card > .furina-input,
+.furina-memory-capture-card > .furina-textarea {
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.furina-memory-capture-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.furina-memory-capture-grid label {
+  display: grid;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+}
+.furina-memory-capture-grid select {
+  min-width: 0;
+}
+.furina-memory-capture-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+.furina-memory-capture-actions button {
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+.furina-memory-capture-actions .furina-memory-capture-save {
+  border-color: color-mix(in srgb, var(--furina-accent) 50%, transparent);
+  background: color-mix(in srgb, var(--furina-accent) 17%, transparent);
+  color: white;
+}
+
+html.furina-focus-mode .furina-memory-quick,
+html.furina-screenshot-mode .furina-memory-quick {
+  display: none !important;
+}
+
+/* ── PILLAR E: NORMAL-CHAT SCENE PRESENTATION ───────────────── */
+
+.furina-scene-caption {
+  position: fixed;
+  z-index: 37;
+  left: 50%;
+  bottom: 105px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  max-width: min(620px, calc(100vw - 170px));
+  padding: 7px 13px;
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 38%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--furina-chat-bg) 84%, transparent);
+  color: var(--furina-assistant-text);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.24);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  pointer-events: none;
+  font-size: 12px;
+}
+
+.furina-scene-caption strong,
+.furina-scene-caption span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.furina-scene-caption span {
+  opacity: 0.72;
+  font-size: 11px;
+}
+.furina-scene-caption-cinematic {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.furina-scene-caption-theatrical {
+  border-radius: 4px;
+  border-left-width: 3px;
+}
+.furina-scene-caption-soft {
+  border-color: transparent;
+  opacity: 0.86;
+}
+
+.furina-scene-card,
+.furina-scene-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482500;
+  pointer-events: none;
+}
+
+.furina-scene-card {
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  background: rgba(4, 4, 9, 0.94);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.42s ease;
+}
+
+.furina-scene-card-visible {
+  opacity: 1;
+}
+.furina-scene-card-content {
+  width: min(720px, 90vw);
+  text-align: center;
+}
+.furina-scene-card-kind {
+  color: var(--furina-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+.furina-scene-card-title {
+  margin-top: 14px;
+  font-family: Georgia, serif;
+  font-size: clamp(30px, 6vw, 62px);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+.furina-scene-card-subtitle {
+  margin-top: 16px;
+  opacity: 0.7;
+  font-size: clamp(13px, 2vw, 18px);
+  letter-spacing: 0.08em;
+}
+.furina-scene-card-minimal {
+  background: rgba(5, 5, 9, 0.8);
+}
+.furina-scene-card-minimal .furina-scene-card-title {
+  font-family: inherit;
+  font-size: clamp(25px, 5vw, 46px);
+}
+.furina-scene-card-theatrical .furina-scene-card-content {
+  padding: 40px 22px;
+  border-block: 1px solid
+    color-mix(in srgb, var(--furina-accent) 55%, transparent);
+}
+.furina-scene-card-soft {
+  background: color-mix(in srgb, var(--furina-chat-bg) 88%, white 12%);
+}
+
+.furina-scene-transition {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  opacity: 0;
+  isolation: isolate;
+  --furina-scene-transition-accent: var(--furina-accent, #8b73ff);
+}
+.furina-scene-transition::before,
+.furina-scene-transition::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.furina-scene-transition span {
+  position: relative;
+  z-index: 3;
+  color: #fff;
+  font-size: clamp(20px, 4vw, 42px);
+  font-family: Georgia, serif;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.72);
+}
+
+/* Calm baseline transition. */
+.furina-transition-fade-black {
+  background: #000;
+}
+.furina-transition-fade-black.furina-scene-transition-run {
+  animation: furina-scene-fade-black 1.2s ease both;
+}
+
+/* A solid accent blade sweeps across the viewport instead of fading it. */
+.furina-transition-theme-color {
+  background: transparent;
+  opacity: 1;
+}
+.furina-transition-theme-color::before {
+  inset: -8%;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--furina-scene-transition-accent) 78%, #050509 22%) 0%,
+      var(--furina-scene-transition-accent) 48%,
+      color-mix(in srgb, var(--furina-scene-transition-accent) 74%, white 26%) 54%,
+      color-mix(in srgb, var(--furina-scene-transition-accent) 82%, #07070b 18%) 100%
+    );
+  box-shadow: 0 0 90px color-mix(in srgb, var(--furina-scene-transition-accent) 64%, transparent);
+  transform: translateX(-112%) skewX(-7deg) scaleX(1.08);
+}
+.furina-transition-theme-color::after {
+  inset: 0;
+  background: color-mix(in srgb, var(--furina-scene-transition-accent) 16%, transparent);
+  opacity: 0;
+}
+.furina-transition-theme-color.furina-scene-transition-run::before {
+  animation: furina-scene-theme-sweep 1.1s cubic-bezier(0.72, 0, 0.25, 1) both;
+}
+.furina-transition-theme-color.furina-scene-transition-run::after {
+  animation: furina-scene-theme-afterglow 1.1s ease both;
+}
+
+/* Camera-like flash: a sharp peak and short luminous after-image. */
+.furina-transition-white-flash {
+  background: transparent;
+  opacity: 1;
+}
+.furina-transition-white-flash::before {
+  background: #fff;
+  opacity: 0;
+}
+.furina-transition-white-flash::after {
+  inset: -12%;
+  background: radial-gradient(circle at 50% 48%, #fff 0 18%, rgba(255,255,255,0.86) 30%, transparent 72%);
+  opacity: 0;
+  filter: blur(10px);
+}
+.furina-transition-white-flash.furina-scene-transition-run::before {
+  animation: furina-scene-white-flash 0.68s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+}
+.furina-transition-white-flash.furina-scene-transition-run::after {
+  animation: furina-scene-white-bloom 0.68s ease-out both;
+}
+
+/* Short, aggressive impact with a radial hit/vignette and visual punch. */
+.furina-transition-red-impact {
+  background: transparent;
+  opacity: 1;
+  -webkit-backdrop-filter: saturate(1) contrast(1);
+  backdrop-filter: saturate(1) contrast(1);
+}
+.furina-transition-red-impact::before {
+  inset: -4%;
+  background:
+    radial-gradient(circle at center, rgba(255, 54, 72, 0.5) 0 14%, rgba(145, 0, 24, 0.8) 46%, rgba(20, 0, 5, 0.96) 100%);
+  opacity: 0;
+  transform: scale(1.12);
+}
+.furina-transition-red-impact::after {
+  box-shadow: inset 0 0 0 0 rgba(255, 33, 57, 0), inset 0 0 150px rgba(70, 0, 12, 0.95);
+  opacity: 0;
+}
+.furina-transition-red-impact.furina-scene-transition-run {
+  animation: furina-scene-red-screen-hit 0.84s ease-out both;
+}
+.furina-transition-red-impact.furina-scene-transition-run::before {
+  animation: furina-scene-red-impact 0.84s cubic-bezier(0.15, 0.75, 0.2, 1) both;
+}
+.furina-transition-red-impact.furina-scene-transition-run::after {
+  animation: furina-scene-red-vignette 0.84s ease-out both;
+}
+
+/* Slow translucent veil + blur. */
+.furina-transition-soft-dissolve {
+  background: color-mix(in srgb, var(--furina-chat-bg, #0a0a0f) 72%, transparent);
+  -webkit-backdrop-filter: blur(0px) saturate(1);
+  backdrop-filter: blur(0px) saturate(1);
+}
+.furina-transition-soft-dissolve::before {
+  background:
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--furina-scene-transition-accent) 11%, transparent), transparent 64%);
+  opacity: 0;
+}
+.furina-transition-soft-dissolve.furina-scene-transition-run {
+  animation: furina-scene-soft-dissolve 1.46s ease-in-out both;
+}
+.furina-transition-soft-dissolve.furina-scene-transition-run::before {
+  animation: furina-scene-soft-haze 1.46s ease-in-out both;
+}
+
+/* Blur the page without covering it with a solid color. */
+.furina-transition-brief-blur {
+  background: rgba(5, 5, 10, 0.01);
+  -webkit-backdrop-filter: blur(0px) brightness(1);
+  backdrop-filter: blur(0px) brightness(1);
+}
+.furina-transition-brief-blur.furina-scene-transition-run {
+  animation: furina-scene-brief-blur 0.94s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Deliberately slower and more cinematic than the other transitions. */
+.furina-transition-time-passes {
+  background: #030305;
+}
+.furina-transition-time-passes::before,
+.furina-transition-time-passes::after {
+  top: 50%;
+  bottom: auto;
+  width: min(28vw, 330px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--furina-scene-transition-accent) 72%, white 28%));
+  opacity: 0;
+  transform: scaleX(0);
+}
+.furina-transition-time-passes::before {
+  left: calc(50% - min(46vw, 520px));
+  transform-origin: right center;
+}
+.furina-transition-time-passes::after {
+  right: calc(50% - min(46vw, 520px));
+  transform-origin: left center;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--furina-scene-transition-accent) 72%, white 28%), transparent);
+}
+.furina-transition-time-passes span {
+  opacity: 0;
+  transform: translateY(8px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-size: clamp(17px, 3vw, 32px);
+}
+.furina-transition-time-passes.furina-scene-transition-run {
+  animation: furina-scene-time-passes 2.18s ease-in-out both;
+}
+.furina-transition-time-passes.furina-scene-transition-run::before,
+.furina-transition-time-passes.furina-scene-transition-run::after {
+  animation: furina-scene-time-line 2.18s ease-in-out both;
+}
+.furina-transition-time-passes.furina-scene-transition-run span {
+  animation: furina-scene-time-text 2.18s ease-in-out both;
+}
+
+@keyframes furina-scene-fade-black {
+  0% { opacity: 0; }
+  28%, 64% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes furina-scene-theme-sweep {
+  0% { transform: translateX(-112%) skewX(-7deg) scaleX(1.08); }
+  46%, 54% { transform: translateX(0%) skewX(-7deg) scaleX(1.08); }
+  100% { transform: translateX(112%) skewX(-7deg) scaleX(1.08); }
+}
+@keyframes furina-scene-theme-afterglow {
+  0%, 13% { opacity: 0; }
+  44%, 57% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes furina-scene-white-flash {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  24% { opacity: 0.94; }
+  100% { opacity: 0; }
+}
+@keyframes furina-scene-white-bloom {
+  0% { opacity: 0; transform: scale(0.72); }
+  14% { opacity: 0.94; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.28); }
+}
+
+@keyframes furina-scene-red-screen-hit {
+  0% { -webkit-backdrop-filter: saturate(1) contrast(1); backdrop-filter: saturate(1) contrast(1); }
+  12% { -webkit-backdrop-filter: saturate(1.45) contrast(1.12); backdrop-filter: saturate(1.45) contrast(1.12); }
+  100% { -webkit-backdrop-filter: saturate(1) contrast(1); backdrop-filter: saturate(1) contrast(1); }
+}
+@keyframes furina-scene-red-impact {
+  0% { opacity: 0; transform: scale(1.13); }
+  10% { opacity: 1; transform: scale(0.98); }
+  22% { opacity: 0.82; transform: scale(1.015); }
+  100% { opacity: 0; transform: scale(1.04); }
+}
+@keyframes furina-scene-red-vignette {
+  0% { opacity: 0; box-shadow: inset 0 0 0 rgba(255,33,57,0); }
+  11% { opacity: 1; box-shadow: inset 0 0 90px rgba(255,33,57,0.42), inset 0 0 190px rgba(68,0,10,0.96); }
+  100% { opacity: 0; box-shadow: inset 0 0 150px rgba(80,0,12,0.02); }
+}
+
+@keyframes furina-scene-soft-dissolve {
+  0% {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(0px) saturate(1);
+    backdrop-filter: blur(0px) saturate(1);
+  }
+  38%, 62% {
+    opacity: 0.86;
+    -webkit-backdrop-filter: blur(10px) saturate(0.88);
+    backdrop-filter: blur(10px) saturate(0.88);
+  }
+  100% {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(0px) saturate(1);
+    backdrop-filter: blur(0px) saturate(1);
+  }
+}
+@keyframes furina-scene-soft-haze {
+  0%, 100% { opacity: 0; transform: scale(0.96); }
+  45%, 60% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes furina-scene-brief-blur {
+  0% {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(0px) brightness(1);
+    backdrop-filter: blur(0px) brightness(1);
+  }
+  30%, 56% {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(20px) brightness(0.86);
+    backdrop-filter: blur(20px) brightness(0.86);
+  }
+  100% {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(0px) brightness(1);
+    backdrop-filter: blur(0px) brightness(1);
+  }
+}
+
+@keyframes furina-scene-time-passes {
+  0% { opacity: 0; }
+  17%, 79% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes furina-scene-time-line {
+  0%, 16% { opacity: 0; transform: scaleX(0); }
+  31%, 70% { opacity: 0.78; transform: scaleX(1); }
+  91%, 100% { opacity: 0; transform: scaleX(0); }
+}
+@keyframes furina-scene-time-text {
+  0%, 20% { opacity: 0; transform: translateY(8px); letter-spacing: 0.4em; }
+  34%, 68% { opacity: 1; transform: translateY(0); letter-spacing: 0.3em; }
+  90%, 100% { opacity: 0; transform: translateY(-6px); letter-spacing: 0.36em; }
+}
+
+.furina-screenshot-countdown {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 5, 10, 0.72);
+  color: #fff;
+  font-size: clamp(72px, 18vw, 180px);
+  font-weight: 700;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+html.furina-focus-mode .furina-scene-caption {
+  display: none;
+}
+html.furina-presentation-screenshot #furina-panel,
+html.furina-presentation-screenshot #furina-launcher,
+html.furina-presentation-screenshot .furina-ambience-player,
+html.furina-presentation-screenshot button[aria-label='Scroll to bottom'] {
+  display: none !important;
+}
+html.furina-presentation-screenshot.furina-ps-hide-composer
+  .clank-atelier-composer-form {
+  display: none !important;
+}
+html.furina-presentation-screenshot.furina-ps-hide-actions
+  .clank-atelier-message-actions {
+  display: none !important;
+}
+html.furina-presentation-screenshot.furina-ps-hide-sidebar
+  .clank-atelier-sidebar {
+  display: none !important;
+}
+html.furina-presentation-screenshot.furina-ps-hide-sidebar
+  .clank-atelier-main-content {
+  margin-left: 0 !important;
+}
+html.furina-presentation-screenshot.furina-ps-hide-avatars
+  .clank-atelier-avatar {
+  display: none !important;
+}
+html.furina-presentation-screenshot.furina-ps-wide #chat-scroll-container {
+  max-width: min(1180px, calc(100vw - 48px)) !important;
+}
+html.furina-presentation-screenshot.furina-ps-clean .clank-atelier-message {
+  margin-block: 18px !important;
+}
+html.furina-presentation-screenshot #chat-scroll-container {
+  scrollbar-width: none !important;
+}
+html.furina-presentation-screenshot #chat-scroll-container::-webkit-scrollbar {
+  display: none !important;
+}
+html.furina-presentation-screenshot:not(.furina-screenshot-show-caption)
+  .furina-scene-caption {
+  display: none !important;
+}
+body.furina-phantom-open .furina-scene-caption,
+body:has(.furina-vn-root) .furina-scene-caption {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .furina-scene-caption {
+    bottom: 96px;
+    max-width: calc(100vw - 32px);
+    gap: 7px;
+  }
+  .furina-scene-caption span {
+    display: none;
+  }
+  .furina-scene-card {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-scene-card {
+    transition-duration: 0.01ms;
+  }
+  .furina-scene-transition-run {
+    animation-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .furina-memory-capture-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.furina-message-bookmark-button[data-furina-bookmarked='true'] {
+  color: var(--furina-accent);
+
+  background: color-mix(in srgb, var(--furina-accent) 14%, rgb(15 15 18 / 0.7));
+
+  border-color: color-mix(in srgb, var(--furina-accent) 45%, transparent);
+}
+
+/* ── SCENE NAVIGATOR ────────────────────────────────────────── */
+
+#furina-scene-navigator {
+  position: fixed;
+
+  right: 18px;
+
+  top: 50%;
+
+  z-index: 2147483000;
+
+  transform: translateY(-50%);
+
+  pointer-events: none;
+}
+
+.furina-scene-nav-toggle {
+  pointer-events: auto;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  min-width: 46px;
+
+  height: 38px;
+
+  padding: 0 11px;
+
+  border: 1px solid color-mix(in srgb, var(--furina-accent) 45%, transparent);
+
+  border-radius: 999px;
+
+  background: rgb(14 14 18 / 0.88);
+
+  color: #fff;
+
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.35);
+
+  backdrop-filter: blur(12px);
+
+  cursor: pointer;
+}
+
+.furina-scene-nav-star {
+  color: var(--furina-accent);
+
+  font-size: 15px;
+}
+
+.furina-scene-nav-count {
+  min-width: 12px;
+
+  text-align: center;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.furina-scene-nav-drawer {
+  pointer-events: auto;
+
+  position: absolute;
+
+  right: 0;
+
+  top: 50%;
+
+  width: min(330px, calc(100vw - 32px));
+
+  max-height: min(520px, calc(100vh - 48px));
+
+  overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  border: 1px solid rgb(255 255 255 / 0.11);
+
+  border-radius: 16px;
+
+  background: rgb(14 14 18 / 0.95);
+
+  box-shadow: 0 18px 60px rgb(0 0 0 / 0.48);
+
+  backdrop-filter: blur(18px);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  transform: translate(0, -50%) scale(0.97);
+
+  transform-origin: right center;
+
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    visibility 140ms ease;
+}
+
+#furina-scene-navigator[data-open='true'] .furina-scene-nav-drawer {
+  opacity: 1;
+
+  visibility: visible;
+
+  transform: translate(-56px, -50%) scale(1);
+}
+
+.furina-scene-nav-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 14px 14px 10px;
+}
+
+.furina-scene-nav-title {
+  font-size: 14px;
+
+  font-weight: 750;
+
+  color: #fff;
+}
+
+.furina-scene-nav-close {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 28px;
+
+  height: 28px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: rgb(255 255 255 / 0.65);
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.furina-scene-nav-close:hover {
+  background: rgb(255 255 255 / 0.07);
+
+  color: #fff;
+}
+
+.furina-scene-nav-section-title {
+  padding: 0 14px 8px;
+
+  color: var(--furina-accent);
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+  text-transform: uppercase;
+}
+
+.furina-scene-nav-list {
+  overflow-y: auto;
+
+  padding: 0 8px 10px;
+}
+
+.furina-scene-nav-item {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  align-items: stretch;
+
+  gap: 4px;
+
+  margin-bottom: 4px;
+}
+
+.furina-scene-nav-jump {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 4px;
+
+  padding: 9px 10px;
+
+  border: 1px solid transparent;
+
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #fff;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.furina-scene-nav-jump:hover {
+  border-color: rgb(255 255 255 / 0.08);
+
+  background: rgb(255 255 255 / 0.055);
+}
+
+.furina-scene-nav-role {
+  color: var(--furina-accent);
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+.furina-scene-nav-preview {
+  width: 100%;
+
+  overflow: hidden;
+
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 2;
+
+  line-clamp: 2;
+
+  color: rgb(255 255 255 / 0.78);
+
+  font-size: 12px;
+
+  line-height: 1.35;
+}
+
+.furina-scene-nav-remove {
+  align-self: center;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 30px;
+
+  height: 30px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: rgb(255 255 255 / 0.38);
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+.furina-scene-nav-remove:hover {
+  background: rgb(255 255 255 / 0.06);
+
+  color: #fff;
+}
+
+.furina-scene-nav-empty {
+  padding: 18px 12px 20px;
+
+  color: rgb(255 255 255 / 0.45);
+
+  font-size: 12px;
+
+  text-align: center;
+}
+
+/* Briefly reveal the exact message Furina jumped to. */
+.clank-atelier-message.furina-bookmark-jump-highlight {
+  animation: furina-bookmark-jump-highlight 1.35s ease-out;
+}
+
+@keyframes furina-bookmark-jump-highlight {
+  0% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+
+  20% {
+    filter: drop-shadow(
+      0 0 10px color-mix(in srgb, var(--furina-accent) 75%, transparent)
+    );
+  }
+
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+}
+
+/* ── RP CHAPTER DIVIDERS ────────────────────────────────────── */
+
+.furina-chapter-divider {
+  width: min(100%, 620px);
+
+  margin: 30px auto 24px;
+
+  display: grid;
+
+  grid-template-columns: 1fr auto 1fr;
+
+  align-items: center;
+
+  gap: 14px;
+
+  color: var(--furina-accent);
+
+  text-align: center;
+
+  pointer-events: none;
+}
+
+.furina-chapter-divider::before,
+.furina-chapter-divider::after {
+  content: '';
+
+  height: 1px;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--furina-accent) 55%, transparent)
+  );
+}
+
+.furina-chapter-divider::after {
+  background: linear-gradient(
+    to left,
+    transparent,
+    color-mix(in srgb, var(--furina-accent) 55%, transparent)
+  );
+}
+
+.furina-chapter-ornament {
+  grid-column: 2;
+
+  grid-row: 1;
+
+  font-size: 12px;
+
+  opacity: 0.8;
+}
+
+.furina-chapter-title {
+  grid-column: 1 / -1;
+
+  margin-top: 2px;
+
+  color: rgb(255 255 255 / 0.82);
+
+  font-family: var(--furina-heading-font);
+
+  font-size: calc(var(--furina-font-size) * 0.82);
+
+  font-weight: 700;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+.furina-chapter-jump-highlight {
+  animation: furina-chapter-jump-highlight 1.35s ease-out;
+}
+
+@keyframes furina-chapter-jump-highlight {
+  0% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+
+  20% {
+    filter: drop-shadow(
+      0 0 12px color-mix(in srgb, var(--furina-accent) 85%, transparent)
+    );
+  }
+
+  100% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+}
+
+/* Response Style filters */
+
+.furina-response-style-filters {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+
+  margin: 12px 0 4px;
+}
+
+.furina-response-style-filter {
+  padding: 6px 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font: inherit;
+
+  font-size: 10px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.furina-response-style-filter:hover {
+  color: rgba(255, 255, 255, 0.9);
+
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 35%,
+    rgba(255, 255, 255, 0.1)
+  );
+
+  transform: translateY(-1px);
+}
+
+.furina-response-style-filter-active {
+  color: white;
+
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 58%,
+    rgba(255, 255, 255, 0.12)
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 18%,
+    rgba(255, 255, 255, 0.04)
+  );
+
+  box-shadow: 0 0 16px color-mix(in srgb, var(--furina-accent) 10%, transparent);
+}
+
+/* =====================================================================
+   STANDARD CHAT PRESENTATION
+   Phantom and Visual Novel layouts are intentionally not targeted here.
+   ===================================================================== */
+
+/* Speaker nameplates are OFF by default via ThemeManager. */
+.clank-atelier-message {
+  position: relative;
+}
+.furina-speaker-nameplate {
+  position: absolute;
+  top: -1.35rem;
+  left: calc(var(--furina-avatar-size, 56px) + 0.85rem);
+  z-index: 2;
+  max-width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--furina-accent) 70%, currentColor);
+  font: 700 0.68rem/1.2 var(--furina-message-font);
+  letter-spacing: 0.05em;
+  opacity: 0.78;
+  pointer-events: none;
+}
+.clank-atelier-message-user > .furina-speaker-nameplate {
+  left: auto;
+  right: calc(var(--furina-avatar-size, 56px) + 0.85rem);
+  text-align: right;
+}
+html:not([data-furina-speaker-nameplates='true']) .furina-speaker-nameplate {
+  display: none !important;
+}
+
+/* Curated message skins. */
+html[data-furina-assistant-skin='minimal']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html[data-furina-user-skin='minimal']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+html[data-furina-assistant-skin='glass']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html[data-furina-user-skin='glass']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 30%,
+    rgba(255, 255, 255, 0.15)
+  ) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 28px rgba(0, 0, 0, 0.16) !important;
+}
+html[data-furina-assistant-skin='terminal']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html[data-furina-user-skin='terminal']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  border-radius: 3px !important;
+  border-width: 1px !important;
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 65%,
+    transparent
+  ) !important;
+  font-family: var(--furina-code-font) !important;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 3px,
+    rgba(255, 255, 255, 0.025) 4px
+  ) !important;
+}
+html[data-furina-assistant-skin='parchment']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html[data-furina-user-skin='parchment']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  border-radius: 5px !important;
+  border-color: #b89a6b88 !important;
+  background: #e8ddc8 !important;
+  color: #35291f !important;
+  font-family: Georgia, serif !important;
+  box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.12) !important;
+}
+html[data-furina-assistant-skin='manga']
+  #chat-scroll-container
+  .clank-atelier-message-assistant
+  .clank-atelier-message-body
+  > .clank-atelier-rendered,
+html[data-furina-user-skin='manga']
+  #chat-scroll-container
+  .clank-atelier-user-bubble {
+  border: 2px solid currentColor !important;
+  border-radius: 14px 14px 14px 3px !important;
+  background: #fff !important;
+  color: #111 !important;
+  box-shadow: 3px 3px 0 #111 !important;
+}
+
+/* Dialogue presentation: blockquotes read as spoken dialogue; emphasis reads as action/narration. */
+html[data-furina-dialogue-presentation='true']
+  .clank-atelier-rendered
+  .clank-atelier-blockquote {
+  border-inline-start-width: 3px;
+  background: color-mix(in srgb, var(--furina-accent) 8%, transparent);
+  font-style: normal;
+}
+html[data-furina-dialogue-presentation='true'] .clank-atelier-rendered em {
+  opacity: 0.84;
+  letter-spacing: 0.01em;
+}
+
+/* Composer skins only target the ordinary Clank composer. */
+html[data-furina-composer-skin='minimal'] .clank-atelier-composer-form {
+  outline-color: transparent;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+html[data-furina-composer-skin='glass'] .clank-atelier-composer-form {
+  backdrop-filter: blur(18px) saturate(1.12);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+  background: rgba(20, 18, 27, 0.58) !important;
+}
+html[data-furina-composer-skin='terminal'] .clank-atelier-composer-form {
+  border-radius: 4px !important;
+  background: #0d1112 !important;
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--furina-accent) 55%, transparent) !important;
+}
+html[data-furina-composer-skin='terminal'] .clank-atelier-composer {
+  font-family: var(--furina-code-font) !important;
+}
+
+.furina-quote-to-composer {
+  position: fixed;
+  z-index: 2147482000;
+  padding: 6px 9px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 48%, rgba(255, 255, 255, 0.14));
+  border-radius: 8px;
+  background: #17141e;
+  color: #f2eef8;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.35);
+  font:
+    700 11px/1 system-ui,
+    sans-serif;
+  cursor: pointer;
+}
+.furina-quote-to-composer:hover {
+  border-color: var(--furina-accent);
+}
+html.furina-focus-mode .furina-quote-to-composer,
+html.furina-screenshot-mode .furina-quote-to-composer {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-choice-option,
+  .furina-dice-actions button,
+  .furina-quote-to-composer {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Typing indicator skins: only existing Clank typing-status nodes are restyled. */
+html[data-furina-typing-indicator='dots']
+  #chat-scroll-container
+  [aria-label*='typing' i],
+html[data-furina-typing-indicator='dots']
+  #chat-scroll-container
+  [data-state='typing'] {
+  letter-spacing: 0.28em;
+  color: var(--furina-accent) !important;
+}
+html[data-furina-typing-indicator='pulse']
+  #chat-scroll-container
+  [aria-label*='typing' i],
+html[data-furina-typing-indicator='pulse']
+  #chat-scroll-container
+  [data-state='typing'] {
+  color: var(--furina-accent) !important;
+  animation: furina-typing-pulse 1s ease-in-out infinite;
+}
+html[data-furina-typing-indicator='terminal']
+  #chat-scroll-container
+  [aria-label*='typing' i],
+html[data-furina-typing-indicator='terminal']
+  #chat-scroll-container
+  [data-state='typing'] {
+  font-family: var(--furina-code-font) !important;
+  color: var(--furina-accent) !important;
+}
+@keyframes furina-typing-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-furina-typing-indicator='pulse']
+    #chat-scroll-container
+    [aria-label*='typing' i],
+  html[data-furina-typing-indicator='pulse']
+    #chat-scroll-container
+    [data-state='typing'] {
+    animation: none !important;
+  }
+}
+
+/* Selection actions coexist instead of covering one another. */
+.furina-quote-to-composer,
+.furina-remember-selection {
+  z-index: 2147483150;
+}
+
+/* Interface SFX controls. */
+.furina-cosmetic-group .furina-secondary-button {
+  justify-self: start;
+}

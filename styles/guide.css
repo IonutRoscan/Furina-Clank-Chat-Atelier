@@ -1,0 +1,1560 @@
+/* =============================================================
+   FURINA GUIDEBOOK
+   ============================================================= */
+
+.furina-guidebook {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 28px;
+
+  color: #f8f7ff;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 220ms ease,
+    visibility 220ms ease;
+}
+
+.furina-guidebook-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.furina-guidebook-backdrop {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 20% 10%,
+      color-mix(in srgb, var(--furina-accent, #8d79ff) 20%, transparent),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 86% 84%,
+      rgba(55, 172, 255, 0.15),
+      transparent 38%
+    ),
+    rgba(4, 5, 11, 0.82);
+
+  -webkit-backdrop-filter: blur(18px) saturate(125%);
+
+  backdrop-filter: blur(18px) saturate(125%);
+}
+
+.furina-guidebook-dialog {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+
+  width: min(1040px, calc(100vw - 56px));
+
+  height: min(760px, calc(100vh - 56px));
+
+  overflow: hidden;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--furina-accent, #8d79ff) 34%,
+      rgba(255, 255, 255, 0.12)
+    );
+
+  border-radius: 24px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(27, 27, 42, 0.97),
+    rgba(11, 12, 21, 0.98)
+  );
+
+  box-shadow:
+    0 36px 100px rgba(0, 0, 0, 0.58),
+    0 0 80px color-mix(in srgb, var(--furina-accent, #8d79ff) 12%, transparent);
+
+  transform: translateY(18px) scale(0.975);
+
+  transition: transform 280ms cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+.furina-guidebook-visible .furina-guidebook-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.furina-guidebook-dialog::before {
+  content: '';
+
+  position: absolute;
+  z-index: 5;
+
+  top: 0;
+  left: 12%;
+
+  width: 42%;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--furina-accent, #8d79ff),
+    rgba(150, 225, 255, 0.9),
+    transparent
+  );
+
+  box-shadow: 0 0 18px var(--furina-accent, #8d79ff);
+
+  animation: furina-guidebook-shimmer 5.5s ease-in-out infinite;
+}
+
+.furina-guidebook-orb {
+  position: absolute;
+  z-index: 1;
+
+  display: block;
+
+  border-radius: 999px;
+
+  filter: blur(2px);
+
+  opacity: 0.32;
+
+  pointer-events: none;
+}
+
+.furina-guidebook-orb-one {
+  top: 7%;
+  left: 5%;
+
+  width: 180px;
+  height: 180px;
+
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 60%, white),
+    transparent 70%
+  );
+
+  animation: furina-guidebook-float-one 9s ease-in-out infinite;
+}
+
+.furina-guidebook-orb-two {
+  right: 4%;
+  bottom: 4%;
+
+  width: 230px;
+  height: 230px;
+
+  background: radial-gradient(circle, rgba(75, 184, 255, 0.5), transparent 70%);
+
+  animation: furina-guidebook-float-two 11s ease-in-out infinite;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+
+.furina-guidebook-header {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  min-width: 0;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 8%, transparent),
+    transparent 62%
+  );
+}
+
+.furina-guidebook-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  min-width: 0;
+}
+
+.furina-guidebook-brand-mark {
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 48%, transparent);
+
+  border-radius: 13px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 14%,
+    transparent
+  );
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 72%, white);
+
+  font-size: 18px;
+
+  box-shadow: inset 0 0 18px
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 9%, transparent);
+
+  animation: furina-guidebook-mark-pulse 3.8s ease-in-out infinite;
+}
+
+.furina-guidebook-brand-copy {
+  min-width: 0;
+}
+
+.furina-guidebook-title {
+  overflow: hidden;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 760;
+  letter-spacing: 0.02em;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-guidebook-subtitle {
+  overflow: hidden;
+
+  margin-top: 2px;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-guidebook-close {
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  width: 38px;
+  height: 38px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  color: #ffffff;
+
+  font-size: 23px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.furina-guidebook-close:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 55%,
+    transparent
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 15%,
+    transparent
+  );
+
+  transform: rotate(4deg) scale(1.04);
+}
+
+/* ── Main layout ────────────────────────────────────────────── */
+
+.furina-guidebook-layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+
+  min-height: 0;
+}
+
+.furina-guidebook-sidebar {
+  min-width: 0;
+  overflow-y: auto;
+
+  padding: 16px 12px;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+
+  background: rgba(0, 0, 0, 0.13);
+
+  scrollbar-width: thin;
+}
+
+.furina-guidebook-navigation {
+  display: grid;
+  gap: 7px;
+}
+
+.furina-guidebook-nav-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  min-width: 0;
+
+  padding: 10px 11px;
+
+  border: 1px solid transparent;
+  border-radius: 11px;
+
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.62);
+
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.furina-guidebook-nav-button:hover {
+  color: #ffffff;
+
+  background: rgba(255, 255, 255, 0.045);
+
+  transform: translateX(2px);
+}
+
+.furina-guidebook-nav-active {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 35%,
+    transparent
+  );
+
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 18%, transparent),
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 5%, transparent)
+  );
+
+  color: #ffffff;
+}
+
+.furina-guidebook-nav-icon {
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  width: 26px;
+  height: 26px;
+
+  border-radius: 8px;
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 72%, white);
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 10%,
+    transparent
+  );
+}
+
+.furina-guidebook-nav-label {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-guidebook-article {
+  min-width: 0;
+  min-height: 0;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding: clamp(24px, 4vw, 46px);
+
+  scrollbar-width: thin;
+
+  scrollbar-color: color-mix(
+      in srgb,
+      var(--furina-accent, #8d79ff) 45%,
+      transparent
+    )
+    transparent;
+}
+
+/* ── Page content ───────────────────────────────────────────── */
+
+.furina-guidebook-page-hero {
+  max-width: 760px;
+
+  animation: furina-guidebook-content-enter 360ms ease both;
+}
+
+.furina-guidebook-page-eyebrow {
+  margin-bottom: 10px;
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 70%, white);
+
+  font-size: 10px;
+  font-weight: 780;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.furina-guidebook-page-title {
+  max-width: 700px;
+
+  margin: 0;
+
+  color: #ffffff;
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: clamp(29px, 4vw, 48px);
+
+  font-weight: 600;
+  line-height: 1.08;
+
+  text-wrap: balance;
+}
+
+.furina-guidebook-page-summary {
+  max-width: 690px;
+
+  margin: 18px 0 0;
+
+  color: rgba(255, 255, 255, 0.65);
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.furina-guidebook-page-body {
+  display: grid;
+  gap: 24px;
+
+  margin-top: 30px;
+
+  animation: furina-guidebook-content-enter 420ms 50ms ease both;
+}
+
+.furina-guidebook-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.furina-guidebook-feature-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+
+  min-width: 0;
+
+  padding: 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 15px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.055),
+    rgba(255, 255, 255, 0.018)
+  );
+
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.furina-guidebook-feature-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 36%,
+    transparent
+  );
+
+  transform: translateY(-3px);
+
+  box-shadow: 0 15px 34px rgba(0, 0, 0, 0.2);
+}
+
+.furina-guidebook-feature-icon {
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 10px;
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 72%, white);
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 12%,
+    transparent
+  );
+}
+
+.furina-guidebook-feature-card h3,
+.furina-guidebook-step h3,
+.furina-guidebook-callout h3,
+.furina-guidebook-section h2 {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.furina-guidebook-feature-card p,
+.furina-guidebook-step p,
+.furina-guidebook-callout p,
+.furina-guidebook-section p {
+  margin: 6px 0 0;
+
+  color: rgba(255, 255, 255, 0.59);
+
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.furina-guidebook-section {
+  max-width: 710px;
+
+  padding-top: 4px;
+}
+
+.furina-guidebook-section h2 {
+  font-size: 19px;
+}
+
+.furina-guidebook-steps {
+  display: grid;
+  gap: 10px;
+}
+
+.furina-guidebook-step {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 14px;
+
+  padding: 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-guidebook-step-number {
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 72%, white);
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.furina-guidebook-callout {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 13px;
+
+  padding: 16px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 28%, transparent);
+
+  border-radius: 15px;
+
+  background: color-mix(in srgb, var(--furina-accent, #8d79ff) 8%, transparent);
+}
+
+.furina-guidebook-callout-tip {
+  border-color: rgba(93, 205, 255, 0.24);
+
+  background: rgba(69, 171, 223, 0.07);
+}
+
+.furina-guidebook-callout-icon {
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 10px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 15%,
+    transparent
+  );
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* ── Tool shortcuts ─────────────────────────────────────────── */
+
+.furina-guidebook-action-panel {
+  display: grid;
+  gap: 11px;
+
+  padding: 16px;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--furina-accent, #8d79ff) 25%,
+      rgba(255, 255, 255, 0.07)
+    );
+
+  border-radius: 16px;
+
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 8%, transparent),
+    rgba(255, 255, 255, 0.015)
+  );
+}
+
+.furina-guidebook-action-heading {
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 10px;
+  font-weight: 780;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.furina-guidebook-action-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.furina-guidebook-action-button {
+  display: grid;
+  grid-template-columns:
+    34px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+  gap: 10px;
+
+  min-width: 0;
+
+  padding: 11px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: #ffffff;
+
+  font: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 170ms ease,
+    background 170ms ease,
+    transform 170ms ease,
+    box-shadow 170ms ease;
+}
+
+.furina-guidebook-action-button:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 45%,
+    transparent
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 11%,
+    rgba(255, 255, 255, 0.025)
+  );
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.furina-guidebook-action-icon {
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 10px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 13%,
+    transparent
+  );
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 72%, white);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.furina-guidebook-action-copy {
+  display: grid;
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.furina-guidebook-action-copy strong {
+  overflow: hidden;
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 720;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-guidebook-action-copy small {
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.45);
+
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-guidebook-action-arrow {
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 65%, white);
+
+  font-size: 14px;
+
+  transition: transform 170ms ease;
+}
+
+.furina-guidebook-action-button:hover .furina-guidebook-action-arrow {
+  transform: translateX(3px);
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+
+.furina-guidebook-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 13px 18px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.furina-guidebook-page-indicator {
+  color: rgba(255, 255, 255, 0.44);
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.furina-guidebook-footer-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.furina-guidebook-footer-button {
+  min-width: 92px;
+
+  padding: 9px 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  color: #ffffff;
+
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.furina-guidebook-footer-button:hover:not(:disabled) {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 42%,
+    transparent
+  );
+
+  transform: translateY(-1px);
+}
+
+.furina-guidebook-footer-primary {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 42%,
+    transparent
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 22%,
+    rgba(255, 255, 255, 0.04)
+  );
+}
+
+.furina-guidebook-footer-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ── Furina panel header button ─────────────────────────────── */
+
+.furina-panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.furina-guidebook-header-button {
+  display: grid;
+  place-items: center;
+
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--furina-accent, #8d79ff) 25%,
+      rgba(255, 255, 255, 0.08)
+    );
+
+  border-radius: 10px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 10%,
+    rgba(255, 255, 255, 0.04)
+  );
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 70%, white);
+
+  font-size: 14px;
+  font-weight: 850;
+
+  cursor: pointer;
+
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.furina-guidebook-header-button:hover {
+  color: #ffffff;
+
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 58%,
+    transparent
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 20%,
+    transparent
+  );
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 0 20px
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 16%, transparent);
+}
+
+/* ── Animation ──────────────────────────────────────────────── */
+
+@keyframes furina-guidebook-shimmer {
+  0%,
+  100% {
+    left: 8%;
+    opacity: 0.45;
+  }
+
+  50% {
+    left: 50%;
+    opacity: 1;
+  }
+}
+
+@keyframes furina-guidebook-float-one {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(24px, 18px, 0) scale(1.08);
+  }
+}
+
+@keyframes furina-guidebook-float-two {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-28px, -14px, 0) scale(0.94);
+  }
+}
+
+@keyframes furina-guidebook-mark-pulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 18px
+      color-mix(in srgb, var(--furina-accent, #8d79ff) 8%, transparent);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 24px
+        color-mix(in srgb, var(--furina-accent, #8d79ff) 18%, transparent),
+      0 0 18px
+        color-mix(in srgb, var(--furina-accent, #8d79ff) 12%, transparent);
+  }
+}
+
+@keyframes furina-guidebook-content-enter {
+  from {
+    opacity: 0;
+
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive layout ──────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .furina-guidebook {
+    padding: 10px;
+  }
+
+  .furina-guidebook-action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-guidebook-dialog {
+    width: calc(100vw - 20px);
+
+    height: calc(100vh - 20px);
+
+    border-radius: 18px;
+  }
+
+  .furina-guidebook-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .furina-guidebook-sidebar {
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding: 9px 10px;
+
+    border-right: 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .furina-guidebook-navigation {
+    display: flex;
+    gap: 7px;
+
+    width: max-content;
+  }
+
+  .furina-guidebook-nav-button {
+    width: auto;
+
+    white-space: nowrap;
+  }
+
+  .furina-guidebook-nav-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .furina-guidebook-article {
+    padding: 24px 18px 32px;
+  }
+
+  .furina-guidebook-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-guidebook-page-title {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 470px) {
+  .furina-guidebook-header {
+    padding: 14px;
+  }
+
+  .furina-guidebook-brand-mark {
+    width: 35px;
+    height: 35px;
+  }
+
+  .furina-guidebook-subtitle {
+    display: none;
+  }
+
+  .furina-guidebook-footer {
+    padding: 11px 12px;
+  }
+
+  .furina-guidebook-page-indicator {
+    display: none;
+  }
+
+  .furina-guidebook-footer-controls {
+    width: 100%;
+  }
+
+  .furina-guidebook-footer-button {
+    flex: 1;
+  }
+}
+
+/* ── Home discovery ─────────────────────────────────────────── */
+
+.furina-home-guide-card {
+  position: relative;
+
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+  gap: 14px;
+
+  min-width: 0;
+  overflow: hidden;
+
+  padding: 16px;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--furina-accent, #8d79ff) 26%,
+      rgba(255, 255, 255, 0.08)
+    );
+
+  border-radius: 14px;
+
+  background:
+    radial-gradient(
+      circle at 8% 10%,
+      color-mix(in srgb, var(--furina-accent, #8d79ff) 13%, transparent),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.045),
+      rgba(255, 255, 255, 0.015)
+    );
+
+  color: inherit;
+
+  font: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 170ms ease,
+    background 170ms ease,
+    transform 170ms ease,
+    box-shadow 170ms ease;
+}
+
+.furina-home-guide-card::after {
+  content: '';
+
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    105deg,
+    transparent 22%,
+    rgba(255, 255, 255, 0.055) 44%,
+    transparent 66%
+  );
+
+  transform: translateX(-120%);
+
+  pointer-events: none;
+
+  transition: transform 650ms ease;
+}
+
+.furina-home-guide-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 48%,
+    rgba(255, 255, 255, 0.08)
+  );
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
+}
+
+.furina-home-guide-card:hover::after {
+  transform: translateX(120%);
+}
+
+.furina-home-guide-decoration {
+  display: grid;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 42%, transparent);
+
+  border-radius: 14px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 13%,
+    transparent
+  );
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 72%, white);
+
+  font-size: 17px;
+
+  box-shadow: inset 0 0 20px
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 10%, transparent);
+
+  animation: furina-home-guide-decoration-pulse 4s ease-in-out infinite;
+}
+
+.furina-home-guide-card-copy {
+  min-width: 0;
+}
+
+.furina-home-guide-title {
+  margin-top: 4px;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1.3;
+}
+
+.furina-home-guide-body {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.44);
+
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.furina-home-guide-action {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: color-mix(in srgb, var(--furina-accent, #8d79ff) 70%, white);
+
+  font-size: 10px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.furina-home-guide-action-arrow {
+  display: inline-block;
+
+  transition: transform 170ms ease;
+}
+
+.furina-home-guide-card:hover .furina-home-guide-action-arrow {
+  transform: translateX(3px);
+}
+
+/* ── One-time welcome banner ────────────────────────────────── */
+
+.furina-home-guide-welcome {
+  position: relative;
+
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+  gap: 14px;
+
+  overflow: hidden;
+
+  padding: 16px;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--furina-accent, #8d79ff) 38%,
+      rgba(255, 255, 255, 0.08)
+    );
+
+  border-radius: 15px;
+
+  background: linear-gradient(
+    125deg,
+    color-mix(
+      in srgb,
+      var(--furina-accent, #8d79ff) 15%,
+      rgba(255, 255, 255, 0.025)
+    ),
+    rgba(255, 255, 255, 0.018)
+  );
+
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.17);
+
+  animation: furina-home-guide-welcome-enter 380ms
+    cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+
+.furina-home-guide-welcome-glow {
+  position: absolute;
+
+  top: -60px;
+  right: -50px;
+
+  width: 170px;
+  height: 170px;
+
+  border-radius: 999px;
+
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 24%, transparent),
+    transparent 68%
+  );
+
+  pointer-events: none;
+
+  animation: furina-home-guide-welcome-glow 5s ease-in-out infinite;
+}
+
+.furina-home-guide-welcome-icon {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #8d79ff) 48%, transparent);
+
+  border-radius: 13px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #8d79ff) 17%,
+    transparent
+  );
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.furina-home-guide-welcome-copy {
+  position: relative;
+  z-index: 1;
+
+  min-width: 0;
+}
+
+.furina-home-guide-welcome-title {
+  margin-top: 4px;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 780;
+  line-height: 1.3;
+}
+
+.furina-home-guide-welcome-body {
+  max-width: 520px;
+
+  margin-top: 5px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.furina-home-guide-welcome-actions {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  gap: 7px;
+
+  min-width: 145px;
+}
+
+.furina-home-guide-welcome-open,
+.furina-home-guide-welcome-dismiss {
+  width: 100%;
+
+  white-space: nowrap;
+}
+
+@keyframes furina-home-guide-decoration-pulse {
+  0%,
+  100% {
+    box-shadow: inset 0 0 20px
+      color-mix(in srgb, var(--furina-accent, #8d79ff) 8%, transparent);
+  }
+
+  50% {
+    box-shadow:
+      inset 0 0 26px
+        color-mix(in srgb, var(--furina-accent, #8d79ff) 18%, transparent),
+      0 0 18px
+        color-mix(in srgb, var(--furina-accent, #8d79ff) 12%, transparent);
+  }
+}
+
+@keyframes furina-home-guide-welcome-enter {
+  from {
+    opacity: 0;
+
+    transform: translateY(-8px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes furina-home-guide-welcome-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform: scale(1.08);
+  }
+}
+
+/* ── Home discovery responsiveness ──────────────────────────── */
+
+@media (max-width: 760px) {
+  .furina-home-guide-card {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .furina-home-guide-action {
+    grid-column: 1 / -1;
+
+    justify-content: flex-end;
+  }
+
+  .furina-home-guide-welcome {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr);
+  }
+
+  .furina-home-guide-welcome-actions {
+    grid-column: 1 / -1;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    width: 100%;
+  }
+}
+
+@media (max-width: 470px) {
+  .furina-home-guide-welcome-icon {
+    display: none;
+  }
+
+  .furina-home-guide-welcome {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-home-guide-welcome-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-home-guide-decoration {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-guidebook,
+  .furina-guidebook-dialog,
+  .furina-guidebook-close,
+  .furina-guidebook-nav-button,
+  .furina-guidebook-feature-card,
+  .furina-guidebook-footer-button,
+  .furina-guidebook-header-button,
+  .furina-guidebook-action-button,
+  .furina-guidebook-action-arrow,
+  .furina-home-guide-card,
+  .furina-home-guide-action-arrow {
+    transition-duration: 0.01ms !important;
+  }
+
+  .furina-guidebook-dialog::before,
+  .furina-guidebook-orb,
+  .furina-guidebook-brand-mark,
+  .furina-guidebook-page-hero,
+  .furina-guidebook-page-body,
+  .furina-home-guide-decoration,
+  .furina-home-guide-welcome,
+  .furina-home-guide-welcome-glow {
+    animation: none !important;
+  }
+}
+
+html[data-furina-locale='ja'] .furina-guidebook {
+  font-family:
+    'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', Meiryo, system-ui,
+    sans-serif;
+  line-break: strict;
+  overflow-wrap: anywhere;
+}
+
+html[data-furina-locale='hi'] .furina-guidebook {
+  font-family:
+    'Noto Sans Devanagari', 'Nirmala UI', Mangal, system-ui, sans-serif;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+html[data-furina-locale='ja'] .furina-guidebook button,
+html[data-furina-locale='hi'] .furina-guidebook button {
+  letter-spacing: normal;
+}

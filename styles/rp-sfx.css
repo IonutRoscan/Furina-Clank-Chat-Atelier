@@ -1,0 +1,357 @@
+/* Furina RP SFX settings */
+.furina-rp-sfx-intro,
+.furina-rp-sfx-card {
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #8b7cff) 22%, transparent);
+  border-radius: 14px;
+  background: color-mix(
+    in srgb,
+    var(--furina-panel-surface, #14141b) 88%,
+    transparent
+  );
+  padding: 14px;
+}
+
+.furina-rp-sfx-intro,
+.furina-rp-sfx-card + .furina-rp-sfx-card {
+  margin-top: 12px;
+}
+
+.furina-rp-sfx-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  opacity: 0.72;
+  margin-bottom: 7px;
+}
+
+.furina-rp-sfx-card-title {
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 9px;
+}
+
+.furina-rp-sfx-card .furina-control,
+.furina-rp-sfx-card .furina-text-control,
+.furina-rp-sfx-card .furina-toggle-row {
+  margin-top: 10px;
+}
+
+.furina-rp-sfx-test-input,
+.furina-rp-sfx-phrases {
+  width: 100%;
+  resize: vertical;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+.furina-rp-sfx-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.furina-rp-sfx-test-result {
+  min-height: 18px;
+  margin-top: 9px;
+  font-size: 12px;
+  opacity: 0.78;
+}
+
+.furina-rp-sfx-category-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.furina-rp-sfx-category {
+  border: 1px solid color-mix(in srgb, currentColor 13%, transparent);
+  border-radius: 11px;
+  overflow: hidden;
+  background: color-mix(in srgb, currentColor 3%, transparent);
+}
+
+.furina-rp-sfx-category-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 11px 12px;
+  user-select: none;
+}
+
+.furina-rp-sfx-category-summary::-webkit-details-marker {
+  display: none;
+}
+
+.furina-rp-sfx-category-summary::after {
+  content: '+';
+  float: right;
+  opacity: 0.62;
+  font-weight: 800;
+}
+
+.furina-rp-sfx-category[open] > .furina-rp-sfx-category-summary::after {
+  content: '−';
+}
+
+.furina-rp-sfx-category-title {
+  display: grid;
+  gap: 2px;
+  padding-right: 22px;
+}
+
+.furina-rp-sfx-category-description {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.66;
+  line-height: 1.35;
+}
+
+.furina-rp-sfx-category-body {
+  padding: 0 12px 12px;
+  border-top: 1px solid color-mix(in srgb, currentColor 9%, transparent);
+}
+
+.furina-rp-sfx-category-body > .furina-secondary-button,
+.furina-rp-sfx-category-body > .furina-primary-button {
+  margin-top: 10px;
+}
+
+.furina-rp-sfx-reset-card {
+  opacity: 0.94;
+}
+.furina-rp-sfx-status {
+  margin-top: 12px;
+}
+
+/* User-directed next-send SFX composer */
+.furina-user-sfx-composer {
+  box-sizing: border-box;
+  color: #eeeaf8;
+  font:
+    12px/1.45 ui-sans-serif,
+    system-ui,
+    sans-serif;
+}
+
+/*
+   The composer picker is a body-level portal. This keeps it outside Clank's
+   React reconciliation so Clank can rebuild the composer without deleting it.
+*/
+.furina-user-sfx-portal {
+  position: fixed;
+  z-index: 2147482600;
+  width: max-content;
+  max-width: calc(100vw - 20px);
+  pointer-events: auto;
+}
+
+.furina-user-sfx-toggle,
+.furina-user-sfx-panel button {
+  box-sizing: border-box;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #9b7cff) 38%, transparent);
+  border-radius: 8px;
+  background: #25202f;
+  color: #eeeaf8;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.furina-user-sfx-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  box-shadow: 0 7px 24px #0007;
+  backdrop-filter: blur(8px);
+}
+
+.furina-user-sfx-toggle:hover,
+.furina-user-sfx-toggle[aria-expanded='true'],
+.furina-user-sfx-toggle.has-queue {
+  border-color: var(--furina-accent, #9b7cff);
+  background: color-mix(in srgb, var(--furina-accent, #9b7cff) 24%, #25202f);
+}
+
+.furina-user-sfx-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--furina-accent, #9b7cff);
+  color: #111015;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.furina-user-sfx-panel[hidden] {
+  display: none !important;
+}
+
+.furina-user-sfx-panel {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  width: var(--furina-user-sfx-panel-width, min(520px, calc(100vw - 24px)));
+  max-width: calc(100vw - 20px);
+  max-height: min(62vh, 560px);
+  overflow: auto;
+  margin: 0;
+  padding: 11px;
+  box-sizing: border-box;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent, #9b7cff) 28%, transparent);
+  border-radius: 12px;
+  background: #17141e;
+  box-shadow: 0 16px 42px #000b;
+}
+
+.furina-user-sfx-head {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 9px;
+}
+
+.furina-user-sfx-head > span,
+.furina-user-sfx-status,
+.furina-user-sfx-empty,
+.furina-rp-sfx-manual-status {
+  color: #c5bdd4;
+  font-size: 11px;
+}
+
+.furina-user-sfx-off {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 9px;
+  padding: 8px 9px;
+  border-radius: 8px;
+  background: color-mix(in srgb, #ffb65c 10%, transparent);
+  border: 1px solid color-mix(in srgb, #ffb65c 28%, transparent);
+}
+
+.furina-user-sfx-off[hidden] {
+  display: none !important;
+}
+
+.furina-user-sfx-panel button {
+  padding: 7px 9px;
+}
+
+.furina-user-sfx-panel button:hover:not(:disabled) {
+  border-color: var(--furina-accent, #9b7cff);
+}
+
+.furina-user-sfx-panel button:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.furina-user-sfx-selected {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  margin-bottom: 9px;
+}
+
+.furina-user-sfx-selected-label {
+  opacity: 0.7;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.furina-user-sfx-panel .furina-user-sfx-chip {
+  padding: 5px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--furina-accent, #9b7cff) 22%, #25202f);
+}
+
+.furina-user-sfx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 6px;
+}
+
+.furina-user-sfx-option {
+  min-width: 0;
+  text-align: left;
+}
+
+.furina-user-sfx-option.is-selected {
+  border-color: var(--furina-accent, #9b7cff);
+  background: color-mix(in srgb, var(--furina-accent, #9b7cff) 30%, #25202f);
+}
+
+.furina-user-sfx-option.is-auto-disabled::after {
+  content: ' · auto off';
+  opacity: 0.55;
+  font-size: 9px;
+}
+
+.furina-user-sfx-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.furina-user-sfx-status {
+  min-height: 16px;
+  margin-top: 7px;
+}
+
+.furina-rp-sfx-manual-status {
+  margin-top: 10px;
+}
+
+/* Panel fallback queue: usable even if a site's composer changes radically. */
+.furina-rp-sfx-manual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(94px, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.furina-rp-sfx-manual-grid .is-selected {
+  border-color: var(--furina-accent, #9b7cff);
+  background: color-mix(
+    in srgb,
+    var(--furina-accent, #9b7cff) 20%,
+    transparent
+  );
+}
+
+.furina-rp-sfx-manual-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+
+html.furina-focus-mode .furina-user-sfx-composer,
+html.furina-screenshot-mode .furina-user-sfx-composer {
+  display: none !important;
+}
+
+@media (max-width: 520px) {
+  .furina-user-sfx-grid,
+  .furina-rp-sfx-manual-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .furina-user-sfx-off {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .furina-user-sfx-portal {
+    max-width: calc(100vw - 16px);
+  }
+}

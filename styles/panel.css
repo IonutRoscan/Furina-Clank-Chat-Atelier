@@ -1,0 +1,4515 @@
+/* ── FURINA PANEL ────────────────────────────────────────────── */
+
+.furina-launcher {
+  position: fixed;
+
+  right: 20px;
+
+  bottom: 20px;
+
+  z-index: 2147483600;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 9px 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  border-radius: 999px;
+
+  background: rgba(21, 21, 26, 0.94);
+
+  color: #ffffff;
+
+  font-family: system-ui, sans-serif;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+
+  backdrop-filter: blur(14px);
+
+  transition:
+    transform 140ms ease,
+    background 140ms ease,
+    border-color 140ms ease;
+}
+
+/* Locale typography: keep dense controls readable in CJK and Devanagari. */
+html[data-furina-locale='ja'] .furina-panel,
+html[data-furina-locale='ja'] .furina-launcher {
+  font-family:
+    'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Yu Gothic', Meiryo, system-ui,
+    sans-serif;
+  line-break: strict;
+  overflow-wrap: anywhere;
+}
+
+html[data-furina-locale='hi'] .furina-panel,
+html[data-furina-locale='hi'] .furina-launcher {
+  font-family:
+    'Noto Sans Devanagari', 'Nirmala UI', Mangal, system-ui, sans-serif;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+html[data-furina-locale='ja'] .furina-panel button,
+html[data-furina-locale='hi'] .furina-panel button {
+  letter-spacing: normal;
+}
+
+
+/* Arabic keeps Furina's geometry stable while aligning translated interface copy naturally. */
+html[data-furina-locale='ar'] .furina-panel,
+html[data-furina-locale='ar'] .furina-launcher,
+html[data-furina-locale='ar'] #furina-guidebook,
+html[data-furina-locale='ar'] .furina-user-sfx-composer {
+  font-family: 'Segoe UI', Tahoma, Arial, system-ui, sans-serif;
+}
+
+html[data-furina-locale='ar'] .furina-panel .furina-portable-help,
+html[data-furina-locale='ar'] .furina-panel .furina-control-label,
+html[data-furina-locale='ar'] .furina-panel .furina-toggle-title,
+html[data-furina-locale='ar'] .furina-panel .furina-toggle-description,
+html[data-furina-locale='ar'] .furina-panel .furina-panel-group-label,
+html[data-furina-locale='ar'] .furina-panel .furina-workspace-block-title,
+html[data-furina-locale='ar'] #furina-guidebook {
+  direction: rtl;
+  text-align: right;
+}
+
+html[data-furina-locale='ar'] .furina-panel input,
+html[data-furina-locale='ar'] .furina-panel textarea,
+html[data-furina-locale='ar'] .furina-panel select {
+  direction: rtl;
+  text-align: right;
+}
+
+.furina-launcher:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--furina-accent, #9b7cff);
+}
+
+.furina-launcher:active {
+  transform: scale(0.97);
+}
+
+.furina-launcher-icon {
+  color: var(--furina-accent, #9b7cff);
+
+  font-size: 16px;
+}
+
+/* ── PANEL ───────────────────────────────────────────────────── */
+
+.furina-panel {
+  position: fixed;
+
+  top: 16px;
+
+  right: 16px;
+
+  bottom: 76px;
+
+  z-index: 2147483599;
+
+  width: min(360px, calc(100vw - 32px));
+
+  display: flex;
+
+  flex-direction: column;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 18px;
+
+  background: rgba(18, 18, 23, 0.97);
+
+  color: #ffffff;
+
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.48);
+
+  backdrop-filter: blur(18px);
+
+  font-family: system-ui, sans-serif;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transform: translateX(calc(100% + 40px));
+
+  pointer-events: none;
+
+  transition:
+    transform 200ms ease,
+    opacity 160ms ease;
+}
+
+.furina-panel-open {
+  opacity: 1;
+
+  transform: translateX(0);
+
+  pointer-events: auto;
+}
+
+/* ── HEADER ──────────────────────────────────────────────────── */
+
+.furina-panel-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 16px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.furina-panel-title {
+  font-size: 18px;
+
+  font-weight: 800;
+}
+
+.furina-panel-subtitle {
+  margin-top: 1px;
+
+  font-size: 11px;
+
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.furina-close-button {
+  width: 34px;
+
+  height: 34px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  color: #ffffff;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.furina-close-button:hover {
+  background: rgba(255, 255, 255, 0.11);
+}
+
+/* ── BODY ────────────────────────────────────────────────────── */
+
+.furina-panel-body {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 14px;
+}
+
+.furina-section {
+  padding: 4px 0 18px;
+}
+
+.furina-section + .furina-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+
+  padding-top: 16px;
+}
+
+.furina-section-title {
+  margin-bottom: 10px;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+/* ── COLLAPSIBLE SECTIONS ────────────────────────────────────── */
+
+.furina-section-header {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 0;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: inherit;
+
+  cursor: pointer;
+
+  font: inherit;
+
+  text-align: left;
+}
+
+.furina-section-header:hover .furina-section-title {
+  color: var(--furina-accent);
+}
+
+.furina-section-arrow {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  flex: 0 0 auto;
+
+  font-size: 15px;
+  line-height: 1;
+
+  opacity: 0.65;
+
+  transform: rotate(0deg);
+
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease,
+    color 160ms ease;
+}
+
+.furina-section-header:hover .furina-section-arrow {
+  opacity: 1;
+
+  color: var(--furina-accent);
+}
+
+.furina-section-content {
+  display: grid;
+
+  grid-template-rows: 1fr;
+
+  opacity: 1;
+
+  margin-top: 12px;
+
+  transition: opacity 160ms ease;
+}
+
+.furina-section-collapsed .furina-section-content {
+  display: none;
+}
+
+.furina-section-collapsed .furina-section-arrow {
+  transform: rotate(-90deg);
+}
+
+/* ── Theme scope ─────────────────────────────────────────────── */
+
+.furina-scope-card {
+  padding: 11px 12px;
+
+  margin-bottom: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.furina-scope-title {
+  font-size: 12px;
+
+  font-weight: 750;
+
+  color: var(--furina-accent, #9b7cff);
+}
+
+.furina-scope-description {
+  margin-top: 3px;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+
+  color: rgba(255, 255, 255, 0.48);
+}
+
+/* ── PRESETS ─────────────────────────────────────────────────── */
+
+.furina-preset-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 7px;
+}
+
+.furina-preset {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: white;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+.furina-preset:hover {
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.furina-preset-swatch {
+  width: 13px;
+
+  height: 13px;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+.furina-preset-name {
+  font-size: 12px;
+
+  font-weight: 650;
+}
+
+/* ── Portability ─────────────────────────────────────────────── */
+
+.furina-panel-group-label {
+  margin-top: 14px;
+
+  margin-bottom: 7px;
+
+  color: rgba(255, 255, 255, 0.42);
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.furina-custom-preset-area {
+  margin-top: 14px;
+
+  padding-top: 4px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.furina-custom-preset-save {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 7px;
+}
+
+.furina-custom-preset-save .furina-secondary-button {
+  width: auto;
+
+  white-space: nowrap;
+}
+
+.furina-custom-preset-list {
+  display: grid;
+
+  gap: 6px;
+
+  margin-top: 8px;
+}
+
+.furina-custom-preset-card {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 8px;
+
+  align-items: center;
+
+  padding: 8px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-custom-preset-name {
+  min-width: 0;
+
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.furina-custom-preset-actions {
+  display: flex;
+
+  gap: 4px;
+}
+
+.furina-portable-mini-button {
+  min-height: 25px;
+
+  padding: 4px 6px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 9px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.furina-portable-mini-button:hover {
+  border-color: color-mix(in srgb, var(--furina-accent) 40%, transparent);
+
+  color: #ffffff;
+}
+
+.furina-portable-delete {
+  color: #ffb9c1;
+}
+
+.furina-portable-empty {
+  padding: 9px;
+
+  border: 1px dashed rgba(255, 255, 255, 0.09);
+
+  border-radius: 8px;
+
+  color: rgba(255, 255, 255, 0.34);
+
+  font-size: 9px;
+
+  text-align: center;
+}
+
+.furina-portable-help {
+  margin-bottom: 8px;
+
+  padding: 9px 10px;
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 10px;
+
+  line-height: 1.45;
+}
+
+.furina-portable-action-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 7px;
+
+  margin-top: 7px;
+}
+
+.furina-portable-status {
+  min-height: 15px;
+
+  margin-top: 5px;
+
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 9px;
+}
+
+.furina-import-textarea {
+  width: 100%;
+
+  min-height: 120px;
+
+  box-sizing: border-box;
+
+  padding: 9px 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 9px;
+
+  resize: vertical;
+
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: #ffffff;
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  font-size: 10px;
+
+  line-height: 1.45;
+}
+
+.furina-import-textarea:focus {
+  border-color: var(--furina-accent, #9b7cff);
+}
+
+.furina-import-preview {
+  margin-top: 10px;
+
+  padding: 10px;
+
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 32%, rgba(255, 255, 255, 0.08));
+
+  border-radius: 10px;
+
+  background: color-mix(in srgb, var(--furina-accent) 6%, transparent);
+}
+
+.furina-import-preview-title {
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 750;
+}
+
+.furina-import-preview-meta,
+.furina-import-preview-target {
+  margin-top: 3px;
+
+  color: rgba(255, 255, 255, 0.48);
+
+  font-size: 9px;
+
+  line-height: 1.4;
+}
+
+.furina-import-apply {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 55%,
+    transparent
+  ) !important;
+}
+
+.furina-setup-part-list {
+  display: grid;
+
+  gap: 6px;
+
+  margin-top: 10px;
+
+  margin-bottom: 9px;
+}
+
+.furina-setup-part-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 8px 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.furina-setup-part-disabled {
+  opacity: 0.35;
+
+  cursor: default;
+}
+
+.furina-setup-preview {
+  box-shadow: inset 0 0 24px
+    color-mix(in srgb, var(--furina-accent) 4%, transparent);
+}
+
+/* ── CONTROLS ────────────────────────────────────────────────── */
+
+.furina-control {
+  margin: 12px 0;
+}
+
+.furina-control-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 7px;
+}
+
+.furina-control-label {
+  font-size: 12px;
+
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.furina-control-value {
+  font-size: 11px;
+
+  color: var(--furina-accent, #9b7cff);
+}
+
+.furina-range {
+  width: 100%;
+
+  accent-color: var(--furina-accent, #9b7cff);
+}
+
+/* ── CONDITIONAL CONTROL GROUPS ──────────────────────────────── */
+
+.furina-conditional-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.furina-conditional-group[hidden] {
+  display: none !important;
+}
+
+/* ── TEXT CONTROLS ───────────────────────────────────────────── */
+
+.furina-text-control {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+
+  width: 100%;
+}
+
+.furina-text-input {
+  width: 100%;
+
+  min-height: 34px;
+
+  box-sizing: border-box;
+
+  padding: 7px 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  color: #ffffff;
+
+  font: inherit;
+
+  font-size: 12px;
+
+  outline: none;
+
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.furina-text-input:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.furina-text-input:focus {
+  border-color: var(--furina-accent);
+}
+
+/* ── SELECT CONTROLS ─────────────────────────────────────────── */
+
+.furina-select-control {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  width: 100%;
+}
+
+.furina-select {
+  width: 100%;
+
+  min-height: 34px;
+
+  padding: 7px 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.055);
+
+  color: #ffffff;
+
+  font: inherit;
+
+  font-size: 12px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.furina-select:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.furina-select:focus {
+  border-color: var(--furina-accent);
+}
+
+.furina-select option {
+  background: #1b1b20;
+
+  color: #ffffff;
+}
+
+/* ── COLORS ──────────────────────────────────────────────────── */
+
+.furina-color-control {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin: 9px 0;
+}
+
+.furina-color-right {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.furina-color-text {
+  width: 76px;
+
+  padding: 6px 7px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 7px;
+
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: white;
+
+  font-size: 11px;
+
+  font-family: ui-monospace, monospace;
+}
+
+.furina-color-picker {
+  width: 31px;
+
+  height: 31px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 7px;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+/* ── TOGGLE ──────────────────────────────────────────────────── */
+
+.furina-toggle-row {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 14px;
+
+  margin-top: 16px;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.furina-toggle-title {
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.furina-toggle-description {
+  margin-top: 2px;
+
+  font-size: 10px;
+
+  color: rgba(255, 255, 255, 0.44);
+}
+
+.furina-checkbox {
+  width: 18px;
+
+  height: 18px;
+
+  accent-color: var(--furina-accent, #9b7cff);
+}
+
+/* ── Reader mode ─────────────────────────────────────────────── */
+
+.furina-reader-help {
+  margin-bottom: 10px;
+
+  padding: 9px 10px;
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 10px;
+
+  line-height: 1.45;
+}
+
+.furina-reader-toggle {
+  margin-top: 8px;
+}
+
+.furina-reader-options {
+  margin-top: 8px;
+
+  padding-top: 2px;
+
+  transition: opacity 140ms ease;
+}
+
+.furina-reader-options-disabled {
+  opacity: 0.42;
+}
+
+.furina-reader-options-disabled .furina-toggle-row {
+  pointer-events: none;
+}
+
+.furina-reader-focus-area {
+  margin-top: 14px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.furina-reader-focus-button {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 35%,
+    rgba(255, 255, 255, 0.1)
+  );
+}
+
+.furina-reader-focus-help {
+  margin-top: 6px;
+
+  color: rgba(255, 255, 255, 0.4);
+
+  font-size: 9px;
+
+  line-height: 1.45;
+}
+
+/* ── Stickers ───────────────────────────────────────────────── */
+
+.furina-sticker-help {
+  margin-bottom: 10px;
+
+  padding: 9px 10px;
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 10px;
+
+  line-height: 1.45;
+}
+
+.furina-sticker-add {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 7px;
+
+  align-items: center;
+}
+
+.furina-sticker-add .furina-secondary-button {
+  width: auto;
+
+  white-space: nowrap;
+}
+
+.furina-sticker-status {
+  min-height: 16px;
+
+  margin-top: 5px;
+
+  color: #ffb9c1;
+
+  font-size: 10px;
+}
+
+.furina-sticker-list {
+  display: grid;
+
+  gap: 8px;
+
+  margin-top: 10px;
+}
+
+.furina-sticker-empty {
+  padding: 10px;
+
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+
+  border-radius: 9px;
+
+  color: rgba(255, 255, 255, 0.4);
+
+  font-size: 10px;
+
+  text-align: center;
+}
+
+.furina-sticker-card {
+  padding: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-sticker-card-header {
+  display: grid;
+
+  grid-template-columns:
+    34px
+    minmax(0, 1fr)
+    28px;
+
+  gap: 8px;
+
+  align-items: center;
+
+  margin-bottom: 9px;
+}
+
+.furina-sticker-preview {
+  width: 34px;
+
+  height: 34px;
+
+  object-fit: contain;
+
+  border-radius: 7px;
+
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.furina-sticker-card-name {
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 11px;
+
+  font-weight: 650;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.furina-sticker-delete {
+  width: 28px;
+
+  height: 28px;
+
+  padding: 0;
+
+  border: 1px solid rgba(255, 80, 100, 0.15);
+
+  border-radius: 7px;
+
+  background: rgba(255, 80, 100, 0.05);
+
+  color: #ffb9c1;
+
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+.furina-sticker-delete:hover {
+  background: rgba(255, 80, 100, 0.12);
+}
+
+/* ── Sticker library ─────────────────────────────────────────── */
+
+.furina-library-area {
+  margin-top: 14px;
+
+  padding-top: 4px;
+}
+
+.furina-library-help {
+  margin-bottom: 8px;
+
+  color: rgba(255, 255, 255, 0.44);
+
+  font-size: 10px;
+
+  line-height: 1.45;
+}
+
+.furina-pack-list {
+  display: grid;
+
+  gap: 8px;
+
+  margin-top: 8px;
+}
+
+.furina-pack-card {
+  padding: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.022);
+}
+
+.furina-pack-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.furina-pack-info {
+  min-width: 0;
+}
+
+.furina-pack-name {
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.84);
+
+  font-size: 11px;
+
+  font-weight: 750;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.furina-pack-count {
+  margin-top: 2px;
+
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+}
+
+.furina-pack-header-actions {
+  display: flex;
+
+  gap: 4px;
+}
+
+.furina-library-mini-button {
+  min-height: 25px;
+
+  padding: 4px 6px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: rgba(255, 255, 255, 0.68);
+
+  font-size: 9px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.furina-library-mini-button:hover {
+  border-color: color-mix(in srgb, var(--furina-accent) 40%, transparent);
+
+  color: #ffffff;
+}
+
+.furina-library-delete {
+  color: #ffb9c1;
+}
+
+.furina-save-selected {
+  margin-top: 8px;
+
+  padding: 7px 8px;
+
+  font-size: 10px;
+}
+
+.furina-save-selected:disabled {
+  opacity: 0.32;
+
+  cursor: default;
+}
+
+.furina-library-sticker-list {
+  display: grid;
+
+  gap: 5px;
+
+  margin-top: 8px;
+}
+
+.furina-library-pack-empty {
+  padding: 7px;
+
+  color: rgba(255, 255, 255, 0.32);
+
+  font-size: 9px;
+
+  text-align: center;
+}
+
+.furina-library-sticker {
+  display: grid;
+
+  grid-template-columns:
+    30px
+    minmax(0, 1fr)
+    auto;
+
+  gap: 7px;
+
+  align-items: center;
+
+  padding: 6px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-library-preview {
+  width: 30px;
+
+  height: 30px;
+
+  object-fit: contain;
+
+  border-radius: 6px;
+
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.furina-library-sticker-name {
+  min-width: 0;
+
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+
+  font-weight: 650;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.furina-library-sticker-actions {
+  display: flex;
+
+  gap: 3px;
+}
+
+/* ── Sticker layouts ─────────────────────────────────────────── */
+
+.furina-layout-area {
+  margin-top: 14px;
+
+  padding-top: 4px;
+}
+
+.furina-layout-save-row {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 7px;
+}
+
+.furina-layout-save-row .furina-secondary-button {
+  width: auto;
+
+  min-width: 62px;
+}
+
+.furina-layout-list {
+  display: grid;
+
+  gap: 7px;
+
+  margin-top: 7px;
+}
+
+.furina-layout-card {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto;
+
+  gap: 10px;
+
+  align-items: center;
+
+  padding: 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-layout-info {
+  min-width: 0;
+}
+
+.furina-layout-name {
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.furina-layout-count {
+  margin-top: 2px;
+
+  color: rgba(255, 255, 255, 0.38);
+
+  font-size: 9px;
+}
+
+.furina-layout-actions {
+  display: flex;
+
+  gap: 5px;
+}
+
+.furina-layout-actions .furina-sticker-action {
+  min-height: 27px;
+
+  padding: 5px 7px;
+}
+
+.furina-layout-delete {
+  color: #ffb9c1;
+}
+
+.furina-clear-stickers {
+  margin-top: 12px;
+
+  margin-bottom: 4px;
+}
+
+.furina-clear-stickers:disabled {
+  opacity: 0.35;
+
+  cursor: default;
+}
+
+.furina-sticker-group-label {
+  margin-top: 11px;
+
+  margin-bottom: 5px;
+
+  color: rgba(255, 255, 255, 0.42);
+
+  font-size: 9px;
+
+  font-weight: 750;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.furina-sticker-actions {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 6px;
+
+  margin-top: 8px;
+}
+
+.furina-sticker-action {
+  min-height: 30px;
+
+  padding: 6px 8px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+}
+
+.furina-sticker-action:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--furina-accent) 45%, transparent);
+
+  color: #ffffff;
+}
+
+.furina-sticker-action:disabled {
+  opacity: 0.28;
+
+  cursor: default;
+}
+
+.furina-sticker-action-active {
+  border-color: color-mix(in srgb, var(--furina-accent) 65%, transparent);
+
+  background: color-mix(in srgb, var(--furina-accent) 14%, transparent);
+
+  color: var(--furina-accent);
+}
+
+.furina-sticker-card-selected {
+  border-color: color-mix(in srgb, var(--furina-accent) 55%, transparent);
+
+  background: color-mix(in srgb, var(--furina-accent) 7%, transparent);
+}
+
+/* ── ACTIONS ─────────────────────────────────────────────────── */
+
+.furina-action-stack {
+  display: grid;
+
+  gap: 7px;
+}
+
+.furina-secondary-button,
+.furina-danger-button {
+  width: 100%;
+
+  padding: 9px 10px;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 650;
+}
+
+.furina-secondary-button {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: white;
+}
+
+.furina-secondary-button:hover {
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.furina-danger-button {
+  border: 1px solid rgba(255, 80, 100, 0.18);
+
+  background: rgba(255, 80, 100, 0.06);
+
+  color: #ffb9c1;
+}
+
+.furina-danger-button:hover {
+  background: rgba(255, 80, 100, 0.11);
+}
+
+/* ── SCROLLBAR ───────────────────────────────────────────────── */
+
+.furina-panel-body {
+  scrollbar-width: thin;
+
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.furina-panel-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.furina-panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.furina-panel-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+
+  border-radius: 999px;
+}
+
+.furina-panel-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+/* ── MOBILE ──────────────────────────────────────────────────── */
+
+@media (max-width: 700px) {
+  .furina-panel {
+    top: 8px;
+
+    right: 8px;
+
+    bottom: 66px;
+
+    width: calc(100vw - 16px);
+  }
+
+  .furina-launcher {
+    right: 12px;
+
+    bottom: 12px;
+  }
+
+  .furina-launcher-label {
+    display: none;
+  }
+}
+
+/* ── Music / ambience ───────────────────────────────────────── */
+
+.furina-ambience-help {
+  margin-bottom: 10px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.furina-ambience-url-control {
+  margin-top: 10px;
+}
+
+.furina-ambience-status {
+  min-height: 15px;
+  margin: 6px 0 4px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.furina-ambience-playback {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.furina-ambience-playback .furina-secondary-button {
+  width: auto;
+}
+.furina-ambience-clear {
+  min-width: 70px;
+  color: rgba(255, 255, 255, 0.62);
+}
+.furina-ambience-playback button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.furina-ambience-toggle {
+  margin-top: 8px;
+}
+
+.furina-ambience-player {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 2147483500;
+  width: min(330px, calc(100vw - 36px));
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 13px;
+  background: rgba(18, 18, 23, 0.92);
+  color: #fff;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
+  -webkit-backdrop-filter: blur(16px) saturate(125%);
+  backdrop-filter: blur(16px) saturate(125%);
+  font-family: system-ui, sans-serif;
+  transition:
+    width 160ms ease,
+    padding 160ms ease,
+    background 160ms ease;
+}
+
+.furina-ambience-main {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 28px;
+  gap: 10px;
+  align-items: center;
+}
+
+.furina-ambience-artwork {
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 12%,
+    rgba(255, 255, 255, 0.035)
+  );
+  color: var(--furina-accent, #9b7cff);
+  font-size: 20px;
+  flex: 0 0 auto;
+}
+
+.furina-ambience-artwork img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.furina-ambience-player-text {
+  min-width: 0;
+}
+
+.furina-ambience-player-title {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-ambience-player-meta {
+  margin-top: 2px;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.43);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-ambience-player-error {
+  color: #ffb9c1;
+}
+
+.furina-ambience-details {
+  margin-top: 8px;
+  overflow: hidden;
+  max-height: 90px;
+  opacity: 1;
+  transition:
+    max-height 160ms ease,
+    opacity 130ms ease,
+    margin 160ms ease;
+}
+
+.furina-ambience-icon-button {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    transform 120ms ease;
+}
+
+.furina-ambience-icon-button:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--furina-accent) 45%, transparent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.furina-ambience-icon-button:disabled {
+  opacity: 0.22;
+  cursor: default;
+}
+
+.furina-ambience-player-play {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 38%, rgba(255, 255, 255, 0.1));
+  border-radius: 50%;
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 10%,
+    rgba(255, 255, 255, 0.035)
+  );
+  color: var(--furina-accent, #9b7cff);
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.furina-ambience-progress-area {
+  margin-top: 9px;
+}
+
+.furina-ambience-progress {
+  display: block;
+  width: 100%;
+  height: 10px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--furina-accent, #9b7cff);
+  cursor: pointer;
+}
+
+.furina-ambience-progress:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.furina-ambience-time {
+  margin-top: 0;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.furina-ambience-transport {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.furina-ambience-transport-spacer {
+  flex: 1;
+}
+.furina-ambience-transport .furina-ambience-player-play {
+  width: 34px;
+  height: 34px;
+}
+
+.furina-ambience-player-collapsed {
+  width: min(270px, calc(100vw - 36px));
+}
+
+.furina-ambience-player-collapsed .furina-ambience-details {
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.furina-ambience-player-collapsed .furina-ambience-artwork {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+}
+
+.furina-ambience-player-collapsed .furina-ambience-main {
+  grid-template-columns: 38px minmax(0, 1fr) 28px;
+}
+
+.furina-soundcloud-frame-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  left: -9999px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+@media (max-width: 700px) {
+  .furina-ambience-player {
+    left: 10px;
+    bottom: 10px;
+    width: min(310px, calc(100vw - 20px));
+  }
+  .furina-ambience-player-collapsed {
+    width: min(250px, calc(100vw - 20px));
+  }
+}
+
+/* ── Atmosphere controls ─────────────────────────────────────── */
+.furina-atmosphere-help {
+  margin-bottom: 10px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.furina-atmosphere-options {
+  display: grid;
+  gap: 9px;
+  margin-top: 10px;
+  transition: opacity 140ms ease;
+}
+
+.furina-atmosphere-options-disabled {
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.furina-atmosphere-note {
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+/* ── Director continuity notes ───────────────────────────────── */
+
+.furina-director-note-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.furina-director-note-card {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  padding: 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.furina-director-note-disabled {
+  opacity: 0.48;
+}
+
+.furina-director-note-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.furina-director-note-category {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 3px 7px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.07);
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.furina-director-note-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.furina-director-note-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.furina-director-continuity-input {
+  min-height: 74px;
+}
+/* ── Keyboard focus / reduced motion hardening ──────────────── */
+
+.furina-panel button:focus-visible,
+.furina-launcher:focus-visible,
+.furina-panel input:focus-visible,
+.furina-panel select:focus-visible,
+.furina-panel textarea:focus-visible,
+.furina-ambience-player button:focus-visible,
+.furina-ambience-player input:focus-visible {
+  outline: 2px solid var(--furina-accent, #9b7cff);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-panel,
+  .furina-launcher,
+  .furina-section-arrow,
+  .furina-text-input,
+  .furina-select,
+  .furina-ambience-player,
+  .furina-ambience-icon-button,
+  .furina-ambience-details {
+    transition: none !important;
+  }
+}
+
+/* ========================================================================
+   ATELIER WORKSPACE REDESIGN
+   ======================================================================== */
+
+/*
+    The legacy accordion rules above are intentionally retained because the
+    individual tool modules still reuse those small control styles. These
+    rules replace only the outer panel/navigation layout.
+*/
+
+.furina-panel.furina-atelier-workspace {
+  top: 14px;
+  right: 14px;
+  bottom: 14px;
+
+  width: min(780px, calc(100vw - 28px));
+  max-height: none;
+
+  border-radius: 20px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(25, 24, 32, 0.985),
+    rgba(15, 15, 20, 0.985)
+  );
+
+  overflow: hidden;
+}
+
+.furina-atelier-workspace .furina-panel-header {
+  min-height: 62px;
+  box-sizing: border-box;
+  padding: 13px 16px 13px 18px;
+
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--furina-accent) 8%, transparent),
+    transparent 52%
+  );
+}
+
+.furina-atelier-workspace .furina-panel-title {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.furina-atelier-workspace .furina-panel-subtitle {
+  font-size: 10px;
+  letter-spacing: 0.035em;
+}
+
+.furina-workspace-app {
+  flex: 1;
+  min-height: 0;
+
+  display: grid;
+  grid-template-columns: 124px minmax(0, 1fr);
+}
+
+/* ── PRIMARY NAVIGATION ─────────────────────────────────────── */
+
+.furina-primary-nav {
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  padding: 12px 9px;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025),
+    rgba(255, 255, 255, 0.008)
+  );
+}
+
+.furina-primary-nav-button {
+  position: relative;
+
+  width: 100%;
+  min-height: 43px;
+
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 9px;
+
+  border: 1px solid transparent;
+  border-radius: 10px;
+
+  background: transparent;
+  color: rgba(255, 255, 255, 0.58);
+
+  font: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 130ms ease,
+    border-color 130ms ease,
+    color 130ms ease,
+    transform 130ms ease;
+}
+
+.furina-primary-nav-button:hover {
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateX(1px);
+}
+
+.furina-primary-nav-button:focus-visible,
+.furina-secondary-nav-button:focus-visible,
+.furina-home-card:focus-visible {
+  outline: 2px solid var(--furina-accent, #9b7cff);
+  outline-offset: 2px;
+}
+
+.furina-primary-nav-button-active {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 30%,
+    rgba(255, 255, 255, 0.06)
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 11%,
+    rgba(255, 255, 255, 0.025)
+  );
+
+  color: #ffffff;
+}
+
+.furina-primary-nav-button-active::before {
+  content: '';
+
+  position: absolute;
+  left: -10px;
+  top: 9px;
+  bottom: 9px;
+
+  width: 3px;
+  border-radius: 0 999px 999px 0;
+
+  background: var(--furina-accent, #9b7cff);
+
+  box-shadow: 0 0 12px color-mix(in srgb, var(--furina-accent) 45%, transparent);
+}
+
+.furina-primary-nav-icon {
+  width: 24px;
+  height: 24px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  color: var(--furina-accent, #9b7cff);
+
+  font-size: 15px;
+  line-height: 1;
+}
+
+.furina-primary-nav-label {
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.furina-primary-nav-badge {
+  min-width: 17px;
+  height: 17px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 4px;
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 18%,
+    rgba(255, 255, 255, 0.04)
+  );
+
+  color: var(--furina-accent, #9b7cff);
+
+  font-size: 8px;
+  font-weight: 850;
+  line-height: 1;
+}
+
+/* ── WORKSPACE SHELL ────────────────────────────────────────── */
+
+.furina-workspace-main {
+  min-width: 0;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  background: radial-gradient(
+    circle at 82% -8%,
+    color-mix(in srgb, var(--furina-accent) 6%, transparent),
+    transparent 34%
+  );
+}
+
+.furina-workspace-header {
+  flex: 0 0 auto;
+
+  padding: 17px 20px 11px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+}
+
+.furina-workspace-title {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.furina-workspace-description {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.43);
+
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.furina-secondary-nav {
+  display: flex;
+  gap: 5px;
+
+  margin-top: 12px;
+
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.furina-secondary-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.furina-secondary-nav[hidden] {
+  display: none !important;
+}
+
+.furina-secondary-nav-button {
+  flex: 0 0 auto;
+
+  min-height: 29px;
+
+  padding: 6px 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(255, 255, 255, 0.5);
+
+  font: inherit;
+  font-size: 9px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.furina-secondary-nav-button:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.furina-secondary-nav-button-active {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 38%,
+    rgba(255, 255, 255, 0.07)
+  );
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 12%,
+    rgba(255, 255, 255, 0.025)
+  );
+
+  color: var(--furina-accent, #9b7cff);
+}
+
+.furina-workspace-scroll {
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  padding: 18px 20px 24px;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.17) transparent;
+}
+
+.furina-workspace-scroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+.furina-workspace-scroll::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.furina-workspace-content {
+  width: min(100%, 620px);
+  margin: 0 auto;
+}
+
+.furina-workspace-stack {
+  display: grid;
+  gap: 16px;
+}
+
+.furina-workspace-stack-split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.furina-workspace-block.furina-section {
+  min-width: 0;
+
+  padding: 0;
+  margin: 0;
+
+  border: 0;
+}
+
+.furina-workspace-block.furina-section
+  + .furina-workspace-block.furina-section {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.furina-workspace-block > .furina-section-content {
+  display: grid;
+  margin-top: 0;
+}
+
+.furina-workspace-block-title {
+  margin-bottom: 9px;
+
+  color: rgba(255, 255, 255, 0.72);
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.furina-css-editor {
+  min-height: 240px !important;
+
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace !important;
+}
+
+.furina-reset-warning {
+  margin-bottom: 10px;
+}
+
+/* ── HOME DASHBOARD ─────────────────────────────────────────── */
+
+.furina-home {
+  display: grid;
+  gap: 16px;
+}
+
+.furina-home-intro {
+  padding: 2px 2px 4px;
+}
+
+.furina-home-kicker {
+  color: var(--furina-accent, #9b7cff);
+
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.furina-home-heading {
+  margin-top: 5px;
+
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.furina-home-copy {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.43);
+
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.furina-home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.furina-home-card {
+  min-width: 0;
+  min-height: 112px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.018)
+  );
+
+  color: inherit;
+
+  font: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform 130ms ease,
+    border-color 130ms ease,
+    background 130ms ease;
+}
+
+.furina-home-card:hover {
+  transform: translateY(-1px);
+
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 32%,
+    rgba(255, 255, 255, 0.08)
+  );
+
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--furina-accent) 7%, rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+.furina-home-card-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.furina-home-card-icon {
+  color: var(--furina-accent, #9b7cff);
+  font-size: 13px;
+}
+
+.furina-home-card-label {
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.furina-home-card-arrow {
+  margin-left: auto;
+
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 12px;
+}
+
+.furina-home-card-value {
+  margin-top: auto;
+  padding-top: 14px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.furina-home-card-meta {
+  margin-top: 3px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: rgba(255, 255, 255, 0.36);
+
+  font-size: 8px;
+}
+
+.furina-home-resume {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 12px;
+
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 5%,
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+.furina-home-resume-title {
+  margin-top: 4px;
+
+  color: rgba(255, 255, 255, 0.8);
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.furina-home-resume-button {
+  width: auto;
+  white-space: nowrap;
+}
+
+/* ── MEDIUM WIDTH ───────────────────────────────────────────── */
+
+@media (max-width: 850px) {
+  .furina-panel.furina-atelier-workspace {
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: calc(100vw - 16px);
+  }
+
+  .furina-workspace-app {
+    grid-template-columns: 104px minmax(0, 1fr);
+  }
+
+  .furina-primary-nav {
+    padding-inline: 7px;
+  }
+
+  .furina-primary-nav-button {
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    padding-inline: 7px;
+  }
+}
+
+/* ── NARROW / MOBILE NAVIGATION ─────────────────────────────── */
+
+@media (max-width: 620px) {
+  .furina-panel.furina-atelier-workspace {
+    border-radius: 16px;
+  }
+
+  .furina-atelier-workspace .furina-panel-header {
+    min-height: 56px;
+    padding: 10px 12px 10px 14px;
+  }
+
+  .furina-workspace-app {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .furina-primary-nav {
+    flex: 0 0 auto;
+
+    flex-direction: row;
+    gap: 4px;
+
+    padding: 6px 7px;
+
+    overflow-x: auto;
+
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+    scrollbar-width: none;
+  }
+
+  .furina-primary-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .furina-primary-nav-button {
+    flex: 1 0 48px;
+    min-width: 48px;
+    min-height: 43px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+
+    padding: 5px 4px;
+
+    text-align: center;
+  }
+
+  .furina-primary-nav-button:hover {
+    transform: none;
+  }
+
+  .furina-primary-nav-button-active::before {
+    left: 10px;
+    right: 10px;
+    top: auto;
+    bottom: -7px;
+
+    width: auto;
+    height: 2px;
+
+    border-radius: 999px 999px 0 0;
+  }
+
+  .furina-primary-nav-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 13px;
+  }
+
+  .furina-primary-nav-label {
+    max-width: 58px;
+    font-size: 7px;
+  }
+
+  .furina-primary-nav-badge {
+    position: absolute;
+    top: 3px;
+    right: 4px;
+
+    min-width: 14px;
+    height: 14px;
+
+    padding-inline: 3px;
+
+    font-size: 7px;
+  }
+
+  .furina-workspace-header {
+    padding: 12px 13px 9px;
+  }
+
+  .furina-workspace-title {
+    font-size: 16px;
+  }
+
+  .furina-workspace-description {
+    font-size: 9px;
+  }
+
+  .furina-secondary-nav {
+    margin-top: 9px;
+  }
+
+  .furina-workspace-scroll {
+    padding: 13px 12px 18px;
+  }
+
+  .furina-workspace-stack-split,
+  .furina-home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-home-card {
+    min-height: 96px;
+  }
+
+  .furina-home-resume {
+    grid-template-columns: 1fr;
+  }
+
+  .furina-home-resume-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .furina-primary-nav-button,
+  .furina-secondary-nav-button,
+  .furina-home-card {
+    transition: none !important;
+  }
+}
+
+/* Keep the opened Atelier above its launcher so the wider workspace does not
+   get a floating button layered over its lower-right corner. */
+.furina-panel.furina-atelier-workspace {
+  z-index: 2147483601;
+}
+
+/* ========================================================================
+   FURINA 1.0 COSMETIC WORKSPACE CONTROLS
+   ======================================================================== */
+
+.furina-cosmetic-group {
+  display: grid;
+  gap: 10px;
+
+  padding: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 14px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.012)
+  );
+}
+
+.furina-cosmetic-group + .furina-cosmetic-group {
+  margin-top: 12px;
+}
+
+.furina-cosmetic-group-title {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.furina-cosmetic-group-description {
+  margin-top: -4px;
+
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.furina-cosmetic-group-body {
+  display: grid;
+  gap: 10px;
+}
+
+.furina-cosmetic-preset-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 8px;
+}
+
+.furina-cosmetic-preset-select {
+  min-width: 0;
+}
+
+.furina-screenshot-mode-button {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ── PILLAR E: START / PRESENT WORKSPACES ───────────────────── */
+
+.furina-presentation-hero,
+.furina-presentation-block {
+  padding: 16px;
+  border: 1px solid var(--furina-panel-border);
+  border-radius: 14px;
+  background: color-mix(
+    in srgb,
+    var(--furina-panel-bg) 86%,
+    var(--furina-accent) 4%
+  );
+}
+
+.furina-presentation-hero {
+  margin-bottom: 14px;
+}
+.furina-presentation-block + .furina-presentation-block {
+  margin-top: 14px;
+}
+.furina-start-scene-button {
+  min-width: 150px;
+  margin-top: 4px;
+}
+
+.furina-presentation-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+
+.furina-presentation-preset-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 10px;
+  align-items: center;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--furina-panel-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-presentation-preset-card > span:not(.furina-presentation-preset-icon) {
+  grid-column: 2;
+  color: var(--furina-panel-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.furina-presentation-preset-card .furina-inline-actions {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+}
+.furina-presentation-preset-icon {
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  color: var(--furina-accent);
+  background: color-mix(in srgb, var(--furina-accent) 14%, transparent);
+}
+.furina-presentation-save-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+@media (max-width: 600px) {
+  .furina-presentation-preset-grid {
+    grid-template-columns: 1fr;
+  }
+  .furina-presentation-save-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── THEME-AWARE PANEL GLASS ────────────────────────────────── */
+
+html[data-furina-panel-glass='true'] .furina-panel.furina-atelier-workspace {
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--furina-accent) 9%, transparent),
+      transparent 42%
+    ),
+    color-mix(
+      in srgb,
+      #111119 var(--furina-panel-glass-opacity-pct),
+      transparent
+    );
+
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 22%,
+    rgba(255, 255, 255, 0.1)
+  );
+
+  backdrop-filter: blur(var(--furina-panel-glass-blur)) saturate(1.12);
+
+  -webkit-backdrop-filter: blur(var(--furina-panel-glass-blur)) saturate(1.12);
+
+  box-shadow:
+    0 18px 64px rgba(0, 0, 0, 0.5),
+    0 0 34px color-mix(in srgb, var(--furina-accent) 10%, transparent);
+}
+
+html[data-furina-panel-glass='true']
+  .furina-atelier-workspace
+  .furina-primary-nav {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--furina-accent) 6%, rgba(255, 255, 255, 0.025)),
+    rgba(255, 255, 255, 0.008)
+  );
+}
+
+/* ── PANEL CURSOR PRESETS ───────────────────────────────────── */
+
+html[data-furina-panel-cursor='star'] .furina-panel,
+html[data-furina-panel-cursor='star'] .furina-launcher {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 1l2.2 7.1L21 12l-6.8 3.9L12 23l-2.2-7.1L3 12l6.8-3.9L12 1z' fill='%23ffffff' stroke='%239b7cff' stroke-width='1.4'/%3E%3C/svg%3E")
+      12 12,
+    auto;
+}
+
+html[data-furina-panel-cursor='ring'] .furina-panel,
+html[data-furina-panel-cursor='ring'] .furina-launcher {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Ccircle cx='11' cy='11' r='6.5' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3Ccircle cx='11' cy='11' r='9' fill='none' stroke='%239b7cff' stroke-width='1' opacity='.75'/%3E%3C/svg%3E")
+      11 11,
+    auto;
+}
+
+html[data-furina-panel-cursor='diamond'] .furina-panel,
+html[data-furina-panel-cursor='diamond'] .furina-launcher {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Cpath d='M11 2l8 9-8 9-8-9 8-9z' fill='%23111119' stroke='%239b7cff' stroke-width='2'/%3E%3Ccircle cx='11' cy='11' r='2' fill='%23ffffff'/%3E%3C/svg%3E")
+      11 11,
+    auto;
+}
+
+/* Interactive controls keep their normal affordances. */
+html[data-furina-panel-cursor]:not([data-furina-panel-cursor='default'])
+  .furina-panel
+  button,
+html[data-furina-panel-cursor]:not([data-furina-panel-cursor='default'])
+  .furina-panel
+  input[type='checkbox'],
+html[data-furina-panel-cursor]:not([data-furina-panel-cursor='default'])
+  .furina-panel
+  input[type='range'],
+html[data-furina-panel-cursor]:not([data-furina-panel-cursor='default'])
+  .furina-panel
+  select {
+  cursor: pointer;
+}
+
+html[data-furina-panel-cursor]:not([data-furina-panel-cursor='default'])
+  .furina-panel
+  input[type='text'],
+html[data-furina-panel-cursor]:not([data-furina-panel-cursor='default'])
+  .furina-panel
+  textarea {
+  cursor: text;
+}
+
+/* ── FURINA ACCENT SPARKLE ──────────────────────────────────── */
+
+.furina-branding {
+  position: relative;
+}
+
+html[data-furina-accent-sparkle='true'] .furina-branding::after {
+  content: '✦';
+
+  position: absolute;
+  top: -2px;
+  right: -17px;
+
+  color: var(--furina-accent);
+  font-size: 10px;
+  line-height: 1;
+
+  text-shadow: 0 0 8px color-mix(in srgb, var(--furina-accent) 74%, transparent);
+
+  pointer-events: none;
+
+  animation: furina-brand-sparkle 2.8s ease-in-out infinite;
+}
+
+@keyframes furina-brand-sparkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.75) rotate(0deg);
+  }
+
+  45% {
+    opacity: 1;
+    transform: scale(1.14) rotate(20deg);
+  }
+
+  62% {
+    opacity: 0.58;
+    transform: scale(0.9) rotate(34deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-furina-accent-sparkle='true'] .furina-branding::after {
+    animation: none !important;
+    opacity: 0.72;
+  }
+}
+
+/* ── Firefox SoundCloud compatibility player ─────────────────── */
+
+.furina-ambience-player-soundcloud-embed {
+  width: min(360px, calc(100vw - 36px));
+}
+
+.furina-ambience-player-soundcloud-embed .furina-ambience-details {
+  max-height: 230px;
+}
+
+.furina-soundcloud-firefox-note {
+  margin: 2px 0 8px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 8.5px;
+  line-height: 1.4;
+}
+
+.furina-soundcloud-frame-compat {
+  display: block;
+  width: 100%;
+  height: 166px;
+  border: 0;
+  border-radius: 9px;
+  background: #111;
+}
+
+.furina-ambience-player-soundcloud-embed.furina-ambience-player-collapsed {
+  width: min(250px, calc(100vw - 36px));
+  padding: 8px;
+}
+
+/*
+    The Firefox SoundCloud compatibility player keeps its iframe mounted while
+    collapsed so playback is not interrupted. The more specific rule above
+    for the compatibility details would otherwise win over Furina's generic
+    collapsed-player rule and leave a large empty body visible.
+*/
+.furina-ambience-player-soundcloud-embed.furina-ambience-player-collapsed
+  .furina-ambience-details {
+  height: 0;
+  max-height: 0;
+  min-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.furina-ambience-player-soundcloud-embed.furina-ambience-player-collapsed
+  .furina-ambience-artwork {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.furina-ambience-player-soundcloud-embed.furina-ambience-player-collapsed
+  .furina-ambience-main {
+  grid-template-columns: 34px minmax(0, 1fr) 28px;
+  gap: 8px;
+}
+
+.furina-ambience-player-soundcloud-embed.furina-ambience-player-collapsed
+  .furina-ambience-player-title {
+  font-size: 10.5px;
+}
+
+.furina-ambience-player-soundcloud-embed.furina-ambience-player-collapsed
+  .furina-ambience-player-meta {
+  font-size: 8px;
+}
+
+@media (max-width: 700px) {
+  .furina-ambience-player-soundcloud-embed {
+    width: min(340px, calc(100vw - 20px));
+  }
+}
+
+/* ── YouTube embedded ambience player ────────────────────────── */
+
+.furina-ambience-player-youtube-embed {
+  width: min(380px, calc(100vw - 36px));
+}
+
+.furina-ambience-player-youtube-embed .furina-ambience-details {
+  max-height: 260px;
+}
+
+.furina-youtube-embed-note {
+  margin: 2px 0 8px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 8.5px;
+  line-height: 1.4;
+}
+
+.furina-youtube-frame-compat {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 9px;
+  background: #111;
+}
+
+.furina-ambience-player-youtube-embed.furina-ambience-player-collapsed {
+  width: min(250px, calc(100vw - 36px));
+  padding: 8px;
+}
+
+/*
+    Keep the YouTube iframe mounted while the card is collapsed so the
+    provider can preserve playback. Only its visual body is folded away.
+*/
+.furina-ambience-player-youtube-embed.furina-ambience-player-collapsed
+  .furina-ambience-details {
+  height: 0;
+  max-height: 0;
+  min-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.furina-ambience-player-youtube-embed.furina-ambience-player-collapsed
+  .furina-ambience-artwork {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.furina-ambience-player-youtube-embed.furina-ambience-player-collapsed
+  .furina-ambience-main {
+  grid-template-columns: 34px minmax(0, 1fr) 28px;
+  gap: 8px;
+}
+
+.furina-ambience-player-youtube-embed.furina-ambience-player-collapsed
+  .furina-ambience-player-title {
+  font-size: 10.5px;
+}
+
+.furina-ambience-player-youtube-embed.furina-ambience-player-collapsed
+  .furina-ambience-player-meta {
+  font-size: 8px;
+}
+
+@media (max-width: 700px) {
+  .furina-ambience-player-youtube-embed {
+    width: min(350px, calc(100vw - 20px));
+  }
+}
+
+/* Interfaces workspace */
+
+.furina-interfaces-workspace {
+  display: grid;
+  gap: 16px;
+}
+
+.furina-interfaces-intro {
+  display: grid;
+  gap: 6px;
+
+  padding: 14px 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--furina-accent) 8%, rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.015)
+  );
+}
+
+.furina-interfaces-intro-kicker {
+  color: var(--furina-accent, #9b7cff);
+
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+}
+
+.furina-interfaces-intro-copy {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.furina-interface-gallery {
+  display: grid;
+  gap: 12px;
+}
+
+.furina-interface-card {
+  position: relative;
+
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns:
+    78px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.022);
+}
+
+.furina-interface-card-phantom {
+  background: linear-gradient(
+    115deg,
+    rgba(230, 0, 18, 0.13),
+    rgba(255, 255, 255, 0.018) 42%,
+    rgba(0, 0, 0, 0.08)
+  );
+}
+
+.furina-interface-card-visual {
+  position: relative;
+
+  width: 72px;
+  height: 64px;
+
+  display: grid;
+  place-items: center;
+
+  overflow: hidden;
+
+  background: #e60012;
+
+  color: #ffffff;
+
+  clip-path: polygon(5% 7%, 94% 0, 100% 77%, 84% 100%, 0 90%);
+
+  transform: rotate(-2deg);
+}
+
+.furina-interface-card-mark {
+  position: relative;
+  z-index: 1;
+
+  font-size: 26px;
+  font-weight: 950;
+  font-style: italic;
+  letter-spacing: -0.08em;
+}
+
+.furina-interface-card-slash {
+  position: absolute;
+
+  right: 6px;
+  bottom: -4px;
+
+  color: rgba(0, 0, 0, 0.72);
+
+  font-size: 24px;
+  font-weight: 950;
+
+  transform: rotate(-12deg);
+}
+
+.furina-interface-card-copy {
+  min-width: 0;
+}
+
+.furina-interface-card-kicker {
+  margin-bottom: 3px;
+
+  color: rgba(255, 255, 255, 0.4);
+
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.furina-interface-card-title {
+  margin: 0;
+
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 850;
+  letter-spacing: -0.015em;
+}
+
+.furina-interface-card-description {
+  margin: 5px 0 7px;
+
+  color: rgba(255, 255, 255, 0.55);
+
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.furina-interface-card-meta {
+  color: rgba(255, 255, 255, 0.32);
+
+  font-size: 7px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.furina-interface-launch {
+  min-width: 78px;
+}
+
+.furina-interface-future {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 10px 12px;
+
+  color: rgba(255, 255, 255, 0.32);
+
+  font-size: 9px;
+}
+
+.furina-interface-future-mark {
+  width: 22px;
+  height: 22px;
+
+  display: inline-grid;
+  place-items: center;
+
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 7px;
+
+  color: var(--furina-accent, #9b7cff);
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+@media (max-width: 560px) {
+  .furina-interface-card {
+    grid-template-columns:
+      58px
+      minmax(0, 1fr);
+  }
+
+  .furina-interface-card-visual {
+    width: 54px;
+    height: 52px;
+  }
+
+  .furina-interface-card-mark {
+    font-size: 21px;
+  }
+
+  .furina-interface-launch {
+    grid-column: 1 / -1;
+
+    width: 100%;
+  }
+}
+
+/* ── SCENE INTELLIGENCE / STORY ─────────────────────────────── */
+
+.furina-story-hero,
+.furina-story-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.furina-story-hero {
+  padding: 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 28%, rgba(255, 255, 255, 0.08));
+  border-radius: 13px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--furina-accent) 10%, transparent),
+    rgba(255, 255, 255, 0.022)
+  );
+}
+
+.furina-story-hero-title {
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  font-weight: 760;
+}
+.furina-story-hero-copy {
+  max-width: 360px;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.furina-story-chapter-pill {
+  flex: 0 0 auto;
+  max-width: 180px;
+  padding: 5px 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 13%,
+    rgba(255, 255, 255, 0.035)
+  );
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.furina-story-options,
+.furina-story-list {
+  display: grid;
+  gap: 9px;
+}
+.furina-story-options {
+  margin-top: 10px;
+}
+.furina-story-list {
+  margin-top: 12px;
+}
+
+.furina-story-editor {
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 35%, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.furina-story-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.furina-story-card {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-story-card-title {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 12px;
+  font-weight: 720;
+  line-height: 1.4;
+}
+.furina-story-card-meta {
+  margin-top: 3px;
+  color: color-mix(in srgb, var(--furina-accent) 72%, white);
+  font-size: 8px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.furina-story-card-date {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.36);
+  font-size: 9px;
+}
+.furina-story-card-copy {
+  margin: 9px 0;
+  color: rgba(255, 255, 255, 0.67);
+  font-size: 11px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.furina-story-details {
+  display: grid;
+  gap: 4px;
+  margin: 7px 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.furina-story-timeline {
+  display: grid;
+  margin-top: 13px;
+}
+.furina-story-timeline-event {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 10px;
+}
+.furina-story-timeline-rail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.furina-story-timeline-rail::after {
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  width: 1px;
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 22%,
+    rgba(255, 255, 255, 0.06)
+  );
+  content: '';
+}
+.furina-story-timeline-event:last-child .furina-story-timeline-rail::after {
+  display: none;
+}
+.furina-story-timeline-dot {
+  position: relative;
+  z-index: 1;
+  width: 9px;
+  height: 9px;
+  margin-top: 5px;
+  border: 2px solid color-mix(in srgb, var(--furina-accent) 72%, white);
+  border-radius: 50%;
+  background: #15131b;
+}
+.furina-story-timeline-body {
+  min-width: 0;
+  padding: 0 0 16px;
+}
+.furina-story-consequence {
+  margin: 7px 0;
+  padding: 7px 9px;
+  border-left: 2px solid
+    color-mix(in srgb, var(--furina-accent) 45%, transparent);
+  background: rgba(255, 255, 255, 0.022);
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.furina-story-snapshot-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 8px 0;
+}
+.furina-story-snapshot-badges span {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 8px;
+}
+
+@media (max-width: 560px) {
+  .furina-story-hero {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .furina-story-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .furina-story-chapter-pill {
+    max-width: none;
+    align-self: flex-start;
+  }
+}
+
+/* ── DIRECTOR MODE 2.0 ─────────────────────────────────────── */
+
+.furina-director2-hero,
+.furina-director2-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.furina-director2-hero {
+  padding: 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 30%, rgba(255, 255, 255, 0.08));
+  border-radius: 13px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--furina-accent) 11%, transparent),
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+.furina-director2-hero-title {
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  font-weight: 750;
+}
+.furina-director2-hero-copy {
+  max-width: 350px;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.furina-director2-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 9px 0 11px;
+}
+
+.furina-director2-chip {
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.62);
+  font: inherit;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.furina-director2-chip:hover {
+  border-color: color-mix(in srgb, var(--furina-accent) 45%, transparent);
+  color: white;
+}
+
+.furina-director2-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.furina-director2-preset {
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.025);
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.furina-director2-preset-active {
+  border-color: color-mix(in srgb, var(--furina-accent) 60%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 11%,
+    rgba(255, 255, 255, 0.025)
+  );
+}
+
+.furina-director2-preset-title {
+  font-size: 11px;
+  font-weight: 700;
+}
+.furina-director2-preset-copy {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.furina-director2-editor {
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 35%, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.furina-director2-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.furina-director2-list {
+  display: grid;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.furina-director2-card {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-director2-card-disabled {
+  opacity: 0.58;
+}
+.furina-director2-card-title {
+  flex: 1;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.furina-director2-order {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--furina-accent) 18%, transparent);
+  color: white;
+  font-size: 9px;
+}
+.furina-director2-status {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 8px;
+  text-transform: uppercase;
+}
+.furina-director2-cue-armed {
+  border-color: color-mix(in srgb, var(--furina-accent) 55%, transparent);
+}
+.furina-director2-cue-fulfilled {
+  opacity: 0.55;
+}
+.furina-director2-card-meta {
+  margin: 8px 0;
+  color: color-mix(in srgb, var(--furina-accent) 70%, white);
+  font-size: 9px;
+  text-transform: capitalize;
+}
+
+.furina-director2-guard-list {
+  display: grid;
+  gap: 8px;
+}
+.furina-director2-truth {
+  margin-top: 9px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.furina-director2-knowledge-map {
+  display: grid;
+  gap: 3px;
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+}
+
+.furina-director2-diagnostic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.furina-director2-diagnostic {
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+}
+.furina-director2-diagnostic-label {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.furina-director2-diagnostic-value {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+.furina-director2-preview {
+  min-height: 150px;
+}
+
+@media (max-width: 560px) {
+  .furina-director2-hero {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .furina-director2-preset-grid,
+  .furina-director2-form-grid,
+  .furina-director2-diagnostic-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Response Style Library */
+
+.furina-response-style-library {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-top: 12px;
+}
+
+.furina-response-style-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 22%, rgba(255, 255, 255, 0.08));
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.018)
+  );
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.furina-response-style-card:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 48%,
+    rgba(255, 255, 255, 0.12)
+  );
+
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.065),
+    rgba(255, 255, 255, 0.025)
+  );
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+
+  transform: translateY(-1px);
+}
+
+.furina-response-style-card::before {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+
+  left: 0;
+
+  width: 3px;
+
+  height: 100%;
+
+  background: var(--furina-accent);
+
+  opacity: 0.3;
+
+  transition:
+    opacity 160ms ease,
+    width 160ms ease;
+
+  pointer-events: none;
+}
+
+.furina-response-style-card:hover::before,
+.furina-response-style-open::before {
+  width: 4px;
+
+  opacity: 0.85;
+}
+
+.furina-response-style-header {
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  width: 100%;
+
+  gap: 12px;
+
+  padding: 13px 14px 13px 16px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.furina-response-style-identity {
+  display: flex;
+
+  min-width: 0;
+
+  flex: 1;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.furina-response-style-name {
+  font-size: 14px;
+
+  font-weight: 700;
+
+  line-height: 1.3;
+
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.furina-response-style-description {
+  font-size: 11px;
+
+  line-height: 1.45;
+
+  color: rgba(255, 255, 255, 0.56);
+}
+
+.furina-response-style-arrow {
+  display: grid;
+
+  width: 26px;
+
+  height: 26px;
+
+  flex: 0 0 auto;
+
+  place-items: center;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.045);
+
+  color: color-mix(in srgb, var(--furina-accent) 75%, white);
+
+  font-size: 15px;
+
+  transition:
+    background 160ms ease,
+    transform 180ms ease;
+}
+
+.furina-response-style-open .furina-response-style-arrow {
+  background: color-mix(in srgb, var(--furina-accent) 14%, transparent);
+}
+
+.furina-response-style-body {
+  position: relative;
+
+  z-index: 1;
+
+  padding: 0 14px 14px 16px;
+}
+
+.furina-response-style-preview {
+  max-height: 340px;
+
+  overflow-y: auto;
+
+  padding: 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.18);
+
+  color: rgba(255, 255, 255, 0.75);
+
+  font-family: var(--furina-code-font, ui-monospace, monospace);
+
+  font-size: 11px;
+
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+
+  overflow-wrap: anywhere;
+}
+
+.furina-response-style-preview::-webkit-scrollbar {
+  width: 6px;
+}
+
+.furina-response-style-preview::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+
+  background: color-mix(in srgb, var(--furina-accent) 35%, transparent);
+}
+
+.furina-response-style-footer {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-top: 10px;
+}
+
+.furina-response-style-count {
+  font-size: 10px;
+
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.furina-response-style-footer .furina-button {
+  min-width: 104px;
+}
+
+.furina-response-style-open {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 48%,
+    rgba(255, 255, 255, 0.1)
+  );
+
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--furina-accent) 7%, rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.018)
+  );
+}
+
+/* ── CONTINUITY VAULT ───────────────────────────────────────── */
+
+.furina-continuity-hero,
+.furina-continuity-card-header,
+.furina-continuity-list-controls,
+.furina-continuity-budget-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.furina-continuity-hero {
+  padding: 14px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 30%, rgba(255, 255, 255, 0.08));
+  border-radius: 13px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--furina-accent) 12%, transparent),
+    rgba(255, 255, 255, 0.025)
+  );
+}
+
+.furina-continuity-hero-title {
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.furina-continuity-hero-copy {
+  max-width: 340px;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.furina-continuity-editor {
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid
+    color-mix(in srgb, var(--furina-accent) 35%, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.furina-continuity-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.furina-continuity-list-controls {
+  margin: 14px 0 9px;
+}
+
+.furina-continuity-list-controls > * {
+  min-width: 0;
+  flex: 1;
+}
+
+.furina-continuity-list {
+  display: grid;
+  gap: 9px;
+}
+
+.furina-continuity-card {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.085);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.furina-continuity-card-disabled {
+  opacity: 0.58;
+}
+
+.furina-continuity-card-archived {
+  opacity: 0.62;
+  border-style: dashed;
+}
+
+/* ── MEMORY INBOX / STORY BIBLE ─────────────────────────────── */
+
+.furina-memory-inbox-hero {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.025);
+}
+.furina-memory-inbox-count {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--furina-accent) 18%, transparent);
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+}
+.furina-memory-inbox-copy {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 10px;
+}
+.furina-memory-inbox-list {
+  display: grid;
+  gap: 9px;
+}
+.furina-memory-suggestion {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+}
+.furina-memory-suggestion-meta {
+  color: color-mix(in srgb, var(--furina-accent) 70%, white);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.furina-memory-suggestion-title {
+  margin-top: 5px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 700;
+}
+.furina-memory-suggestion-text {
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 10px;
+  line-height: 1.55;
+}
+.furina-memory-bible-card,
+.furina-memory-bible-preview {
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.022);
+}
+.furina-memory-bible-preview {
+  border-color: color-mix(
+    in srgb,
+    var(--furina-accent) 34%,
+    rgba(255, 255, 255, 0.08)
+  );
+}
+.furina-memory-bible-preview-title {
+  color: white;
+  font-size: 12px;
+  font-weight: 720;
+}
+.furina-memory-bible-preview-meta {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 9px;
+}
+.furina-memory-bible-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin: 11px 0;
+}
+.furina-memory-bible-stat {
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.furina-memory-bible-stat strong {
+  color: white;
+  font-size: 13px;
+}
+.furina-memory-bible-stat span {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 8px;
+  text-transform: capitalize;
+}
+@media (max-width: 560px) {
+  .furina-memory-bible-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.furina-continuity-card-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 720;
+}
+
+.furina-continuity-card-meta {
+  margin-top: 3px;
+  color: color-mix(in srgb, var(--furina-accent) 75%, white);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+}
+
+.furina-continuity-card-text {
+  margin: 9px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.furina-continuity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.furina-continuity-tag {
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: color-mix(
+    in srgb,
+    var(--furina-accent) 13%,
+    rgba(255, 255, 255, 0.04)
+  );
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 9px;
+}
+
+.furina-continuity-card-actions {
+  margin-top: 10px;
+}
+
+.furina-continuity-budget-controls {
+  align-items: end;
+}
+
+.furina-continuity-budget-controls > * {
+  flex: 1;
+}
+
+.furina-continuity-meter {
+  height: 7px;
+  margin-top: 13px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.furina-continuity-meter-bar {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #69d5a3;
+  transition:
+    width 0.18s ease,
+    background 0.18s ease;
+}
+
+.furina-continuity-meter-bar[data-weight='medium'] {
+  background: #e9bd68;
+}
+.furina-continuity-meter-bar[data-weight='heavy'] {
+  background: #ee7786;
+}
+
+.furina-continuity-preview-summary {
+  margin: 7px 0 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+}
+
+.furina-continuity-preview {
+  min-height: 110px;
+}
+
+.furina-continuity-reasons {
+  display: grid;
+  gap: 5px;
+  margin-top: 9px;
+}
+
+.furina-continuity-reason {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 9px;
+}
+
+@media (max-width: 560px) {
+  .furina-continuity-hero,
+  .furina-continuity-list-controls,
+  .furina-continuity-budget-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .furina-continuity-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Mobile launcher drawer handle ─────────────────────────────
+   On touch/narrow layouts the desktop Furina pill is replaced by a small
+   right-edge handle. JavaScript keeps --furina-mobile-launcher-top aligned
+   just above Clank's live composer so the launcher never competes with Send.
+   ------------------------------------------------------------------------ */
+@media (max-width: 760px), (pointer: coarse) and (max-width: 1100px) {
+  .furina-launcher {
+    top: var(--furina-mobile-launcher-top, 62vh);
+    right: 0;
+    bottom: auto;
+
+    width: 30px;
+    min-width: 30px;
+    height: 48px;
+    min-height: 48px;
+
+    justify-content: center;
+    gap: 0;
+
+    box-sizing: border-box;
+    padding: 0 1px 0 4px;
+
+    border-right: 0;
+    border-radius: 14px 0 0 14px;
+
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--furina-accent, #9b7cff) 16%, rgba(20, 20, 27, 0.96)),
+      rgba(17, 17, 23, 0.96)
+    );
+
+    box-shadow:
+      -7px 7px 24px rgba(0, 0, 0, 0.28),
+      inset 1px 0 0 color-mix(in srgb, var(--furina-accent, #9b7cff) 24%, transparent);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+    transition:
+      opacity 130ms ease,
+      transform 130ms ease,
+      background 130ms ease,
+      border-color 130ms ease,
+      box-shadow 130ms ease;
+  }
+
+  .furina-launcher::before {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 5px;
+
+    width: 2px;
+    height: 18px;
+
+    border-radius: 999px;
+
+    background: color-mix(
+      in srgb,
+      var(--furina-accent, #9b7cff) 62%,
+      rgba(255, 255, 255, 0.45)
+    );
+
+    opacity: 0.72;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .furina-launcher-label {
+    display: none !important;
+  }
+
+  .furina-launcher-icon {
+    margin-left: 3px;
+    color: var(--furina-accent, #9b7cff);
+    font-size: 13px;
+    line-height: 1;
+
+    filter: drop-shadow(
+      0 0 5px color-mix(in srgb, var(--furina-accent, #9b7cff) 45%, transparent)
+    );
+  }
+
+  .furina-launcher:hover {
+    transform: none;
+  }
+
+  .furina-launcher:active {
+    transform: translateX(2px) scale(0.98);
+  }
+
+  .furina-launcher:focus-visible {
+    outline-offset: -3px;
+  }
+
+  /* The panel has its own close button. Hiding the handle while expanded keeps
+     the tiny launcher from floating over the mobile workspace. */
+  .furina-launcher[aria-expanded='true'] {
+    opacity: 0;
+    transform: translateX(100%);
+    pointer-events: none;
+  }
+}
