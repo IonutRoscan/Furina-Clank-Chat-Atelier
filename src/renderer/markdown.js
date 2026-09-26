@@ -1,6 +1,5 @@
 'use strict'
 
-
 /*
   Developer notes
 
@@ -16,6 +15,32 @@
 */
 
 window.ClankAtelier = window.ClankAtelier || {}
+
+// NESTED EMPHASIS STYLING
+//
+// Clank can apply its own typography rules to <strong> and <em>. In some
+// themes that can make a semantic <strong><em> combination look mostly
+// italic. Keep Furina's nested emphasis styling explicit and local.
+if (!document.getElementById('clank-atelier-nested-emphasis-style')) {
+  const style = document.createElement('style')
+  style.id = 'clank-atelier-nested-emphasis-style'
+  style.textContent = `
+    .clank-atelier-bold-italic {
+      font-weight: 700 !important;
+      font-style: italic !important;
+    }
+
+    .clank-atelier-bold-italic em {
+      font-weight: 700 !important;
+      font-style: italic !important;
+    }
+
+    .clank-atelier-nested-bold {
+      font-weight: 700 !important;
+    }
+  `
+  document.head.appendChild(style)
+}
 
 // ESCAPE HTML
 
@@ -90,19 +115,182 @@ window.ClankAtelier.renderInlineMarkdown = function (text) {
   )
 
   // INLINE CODE
-  html = html.replace(
-    /`([^`\n]+)`/g,
-    '<code class="clank-atelier-inline-code">$1</code>'
-  )
+  // Protect code spans while emphasis is parsed. Markdown markers inside
+  // code are literal text and must never become <strong> or <em>.
+  const protectedInlineCode = []
 
-  // BOLD
-  html = html.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+  html = html.replace(/`([^`\n]+)`/g, (match, code) => {
+    const token = `\uE000${protectedInlineCode.length}\uE001`
+
+    protectedInlineCode.push(
+      '<code class="clank-atelier-inline-code">' + code + '</code>'
+    )
+
+    return token
+  })
+
+  /*
+    Emphasis is parsed recursively so nested Markdown produces valid HTML.
+
+    This intentionally covers the practical combinations Furina users are
+    likely to write rather than attempting to implement every CommonMark edge
+    case. The parser works only on escaped text, while inline code is protected
+    above so its asterisks remain literal.
+  */
+  // Finds the next standalone `*` (one that is not part of a `**` pair)
+  // starting from `from`, stopping if it would land at or past `limit`.
+  // Used to tell a genuine nested `*italic **bold***` pattern apart from
+  // an unrelated `**`/`***` run that just happens to appear later in the
+  // same line (for example a plain `*action*` followed separately by a
+  // `***bold italic***` phrase).
+  function findStandaloneStar(source, from, limit) {
+    let end = from
+
+    while (end < source.length && (limit === undefined || end < limit)) {
+      end = source.indexOf('*', end)
+
+      if (end === -1 || (limit !== undefined && end >= limit)) {
+        return -1
+      }
+
+      if (source[end - 1] !== '*' && source[end + 1] !== '*') {
+        return end
+      }
+
+      end++
+    }
+
+    return -1
+  }
+
+  function renderEmphasis(source) {
+    let result = ''
+    let index = 0
+
+    function renderRange(start, end) {
+      return renderEmphasis(source.slice(start, end))
+    }
+
+    while (index < source.length) {
+      // Common nested form: *italic with **bold inside***. The final three
+      // stars are the bold closing pair plus the outer italic closer.
+      //
+      // This must only fire when the `**` really does belong to the same
+      // span as this opening `*`. If a standalone closing `*` appears first
+      // (a normal, unrelated italic ending before the later `**`), this is
+      // NOT the nested pattern -- it's a plain italic followed by something
+      // else further down the line, and must fall through to the plain
+      // italic branch below instead.
+      if (source[index] === '*' && source[index + 1] !== '*') {
+        const nestedBold = source.indexOf('**', index + 1)
+
+        if (nestedBold > index + 1) {
+          const plainClose = findStandaloneStar(source, index + 1, nestedBold)
+
+          if (plainClose === -1) {
+            const closingTriple = source.indexOf('***', nestedBold + 2)
+
+            if (closingTriple !== -1) {
+              result +=
+                '<em>' +
+                renderRange(index + 1, nestedBold) +
+                '<strong class="clank-atelier-nested-bold">' +
+                renderRange(nestedBold + 2, closingTriple) +
+                '</strong></em>'
+
+              index = closingTriple + 3
+              continue
+            }
+          }
+        }
+      }
+
+      // Triple emphasis gets the first chance to claim its complete span.
+      if (source.startsWith('***', index)) {
+        const end = source.indexOf('***', index + 3)
+
+        if (end !== -1 && end > index + 3) {
+          result +=
+            '<strong class="clank-atelier-bold-italic"><em>' +
+            renderRange(index + 3, end) +
+            '</em></strong>'
+
+          index = end + 3
+          continue
+        }
+      }
+
+      // A single star starts italic only when it is not immediately part of
+      // a bold marker. Its closing star must likewise stand on its own.
+      if (source[index] === '*' && source[index + 1] !== '*') {
+        let end = index + 1
+
+        while (end < source.length) {
+          end = source.indexOf('*', end)
+
+          if (end === -1) {
+            break
+          }
+
+          if (source[end - 1] !== '*' && source[end + 1] !== '*') {
+            break
+          }
+
+          end++
+        }
+
+        if (end !== -1 && end > index + 1) {
+          result += '<em>' + renderRange(index + 1, end) + '</em>'
+
+          index = end + 1
+          continue
+        }
+      }
+
+      // Bold is checked after outer single-star emphasis. This lets
+      // *italic with **bold inside*** keep the final single star for the
+      // outer italic span.
+      if (source.startsWith('**', index)) {
+        let end = index + 2
+
+        while (end < source.length) {
+          end = source.indexOf('**', end)
+
+          if (end === -1) {
+            break
+          }
+
+          if (source[end + 2] !== '*') {
+            break
+          }
+
+          end++
+        }
+
+        if (end !== -1 && end > index + 2) {
+          result += '<strong>' + renderRange(index + 2, end) + '</strong>'
+
+          index = end + 2
+          continue
+        }
+      }
+
+      result += source[index]
+      index++
+    }
+
+    return result
+  }
+
+  html = renderEmphasis(html)
 
   // STRIKETHROUGH
   html = html.replace(/~~([^~\n]+)~~/g, '<del>$1</del>')
 
-  // ITALIC
-  html = html.replace(/(^|[^\*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>')
+  // Restore protected inline code after all emphasis passes.
+  html = html.replace(/\uE000(\d+)\uE001/g, (match, index) => {
+    return protectedInlineCode[Number(index)] || match
+  })
 
   // LINKS
   html = html.replace(

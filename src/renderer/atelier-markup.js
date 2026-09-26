@@ -121,8 +121,18 @@
   function inline(source, depth = 0, links = true, interactive = true) {
     const text = String(source)
     if (depth > MAX_DEPTH) return esc(text)
+    /*
+      Emphasis groups, in order: 8 = ***bold italic*** (symmetric triple-star,
+      checked first so it isn't swallowed by the bold alternative), 9 = **bold**,
+      10 = ~~strikethrough~~, 11 = *italic*. The italic content class also
+      accepts a complete **bold** span as one of its repeated units, so a
+      single-star italic run that has bold nested inside it -- for example
+      *text **bold** more* or *text **bold*** -- is captured whole and handed
+      back into inline() to render the nested <strong> correctly, instead of
+      the bold alternative grabbing the ** pair out of context.
+    */
     const pattern =
-      /\\([\\`*~\[\]])|(`+)([^\n]*?)\2(?!`)|!\[([^\]\n]*)\]\((https?:\/\/[^\s)]+)\)|\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|\*\*([^*\n]+)\*\*|~~([^~\n]+)~~|\*([^*\n]+)\*(?!\*)|\[f:([a-z][a-z0-9-]*)([^\]\n]*)\]/g
+      /\\([\\`*~\[\]])|(`+)([^\n]*?)\2(?!`)|!\[([^\]\n]*)\]\((https?:\/\/[^\s)]+)\)|\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)|\*\*\*([^*\n]+)\*\*\*|\*\*([^*\n]+)\*\*|~~([^~\n]+)~~|\*((?:[^*\n]|\*\*[^*\n]*\*\*)+)\*(?!\*)|\[f:([a-z][a-z0-9-]*)([^\]\n]*)\]/g
     let html = '',
       cursor = 0,
       m
@@ -153,8 +163,8 @@
               inline(m[6], depth + 1, false, false) +
               '</a>'
             : esc(m[0])
-      } else if (m[11] !== undefined) {
-        const token = header(m[11], m[12])
+      } else if (m[12] !== undefined) {
+        const token = header(m[12], m[13])
         const close =
           token?.def.type === 'inline' &&
           A.AtelierSettings?.value.rendering !== false
@@ -211,14 +221,19 @@
               '</span>'
           pattern.lastIndex = close.end
         }
+      } else if (m[8] !== undefined) {
+        html +=
+          '<strong class="clank-atelier-bold-italic"><em>' +
+          inline(m[8], depth + 1, links, interactive) +
+          '</em></strong>'
       } else {
         const tag =
-          m[8] !== undefined ? 'strong' : m[9] !== undefined ? 'del' : 'em'
+          m[9] !== undefined ? 'strong' : m[10] !== undefined ? 'del' : 'em'
         html +=
           '<' +
           tag +
           '>' +
-          inline(m[8] ?? m[9] ?? m[10], depth + 1, links, interactive) +
+          inline(m[9] ?? m[10] ?? m[11], depth + 1, links, interactive) +
           '</' +
           tag +
           '>'
